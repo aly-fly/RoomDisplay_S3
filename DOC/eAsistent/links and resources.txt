@@ -1,0 +1,9 @@
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/5/9421462
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/6/9421462
+
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600887/0/0/0/5/9621355
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600887/0/0/0/6/9621355
+
+https://forum.arduino.cc/t/parse-http-data-from-website/576407/5
+
+https://github.com/fdivitto/FabGL

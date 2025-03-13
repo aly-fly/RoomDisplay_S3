@@ -1,0 +1,87 @@
+{
+    "wifi_sta": {
+        "connected": true,
+        "ssid": "xxxxxx",
+        "ip": "10.38.22.111",
+        "rssi": -49
+    },
+    "cloud": {
+        "enabled": true,
+        "connected": true
+    },
+    "mqtt": {
+        "connected": false
+    },
+    "time": "11:07",
+    "unixtime": 1709460452,
+    "serial": 58062,
+    "has_update": false,
+    "mac": "3494xxxxxxxx",
+    "cfg_changed_cnt": 0,
+    "actions_stats": {
+        "skipped": 0
+    },
+    "relays": [
+        {
+            "ison": false,
+            "has_timer": false,
+            "timer_started": 0,
+            "timer_duration": 0,
+            "timer_remaining": 0,
+            "overpower": false,
+            "is_valid": true,
+            "source": "input"
+        }
+    ],
+    "emeters": [
+        {
+            "power": 67.91,
+            "pf": 0.57,
+            "current": 0.52,
+            "voltage": 230.54,
+            "is_valid": true,
+            "total": 2196813.5,
+            "total_returned": 2.2
+        },
+        {
+            "power": 2.95,
+            "pf": 0.04,
+            "current": 0.34,
+            "voltage": 228.79,
+            "is_valid": true,
+            "total": 1779910.9,
+            "total_returned": 1.0
+        },
+        {
+            "power": 3.76,
+            "pf": 0.04,
+            "current": 0.37,
+            "voltage": 228.63,
+            "is_valid": true,
+            "total": 1917443.4,
+            "total_returned": 0.1
+        }
+    ],
+    "total_power": 74.62,
+    "emeter_n": {
+        "current": 0.00,
+        "ixsum": 0.45,
+        "mismatch": false,
+        "is_valid": false
+    },
+    "fs_mounted": true,
+    "v_data": 1,
+    "ct_calst": 0,
+    "update": {
+        "status": "idle",
+        "has_update": false,
+        "new_version": "20230913-114244/v1.14.0-gcb84623",
+        "old_version": "20230913-114244/v1.14.0-gcb84623",
+        "beta_version": "20231107-165007/v1.14.1-rc1-g0617c15"
+    },
+    "ram_total": 49920,
+    "ram_free": 28492,
+    "fs_size": 233681,
+    "fs_free": 154616,
+    "uptime": 3790393
+}

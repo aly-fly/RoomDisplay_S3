@@ -1,0 +1,724 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)https://meteo.arso.gov.si/uploads/meteo/help/sl/xml_service.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>meteo.si: XML - opis vremenskih podatkov </title>
+	<meta name="GENERATOR" content="OpenOffice.org 3.0  (Unix)">
+	<meta name="CREATED" content="20080128;14114000">
+	<meta name="CHANGED" content="20090616;12011100">
+	<meta name="Info 1" content="">
+	<meta name="Info 2" content="">
+	<meta name="Info 3" content="">
+	<meta name="Info 4" content="">
+	<style type="text/css">
+	<!--
+		@page { size: 8.27in 11.69in; margin: 0.98in }
+		P { margin-bottom: 0.08in; direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		P.western { font-family: "Times New Roman", serif; font-size: 12pt; so-language: en-GB }
+		P.cjk { font-family: "Times New Roman", serif; font-size: 12pt }
+		P.ctl { font-family: "Times New Roman", serif; font-size: 12pt; so-language: ar-SA }
+		H3 { margin-top: 0.19in; margin-bottom: 0.19in; direction: ltr; color: #000000; widows: 2; orphans: 2; page-break-after: auto }
+		H3.western { font-family: "Times New Roman", serif; font-size: 13pt; so-language: sl-SI }
+		H3.cjk { font-family: "Times New Roman", serif; font-size: 13pt }
+		H3.ctl { font-family: "Times New Roman", serif; font-size: 13pt; so-language: ar-SA }
+		PRE { direction: ltr; color: #000000; widows: 2; orphans: 2 }
+		PRE.western { so-language: en-GB }
+		PRE.ctl { so-language: ar-SA }
+	-->
+	</style>
+<style>
+.fortipam-fade-in {
+  opacity: 0;
+  animation: fortipam-fade-in-animation 0.15s ease-in forwards;
+}
+
+@keyframes fortipam-fade-in-animation {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}</style></head>
+<body lang="en-US" text="#000000" dir="LTR">
+<h3 lang="sl-SI" class="western" style="margin-top: 0in">meteo.si:
+XML - opis vremenskih podatkov 
+</h3>
+<h3 lang="sl-SI" class="western" align="CENTER" style="margin-top: 0in">
+16.6.2009 - ver 0.80</h3>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">Spremembe
+glede na verzijo 0.72 (16.7.2008):</p>
+<ul>
+	<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+	<font face="Times New Roman, serif"><font size="3">novo: </font></font>
+	</p>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font color="#000000"> <font face="Times New Roman, serif"><font size="3"><span lang="en-GB">&lt;domain_shortTitle&gt;</span></font></font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;ff_value&gt;   reprezentativna vrednost intervala za jakost
+		vetra [m/s] (*)</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;ff_minimum&gt; minimum        vrednosti intervala za jakost
+		vetra [m/s]</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;ff_maximum&gt; maximum        vrednosti intervala za jakost
+		vetra [m/s]</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;tsValid_issued_RFC822&gt;     '03 Jun 2009 09:43:00 +0200'</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;tsUpdated_RFC822&gt;            '03 Jun 2009 11:43:00 +0200'</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;title&gt;                     "vrsta" podatka,
+		zaenkrat relevantno v glavnem pri napovedih</p>
+	</li></ul>
+</li></ul>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">          
+                   npr. 'METEO_FCAST' (napoved prognostika),</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">          
+                          'METEO_MODEL' (avtomatska napoved modela)</p>
+<ul>
+	<ul>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			pri  METEO_FCAST so relevantne napovedi temperature v &lt;tx&gt;
+			in &lt;tn&gt;</p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			pri  METEO_MODEL so relevantne napovedi temperature v &lt;txsyn&gt;
+			in &lt;tnsyn&gt;</p>
+		</li></ul>
+	</ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsDeg_icon&gt;
+		- kratica (ime ikone, ki jo uporablja meteo.si)  za moč neviht
+		(relevantno pri napovedih); [light | mod | heavy]</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ts_shortText&gt;
+		-  kratek tekst za pojav neviht - npr. "nevihte"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fogDeg_icon&gt;
+		- kratica (ime ikone, ki jo uporablja meteo.si)  za 'gostoto' megle
+		(relevantno pri napovedih); [light | mod | heavy]</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fog_shortText&gt;
+		-  kratek tekst za pojav megle - npr. "megla"</font></font></p>
+	</li></ul>
+</ul>
+<pre lang="en-GB" class="western" style="widows: 2; orphans: 2"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB">	 (*) ostaja tudi &lt;ff_val&gt;  konkretna vrednost hitrosti vetra, kadar je na voljo</span></font></font></pre>
+<ul>
+	<p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+	</p>
+	<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+	<font color="#000000"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB">radi
+	bi vnovič opozorili, da je za identifikacijo'domene', torej točke
+	oz. območja s podatki:</span></font></font></font></p>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 najbolj relevanten tag &lt;domain_meteosiId&gt; (ki je v
+		terminologiji podatkovnih baz "unique") in se predvidoma
+		ne bo spreminjal</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		razmeroma kozervativen &lt;domain_title&gt;, ki se bo malo
+		spreminjal</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		dodan tag &lt;domain_shortTitle&gt;, ki se bo skupaj z obstoječim
+		&lt;domain_longTitle&gt; občasno lahko spremenil   (npr.
+		'Ljubljana' --&gt; 'Ljubljana in okolica' ipd.)</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		praviloma bodo:</p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			 &lt;domain_title&gt;            'meteorološko' ime brez
+			šumnikov; "UPPER<span style="text-decoration: none">-CASE</span>"</p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			 &lt;domain_shortTitle&gt;   krajše opisno ime s šumniki;
+			"Camel-Case" 
+			</p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			 &lt;domain_longTitle&gt;    daljše opisno ime s šumniki;
+			"Camel-Case"  
+			</p>
+		</li></ul>
+	</li></ul>
+</li></ul>
+<pre lang="en-GB" class="western" style="margin-bottom: 0.2in"></pre><p lang="en-GB" class="western" style="margin-bottom: 0in; border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">XML
+vremenski podatki so na voljo testno.</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">Možnosti,
+da bo občasno prihajalo do manjših težav z obnavljanjem podatkov,
+ne moremo izključiti.</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in"><br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in"><i>(V
+nadaljevanju besedila izraz "(pod)element" uporabljamo za
+"značka" oz. "tag".)</i></p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in"><br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">Nabor
+elementov se bo še dopolnjeval. 
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in">Sheme
+(xsd) zaenkrat še ni na voljo.</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in"><br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+<font face="Times New Roman, serif"><font size="3"><i><b>V primeru, da
+vrednost določenega elementa ni na voljo, element praviloma vseeno
+obstaja in je prazen.</b></i></font></font></p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; font-weight: normal; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+<font color="#000000"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB"><span style="font-weight: normal">&lt;data&gt;
+- korenski element; v</span></span></font></font></font>si podatki v
+datotekah XML so podelementi <font color="#000000"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB">&lt;data&gt;.</span></font></font></font></p>
+<ul>
+	<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+	<font face="Times New Roman, serif"><font size="3">Atribut "id"
+	označuje tip informacije (trenutno npr.
+	"MeteoSI_WebMet_observation_xml" za opazovanja ali
+	"MeteoSI_WebMet_forecast_xml" za napo<span style="font-weight: normal">ved
+	- oboje za določeno/e lokacijo/e za določen/e čas/e).</span></font></font></p>
+</li></ul>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; font-weight: normal; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in"><span style="font-weight: normal">Trenutni
+nabor pod-elementov</span>:</p>
+<ul>
+	<li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;credit&gt;
+	- ustanova/izdajatelj</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;credit_url&gt;
+	- spletni naslov izdajatelja</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;image_url&gt;
+	- spletni naslov logotipa izdajatelja</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;suggested_pickup&gt;
+	-predlagani  termin za osveževanje informacije, npr. "25
+	minutes after hour" - 25 min čez polno uro</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;suggested_pickup_period&gt;
+	- predlagani časovni interval osveževanja informacije v minutah</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;icon_url_base&gt;
+	- spletni naslov vremenskih ikon; to pot dodamo vsem ikonam npr.
+	nn_icon, da pridemo do slike</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;icon_format&gt;
+	- format ikon, npr. "png"</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;docs_url&gt;
+	- spletni naslov dokumentacije (ta dokument)</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;disclaimer_url&gt;
+	- spletni naslov s podatki o omejitvi odgovornosti</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;copyright_url&gt;
+	- spletni naslov  s podatki o avtorskih pravicah</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;privacy_policy_url&gt;
+	- spletni naslov s podatki o načinu zagotavljanja zasebnosti
+	uporabnikov spletnega mesta</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;managing_editor&gt;-
+	elektronski naslov urednika strani</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;web_master&gt;-
+	elektronski naslov skbnika spletnih strani</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;generator&gt;
+	- interna oznaka procesa/generatorja podatkov (AutoPro/ProCreator)</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;meteosi_url&gt;
+	-  spletni naslov meteo.si</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;two_day_history_url&gt;
+	- spletni naslov podatkov o opazovanem vremenu (pri xml z opazovanji
+	- do dva dni)</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;language&gt;
+	- jezik podatkov po ISO 639-2 standardu, npr. "sl"</p>
+	</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in">&lt;metData&gt;
+	-<u><b>podatki z aktualnimi vremenskimi informacijami za določeno
+	lokacijo in določen čas</b></u>;  pod-elementi:</p>
+</li></ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 &lt;title&gt; - "vrsta" podatka; zaenkrat relevantno v
+		glavnem pri napovedih: 'METEO_FCAST' (napoved prognostika),
+		<font color="#000000"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB">METEO_MODEL'
+		(avtomatska napoved računalniškega modela)</span></font></font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_meteosiId&gt;
+		- alfanumerična šifra lokacije, npr. "LJUBL-ANA_BRNIK_";
+		ena beseda, brez whitespace-ov</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_countryIsoCode2&gt;
+		- ISO 3166-1-alpha-2  dvočrkovna koda za državo lokacije, npr.
+		"SI"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_parentId&gt;
+		- šifra geografskega območja, ki mu pripada lokacija npr.
+		"SI_GORENJSKA_"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font color="#000000"><span lang="en-GB">&lt;domain_lat&gt; -
+		geografska širina lokacije v stopinjah (prav</span></font><font color="#000000"><font face="Times New Roman, serif"><font size="3"><span lang="en-GB">iloma
+		WGS84 - World Geodetic System 1984)</span></font></font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_lon&gt;
+		- geografska dolžina lokacije v stopinjah (praviloma WGS84)</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_altitude&gt;
+		- nadmorska višina lokacije v m</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;domain_title&gt;
+		- "meteorološko" ime lokacije (krajše),  praviloma
+		"UPPER-CASE" brez šumnikov npr. "LJUBLJANA/BRNIK"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		&lt;domain_longTitle&gt; -  daljše opisno ime lokacije, praviloma
+		"Camel-Case" s šumniki; npr. "Letališče Jožeta
+		Pučnika Ljubljana"</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		&lt;domain_shortTitle&gt; - krajše opisno ime lokacije, praviloma
+		"Camel-Case" s šumniki; npr. "Letališče Jožeta
+		Pučnika Ljubljana"</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;sunrise/&gt; -
+		sončni vzhod za lokacijo, npr. "7:40 CET"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;sunset/&gt; -
+		sončni zahod za lokacijo, npr. "16.18 CET"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsValid_issued&gt;
+		- datum in ura izdaje podatkov, npr. "17.12.2007 8:00 CET"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		&lt;tsValid_issued_day&gt; - ime dneva izdaje podatkov, npr.
+		"Ponedeljek"</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsValid_issued_UTC&gt;
+		- datum in ura izdaje podatkov v UTC, npr. "17.12.2007 7:00
+		UTC"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsValid_issued_RFC822&gt;
+		- datum in ura izdaje podatkov po RFC822 standardu; npr. "03
+		Jun 2009 09:43:00 +0200"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsUpdated&gt;"
+		- datum in ura obnovitve  podatkov, npr. "28.01.2008 10:12
+		CET"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsUpdated_day&gt;
+		- ime dneva obnovitve  podatkov, npr. "Ponedeljek"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsUpdated_UTC&gt;
+		- datum in ura obnovitve  podatkov v UTC, npr. "28.01.2008
+		10:12 UTC"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsUpdated_RFC822&gt;
+		- datum in ura obnovitve  podatkov po RFC822 standardu; npr. "03
+		Jun 2009 09:43:00 +0200"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;valid&gt; -
+		datum in ura veljavnosti podatkov, npr. "17.12.2007 8:00 CET"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;valid_day&gt;
+		- ime dneva veljavnosti podatkov, npr."Ponedeljek"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;valid_UTC&gt;-
+		datum in ura veljavnosti podatkov v UTC, npr. "17.12.2007 7:00
+		UTC"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;nn_icon&gt; -
+		kratica (ime ikone, ki jo uporablja meteo.si) za količino
+		oblačnosti oz. videz neba; </font></font>
+		</p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: clear,
+			mostClear, slightCloudy, partCloudy, modCloudy, prevCloudy,
+			overcast, FG (za interpretacijo gl. &lt;nn_shortText&gt;)</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;nn_shortText&gt;
+		- kratek tekst za količino oblačnosti oz. videz neba</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: jasno,
+			pretežno jasno, rahlo oblačno, delno oblačno, zmerno oblačno,
+			pretežno oblačno, oblačno, megla</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;nn_decodeText&gt;
+		- kratica za količino oblačnosti oz. videz neba:</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi (pri
+			opazovanjih): 0/8, 0/8 .. 1/8, 1/8 .. 2/8, 2/8 .. 3/8, 3/8 .. 4/8,
+			4/8 .. 5/8, 5/8 .. 6/8, 6/8 .. 7/8, 7/8 .. 8/8, 9/8 (v9/8 kadar je
+			lokacija v oblakih)</font></font></p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi (pri
+			napovedih [metData/title='METEO_MODEL' ali 'METEO_FCAST']): J, PJ,
+			RO, DO, ZO, PO, O, M (za interpretacijo gl. &lt;nn_shortText&gt;)</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;rr_decodeText&gt;
+		-  kratica za moč vremenskega pojava:</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: light,
+			mod, heavy (šibko, zmerno, močno)</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;wwsyn_icon&gt;
+		- kratica (ime ikone, ki jo uporablja meteo.si) za vremenski pojav
+		(pri napovedih samo osnovni vremenski pojav, pri opazovanjih pa je
+		vključena tudi moč pojava):</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">napovedi:
+			(osnovni) razredi: FG, DZ, FZDZ, RA, FZRA, RASN, SN, SHRA, SHRASN,
+			SHSN, SHGR, TS, TSRA, TSRASN, TSSN, TSGR (megla; rosenje; rosenje,
+			ki zmrzuje; dež; dež, ki zmrzuje; dež s snegom; sneg; ploha
+			dežja; ploha dežja s snegom; snežna ploha; ploha sodre;
+			nevihta; nevihta z dežjem; nevihta z dežjem in snegom; nevihta s
+			sneženjem; nevihta s točo)</font></font></p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">opazovanja:
+			razširjeni razredi (osnovnim razredom &lt;wwsyn_icon&gt; iz
+			napovedi so dodane še moči pojavov iz &lt;rr_decodeText&gt;): FG
+			lightFG modFG heavyFG DZ lightDZ modDZ heavyDZ FZDZ lightFZDZ
+			modFZDZ heavyFZDZ RA lightRA modRA heavyRA FZRA lightFZRA modFZRA
+			heavyFZRA RASN lightRASN modRASN heavyRASN SN lightSN modSN
+			heavySN SHRA lightSHRA modSHRA heavySHRA SHRASN lightSHRASN
+			modSHRASN heavySHRASN SHSN lightSHSN modSHSN heavySHSN SHGR
+			lightSHGR modSHGR heavySHGR TS lightTS modTS heavyTS TSRA
+			lightTSRA modTSRA heavyTSRA TSRASN lightTSRASN modTSRASN
+			heavyTSRASN TSSN lightTSSN modTSSN heavyTSSN TSGR lightTSGR
+			modTSGR heavyTSGR</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;wwsyn_shortText&gt;
+		- kratek tekst za vremenski pojav npr. "megla, se redči",
+		..., "močna nevihta s točo"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;wwsyn_longText&gt;
+		- dolg tekst za vremenski pojav, npr. "megla v pasovih, ki se
+		redči"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;wwsyn_decodeText/&gt;
+		- kratica za osnovni vremenski pojav (samo pri napovedih, gl. tudi
+		&lt;wwsyn_icon&gt;):</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">pri napovedih;
+			razredi : gl. osnovne razrede pri &lt;wwsyn_icon&gt;</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;nn_icon-wwsyn_icon&gt;
+		- kratica (sestavljeno ime ikone, ki jo uporablja meteo.si) za
+		oblačnost + (razširjeni) vremenski pojav: npr.
+		"prevCloudy_lightTSRASN":</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: vse
+			možne kombinacije  razredov &lt;nn_icon&gt; in razširjenih
+			razredov &lt;wwsyn_icon&gt;</font></font></p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">nasvet: pri
+			vizualizaciji morate poskrbeti, da uporabljate samo smiselne
+			kombinacije (na meteo.si npr. vse kombinacije "clear_*.png"
+			kažejo samo "clear.png" ali pa "FG_lightFG.png"
+			- "FG.png")</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ts_icon&gt; -
+		pri napovedih:  "TS"  (thunderstorm - nevihta);  prazno,
+		kadar nevihte niso napovedane</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tsDeg_icon&gt;
+		- pri napovedih: kratica (delno ime ikone, ki jo uporablja
+		meteo.si)  za moč neviht; [light | mod | heavy]; prazno, kadar
+		nevihte niso napovedane</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ts_shortText&gt;
+		-  kratek tekst za pojav neviht - npr. "nevihte"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ts_decodeText&gt;
+		-  kratica za nevihte;"TS"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fog_icon&gt; -
+		pri napovedih:  "FG" (fog - megla);  prazno, kadar
+		megla ni napovedana</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fogDeg_icon&gt;
+		- pri napovedih: kratica (delno ime ikone, ki jo uporablja
+		meteo.si)  za 'gostoto' megle; [light | mod | heavy]; prazno, kadar
+		megla ni napovedana</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fog_shortText&gt;
+		-  kratek tekst za pojav megle - npr. "megla"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;fog_decodeText&gt;
+		-  kratica za meglo;"FG"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tnsyn_var_desc&gt;
+		- ime parametra: "Minimalna temperatura"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tnsyn_var_unit&gt;
+		- enota parametra, npr. "°C"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tnsyn&gt; -
+		vrednost dnevne minimalne temperature (ponavadi najnižja
+		jutranja), praviloma zaokrožena na celo vrednost</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tnsyn_degreesC&gt;
+		 - vrednost minimalne temperature v °C</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;txsyn_var_desc&gt;
+		- ime parametra: "Maksimalna temperatura"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;txsyn_var_unit&gt;
+		- enota parametra, npr. "°C"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;txsyn&gt;  -
+		vrednost dnevne maksimalne temperature (ponavadi najvišja dnevna),
+		praviloma zaokrožena na celo vrednost, npr. -13</font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;txsyn_degreesC&gt;
+		 - vrednost maksimalne temperature v °C</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tn_var_desc&gt;
+		- ime parametra: "Minimalna terminska temperatura"</font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tn_var_unit&gt;
+		- enota parametra, npr. "°C"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tn&gt; -
+		vrednost terminske minimalne temperature, praviloma zaokrožena na
+		celo vrednost</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tn_degreesC&gt;
+		 - vrednost minimalne temperature v °C</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tx_var_desc&gt;
+		- ime parametra: "Maksimalna terminska temperatura"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tx_var_unit&gt;
+		- enota parametra, npr. "°C"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tx&gt;  -
+		vrednost terminske maksimalne temperature, praviloma zaokrožena na
+		celo vrednost, npr. -13</font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;tx_degreesC&gt;
+		 - vrednost maksimalne temperature v °C</font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;t_var_desc&gt;
+		- ime parametra: "Temperatura" - terminska</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;t_var_unit&gt;
+		- enota parametra, npr. "°C"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		 <font face="Times New Roman, serif"><font size="3">&lt;t&gt; -
+		vrednost (terminske) temperature, praviloma zaokrožena na celo
+		vrednost</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;t_degreesC&gt;
+		- vrednost temperature v °C</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;windchill&gt;
+		- "občutek mraza" - indeks občutja vpliva vremena
+		zaradi temperature in vetra (°C)</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;vis_value&gt;
+		- vidnost</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;vis_unit&gt;-
+		enota vidnosti</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;rh_var_desc&gt;
+		- ime parametra: "Relativna vlažnost"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;rh_var_unit&gt;
+		- enota relativne vlažnosti  (%)</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;rh&gt; -
+		vrednost relativne vlažnosti  v %</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;td_var_desc&gt;-
+		ime parametra: "Temperatura rosišča"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;td_var_unit&gt;-
+		enota temperature rosišča</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;td&gt;  -
+		vrednost temperature rosišča</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;td_degreesC&gt;
+		- vrednost temperature rosišča v °C</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_var_desc&gt;-
+		ime parametra : "Smer vetra"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_var_unit&gt;
+		- se ne uporablja</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_icon&gt; -
+		kratica (ime ikone, ki jo uporablja meteo.si) smeri vetra veter od
+		koder piha veter (oz. "VRB" v primeru spremenljive smeri
+		vetra):</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi za
+			opazovanja 16 smeri + VRB: N, NNE, NE, ENE, E, ESE, SE, SSE, S,
+			SSW, SW, WSW,  W, WNW, NW, NNW, VRB</font></font></p>
+			</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi za
+			napovedi 8 smeri + VRB: N, NE, E,  SE, S, SW, W, NW, VRB</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_shortText&gt;
+		- kratek tekst smeri vetra, npr. VSV</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_longText&gt;
+		- dolg tekst smeri vetra, npr. "vzhodno-severovzhodni veter"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;dd_decodeText&gt;
+		- angl. kratica za smer vetra, npr. "ENE"; razredi - gl.
+		&lt;dd_icon&gt;</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ff_val&gt; -
+		hitrost vetra </font></font>
+		</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ff_unit&gt;-
+		enota hitrosti vetra ; npr. "m/s"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ff_icon&gt; -
+		kratica (ime ikone, ki jo uporablja meteo.si) za moč vetra:</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: light,
+			mod, heavy   (šibek, zmeren, močen veter)</font></font></p>
+		</li></ul>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ddff_icon&gt;kratica
+		(sestavljeno ime ikone, ki jo uporablja meteo.si) za moč vetra +
+		smer vetra : npr. "modENE"</font></font></p>
+		<ul>
+			<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+			<font face="Times New Roman, serif"><font size="3">razredi: vsi
+			razredi &lt;dd_icon&gt; + vse možne kombinacije  razredov
+			&lt;ff_icon&gt; in &lt;dd_icon&gt;, npr. "ENE",
+			"lightENE", "modENE", "heavyENE",
+			..., "VRB", "lightVRB", "modVRB",
+			"heavyVRB"</font></font></p>
+		</li></ul>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		&lt;ff_value&gt; - reprezentativna vrednost intervala za jakost
+		vetra [m/s]</p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		&lt;ff_minimum&gt; - minimum vrednosti intervala za jakost vetra
+		[m/s]</p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ff_maximum&gt;
+		- maximum vrednosti intervala za jakost vetra [m/s]</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ffmax_val&gt;
+		- hitrost vetra v sunkih [m/s]</font></font></p>
+	</li></ul>
+</ul>
+<ul>
+	<ul>
+		<li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;ffmax_unit/&gt;
+		- enota hitrosti sunkov vetra, npr. "m/s"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;msl_var_desc&gt;
+		- ime parametra: "Pritisk"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;msl_var_unit&gt;
+		- enota pritiska, npr. "hPa"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;msl&gt; -
+		vrednost pritiska</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;msl_mb&gt; -
+		vrednost pritiska v milibarih</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;pa_shortText/&gt;
+		- tendenca pritiska, npr "močno pada"</font></font></p>
+		</li><li><p lang="en-GB" class="western" style="margin-bottom: 0in; widows: 2; orphans: 2">
+		<font face="Times New Roman, serif"><font size="3">&lt;note&gt; - za
+		opazovanja SYNOP depeša po WMO standardu</font></font></p>
+	</li></ul>
+</ul>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in; widows: 2; orphans: 2">
+<br>
+</p>
+<p lang="en-GB" class="western" style="margin-bottom: 0in; border-top: none; border-bottom: 1px solid #000000; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.03in; padding-left: 0in; padding-right: 0in; widows: 2; orphans: 2; page-break-before: always">
+<br>
+</p>
+<p lang="sl-SI" style="margin-top: 0.19in; margin-bottom: 0in"><u><b>FAQ:</b></u></p>
+<pre lang="en-GB" class="western" style="margin-right: 0.39in; margin-bottom: 0.2in"><span lang="en-GB">----</span>
+<span lang="en-GB">Q: Prosil bi še za pojasnila za &lt;wwsyn_icon&gt;,, ukvarjam se s kombinacijami <font color="#000000">FZRA, SHRA, SHGR, TSRA, TSSN (kaj pomenijo ?) in vprašanjem s katerimi vse kombinacijami je možen "overcast" ?</font></span>
+<span lang="en-GB">A: </span>
+<span lang="en-GB">Freezing rain</span>
+<span lang="en-GB">shower of rain</span>
+<span lang="en-GB">shower of graupel (ploha toče)</span>
+<span lang="en-GB">thunderstorm with rain (nevihta z dežjem)</span>
+<span lang="en-GB">thunderstorm with snow (nevihta s sneženjem)</span>
+
+<span lang="en-GB">overcast - načeloma z vsemi.</span>
+
+<span lang="en-GB">----</span>
+<span lang="en-GB">Q: <font color="#000000">ali je &lt;ww_degree&gt; vedno vsebovan tudi v  &lt;wwsyn_icon&gt;?</font></span>
+
+<span lang="en-GB">A: </span>
+<span lang="en-GB">načeloma da (vsaj pri opazovanjih)</span>
+<span lang="en-GB">pri forecast sta ločena.</span>
+
+<span lang="en-GB">odvisno od vas, kako jih skombinirate.</span>
+<span lang="en-GB">mi težimo k temu, da ikono sestavimo npr. prevCloudy_heavyTSGR</span>
+
+<span lang="en-GB">----</span>
+<span lang="en-GB">Q: relevantni razredi oblačnosti in pojavov?</span>
+
+<span lang="en-GB">A: </span>
+<span lang="en-GB">gl. &lt;nn_icon&gt; in &lt;wwsyn_icon&gt; v dokumentaciji;  </span>
+<span lang="en-GB">oz. združena v tag-u, npr.</span>
+<span lang="en-GB">&lt;nn_icon-wwsyn_icon&gt;overcast_modSHRA&lt;/nn_icon-wwsyn_icon&gt;</span>
+<span lang="en-GB">ali</span>
+<span lang="en-GB">&lt;nn_icon-wwsyn_icon&gt;prevCloudy&lt;/nn_icon-wwsyn_icon&gt;, kadar pojava ni.</span>
+<span lang="en-GB">----</span>
+</pre>
+
+</body></html>
