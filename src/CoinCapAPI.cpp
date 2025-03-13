@@ -286,7 +286,7 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
 
   if (DataLen < DspW) {
     Serial.println("BTC: Not enough data to plot!");
-    DisplayText("BTC: NOT ENOUGH DATA", 1, 5, 20, CLRED);
+    DisplayText("BTC: NOT ENOUGH DATA", FONT_TITLE, 5, 20, CLRED);
     delay(500);
     return;
   }
@@ -296,19 +296,21 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
   DisplayShowImage(FileName,   0, 0);
 
   // vertical line
-  int LineX = DspW - LineSpacing;
   String sTxt;
   if (BgImage == 'd') {
     sTxt = "day";
   } else {
     sTxt = "week";
   }
+  int LineX1 = DspW - LineSpacing;
+  int LineX2 = DspW - LineSpacing * 2;
   tft.setTextColor(TFT_DARKGREY, TFT_BLACK);
-  tft.drawString(sTxt, LineX + 4, DspH - 22, 1);
+  tft.drawString(sTxt, LineX1 + 4, DspH - 22, 1);
   int numDots = DspH / 6;
   for (int i = 0; i < numDots; i++)
   {
-    tft.drawFastVLine(LineX, i*6, 3, TFT_DARKGREY);
+    tft.drawFastVLine(LineX1, i*6, 3, TFT_DARKGREY);
+    tft.drawFastVLine(LineX2, i*6, 3, TFT_DARKGREY);
   }  
 
   float_t Minn, Maxx;
@@ -364,9 +366,9 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
   tft.drawNumber(round(Maxx), 75, 2, 1);
   tft.drawNumber(round(Minn), 75, DspH - 12, 1);
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
-  tft.loadFont(FONT_SIZE_24);
-  X = tft.drawNumber(round(DataArray[DataLen-1]), 170, 2);
-  tft.drawString("USD", 170 + X + 11, 2);
+  tft.loadFont(FN_TITLE);
+  X = tft.drawNumber(round(DataArray[DataLen-1]), 140, 9);
+  tft.drawString("USD", 140 + X + 13, 9);
   tft.unloadFont();
 }
 

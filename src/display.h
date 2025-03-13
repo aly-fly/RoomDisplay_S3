@@ -29,15 +29,25 @@
 //  This sketch uses font files created from the Noto family of fonts:
 //  https://www.google.com/get/noto/
 
-//0 -> Original Adafruit 8 pixel font
-#define FONT_SIZE_15  "15-Noto-Sans-Bold"
-#define FONT_SIZE_20  "20-Noto-Sans-Mono"
-#define FONT_SIZE_201 "20-KristenITC"
-#define FONT_SIZE_202 "20-Ebrima-Bold"
-#define FONT_SIZE_24  "24-Latin-Hiragana"
-#define FONT_SIZE_28  "28-Final-Frontier"
-#define FONT_SIZE_36  "36-Noto-Sans-Bold"
-#define FONT_SIZE_361 "36-SegoeUIBlack"
+//0 -> Original Adafruit 8 pixel font 
+#define FN_TXT_SMALL    "15-Noto-Sans-Bold"
+#define FN_URNIK_TT     "20-MVBoli" // "20-KristenITC"
+#define FN_URNIK_MM     "20-Ebrima-Bold"
+#define FN_TXT          "22-SegoeUI" // 20-Noto-Sans-Mono 
+#define FN_TITLE        "30-SegoeUI-Bold"
+#define FN_TEMP_METEO   "40-Rockwell-ExtraBold"
+#define FN_TEMP_SINGLE  "60-Rockwell-ExtraBold"
+
+enum FontSize_t {
+  FONT_SYS,
+  FONT_TXT_SMALL,
+  FONT_URNIK_TT,
+  FONT_URNIK_MM,
+  FONT_TXT,
+  FONT_TITLE,
+  FONT_TEMP_METEO,
+  FONT_TEMP_SINGLE
+};
 
   extern TFT_eSPI tft; // for graphical plot
 
@@ -47,11 +57,10 @@
   void DisplayInit(void);
   void DisplayInitFonts(void);
   void DisplaySetBrightness(uint8_t Brightness = 255);
-  void DisplayClearCanvas(void);
   void DisplayClear(uint16_t Color = TFT_BLACK);
   void DisplayText(const char Text[]);
   void DisplayText(const char Text[], uint16_t color);
-  void DisplayText(const char Text[], uint16_t FontSize, int16_t X, int16_t Y, uint16_t Color = 0xFFFF, bool Wrap=false);
+  void DisplayText(const char Text[], FontSize_t FontSize, int16_t X, int16_t Y, uint16_t Color = 0xFFFF, bool Wrap=false);
   void DisplayUpdate(void);
 
   void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgScaling = 1);

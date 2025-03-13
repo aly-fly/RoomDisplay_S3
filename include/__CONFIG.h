@@ -2,7 +2,7 @@
  * Author: Aljaz Ogrin
  * Project: 
  * Hardware: ESP32
- * File description: Global configuration for the ESP32-Roomba project
+ * File description: Global configuration
  */
  
 #ifndef __CONFIG_H_
@@ -26,6 +26,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 
 #define DAY_TIME     7
 #define NIGHT_TIME  22
+#define NIGHT_TIME_BRIGHTNESS  20
 
 // ************ WiFi config *********************
 //#define WIFI_SSID  "..." -> enter into the file __CONFIG_SECRETS.h
@@ -61,7 +62,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 // ************ Hardware *********************
 
 //#define USE_SD_CARD_SPI
-#define USE_SD_CARD_MMC
+//#define USE_SD_CARD_MMC
 
 #ifdef USE_SD_CARD_SPI
   #define SD_MOSI       23
@@ -78,27 +79,20 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
   #define IMAGES_ON_SD_CARD
 #endif
 
-  #define ST7796_DRIVER   // 4 inch LCD
+  #define ST7796_DRIVER   // 4 inch LCD 480 x 320 
 
   // common TFT pins
 
-  #define USE_HSPI_PORT  // for TFT display;  VSPI is used for SD card
+  #define USE_HSPI_PORT  // for TFT display;  VSPI is used for SD card or MMC
 
-  #define TFT_BL        21
+  #define TFT_MISO      GPIO_NUM_9
+  #define TFT_BL        GPIO_NUM_10
+  #define TFT_SCLK      GPIO_NUM_11
+  #define TFT_MOSI      GPIO_NUM_12
+  #define TFT_DC        GPIO_NUM_13
   #define TFT_RST       -1 // connect to RESET pin / ESP32 EN pin
-  #define TFT_DC         2
-  
-#ifdef FREE_JTAG_PINS
-  #define TFT_CS        0
-  #define TFT_SCLK      0
-  #define TFT_MISO      0
-  #define TFT_MOSI      0
-#else
-  #define TFT_CS        15  // JTAG !!
-  #define TFT_SCLK      14  // JTAG !!
-  #define TFT_MISO      12  // JTAG !!
-  #define TFT_MOSI      13  // JTAG !!
-#endif
+  #define TFT_CS        GPIO_NUM_14
+
 
 // ************ BODMER LIBRARY CONFIG *********************
 
@@ -112,15 +106,15 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 //#define LOAD_GFXFF  // FreeFonts. Include access to the 48 Adafruit_GFX free fonts FF1 to FF48 and custom fonts
 
 #define SMOOTH_FONT
-//  FONT_FS_AVAILABLE    // while examining the library, looks like this should be enabled because fonts are in the file system, but it crashes with this enabled..
 
-#define SPI_FREQUENCY  20000000
-
+#define SPI_FREQUENCY        25000000
+#define SPI_READ_FREQUENCY   10000000
 #define DISABLE_ALL_LIBRARY_WARNINGS
 #define USER_SETUP_LOADED
 
 // ************ SD CARD CONFIG *********************
-#define SPI_FREQ_SDCARD 20000000  // default 4 MHz; max 25 MHz
+#define MMC_FREQ_SDCARD   10000 // 10 MHz  SDMMC_FREQ_DEFAULT // 20 MHz
+#define SPI_FREQ_SDCARD   20000000  // default 4 MHz; max 25 MHz
 #define SPI_DMA_MAX 4095 
 
 #endif /* __CONFIG_H_ */

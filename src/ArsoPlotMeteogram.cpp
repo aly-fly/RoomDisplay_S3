@@ -26,11 +26,12 @@ void ArsoPlotMeteogram(void) {
     
     float_t X1, X2, Y1, Y2, Yscaling;
     Yscaling = (float(DspH) / (Maxx - Minn));
-    if (Yscaling > 4) {
-      Yscaling = 4; // limit Y zoom
+    Serial.printf("Scaling Y: %f\r\n", Yscaling);
+    if (Yscaling > 10) {
+      Yscaling = 10; // limit Y zoom
       Yoffset =+ 45;
     }
-    Serial.printf("Scaling Y: %f\r\n", Yscaling);
+    Serial.printf("Scaling Y limited: %f\r\n", Yscaling);
 
     int8_t MidnightIdx = 0;
     for (uint8_t i = 0; i < MTG_NUMPTS; i++) {
@@ -86,7 +87,7 @@ void ArsoPlotMeteogram(void) {
 
       if (Y1 > DspH) Y1 = DspH;
 
-      if (Y1 > 0) tft.fillRect(X1+9, DspH-Y1, 2, Y1, TFT_GREEN);
+      if (Y1 > 0) tft.fillRect(X1+14, DspH-Y1, 2, Y1, TFT_GREEN);
       delay(5);
     }
 
@@ -136,7 +137,7 @@ void ArsoPlotMeteogram(void) {
       DayIdx = CurrDay + i + DayShift;
       if (DayIdx > 6) DayIdx -=7; // overflow
       if (DayIdx < 0) DayIdx +=7; // underflow
-      DisplayText(DAYS3[DayIdx], 1, X, DspH-49, CLGREY);
+      DisplayText(DAYS3[DayIdx], FONT_TITLE, X, DspH-60, CLGREY);
     }
 
 
@@ -157,7 +158,7 @@ void ArsoPlotMeteogram(void) {
     }
 
     // temperature low / blue
-    tft.loadFont(FONT_SIZE_36);
+    tft.loadFont(FN_TEMP_METEO); // FONT_TEMP_METEO
     tft.setTextColor(CLBLUE, CLWHITE);
     for (uint8_t i = 0; i < 3; i++) {
       idx = MidnightIdx + i * 8 + 1;
@@ -165,7 +166,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2 - 10, Y2 + 5, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 + 10, 2);
       delay(50);
     }
 
@@ -177,7 +178,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2 - 20, Y2 - 34, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 50, 2);
       delay(60);
     }
 
@@ -185,7 +186,7 @@ void ArsoPlotMeteogram(void) {
     String FN;
 
     for (uint8_t i = 0; i < MTG_NUMPTS; i++) {
-      X2 = (i * Xscaling);
+      X2 = (i * Xscaling * 0.95);
       Y2 = 0;
       if ((i % 2) == 1) {Y2 = 32;}
       FN = "/w/" + ArsoMeteogram[i].WeatherIcon + ".bmp";
@@ -200,7 +201,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2 - 20, Y2 - 34, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 50, 2);
     }
     tft.unloadFont();
   }

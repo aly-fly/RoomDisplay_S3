@@ -1,8 +1,6 @@
-- center or right align text
-- True type font
+
 - ikone za veter
 - lunina faza
 - horizontalne črte za BTC
-- SD card
-- icons on the SD card
 - Radar .gif download and render
+- radio trenutni komad

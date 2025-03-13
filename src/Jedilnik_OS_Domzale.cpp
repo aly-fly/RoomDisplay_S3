@@ -1018,12 +1018,12 @@ void DrawJedilnikOsDomzale(void) {
 
   // display
   if (processSingleDay > -1) {
-    DisplayText(JedilnikDatum.c_str(), 1, 110, 15, CLBLUE);
-    DisplayText(sToday.c_str(), 1, 20, 15, CLGREY);
-    DisplayText(Jed[1].c_str(), 1, 1,  50, CLYELLOW, true);
-    DisplayText(Jed[2].c_str(), 1, 1, 130, CLCYAN, true);
+    DisplayText(JedilnikDatum.c_str(), FONT_TITLE, 110, 15, CLBLUE);
+    DisplayText(sToday.c_str(), FONT_TXT, 20, 15, CLGREY);
+    DisplayText(Jed[1].c_str(), FONT_TXT, 1,  70, CLYELLOW, true);
+    DisplayText(Jed[2].c_str(), FONT_TXT, 1, 180, CLCYAN, true);
   } else { // weekend
-    DisplayText(JedilnikDatum.c_str(), 1, 10, 1, CLBLUE);
+    DisplayText(JedilnikDatum.c_str(), FONT_TXT, 10, 1, CLBLUE);
     DisplayText("\n\n\n======================================\n", CLGREY);
     for (int i = 0; i < 5; i++) {
       DisplayText(Jedilnik[i].c_str(), CLYELLOW);

@@ -55,11 +55,11 @@
 #include <Arduino.h>
 #include <FS.h>
 
-#ifdef USE_SD_CARD_SPI
+#if defined (USE_SD_CARD_SPI)
   #include <SD.h>
   #include <SPI.h>
   SDFS myCard = SD;
-#elif defined(USE_SD_CARD_MMC)
+#elif defined (USE_SD_CARD_MMC)
   #include <SD_MMC.h>
   fs::SDMMCFS myCard = SD_MMC;
 #endif
@@ -330,6 +330,7 @@ void SD_TEST_testFileIO(fs::FS &fs, const char *path)
 
 void SD_TEST()
 {
+#if defined(USE_SD_CARD_SPI)||defined(USE_SD_CARD_MMC)  
   SD_TEST_listDir(myCard, "/", 0);
   SD_TEST_createDir(myCard, "/mydir");
   SD_TEST_listDir(myCard, "/", 0);
@@ -342,4 +343,5 @@ void SD_TEST()
   SD_TEST_renameFile(myCard, "/hello.txt", "/foo.txt");
   SD_TEST_readFile(myCard, "/foo.txt");
   SD_TEST_testFileIO(myCard, "/test.txt");
+#endif
 }

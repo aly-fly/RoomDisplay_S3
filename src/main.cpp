@@ -61,7 +61,7 @@ void setup() {
   DisplayClear();
 
   DisplayText("Init...\n", CLYELLOW);
-  DisplayText("Project: github.com/aly-fly/RoomDisplay\n", CLWHITE);
+  DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
   DisplayText("Version: ", CLWHITE);
   DisplayText(VERSION, CLCYAN);
   DisplayText("\n", CLWHITE);
@@ -220,7 +220,7 @@ void loop() {
 
   #else
   if (NightMode) {
-    DisplaySetBrightness(12);
+    DisplaySetBrightness(NIGHT_TIME_BRIGHTNESS);
   } else { // lower brightness at night
     DisplaySetBrightness(); // full power
   }
@@ -235,14 +235,12 @@ void loop() {
       char FileName[30];
       sprintf(FileName, "/bg_grass_%dx%d.bmp", DspW, DspH);
       DisplayShowImage(FileName,   0, 0);
-      DisplayText("Temperatura pred hiso", 1,  20,   8, CLWHITE);
-      DisplayText(SunRiseTime.c_str(), 1,   5+3,       240-45-26-3+3, CLBLACK);  // shadow
-      DisplayText(SunRiseTime.c_str(), 1,   5,         240-45-26-3,   CLYELLOW);
-      DisplayText(SunSetTime.c_str(),  1,  320 - 75+3, 240-45-26-3+3, CLBLACK);  // shadow
-      DisplayText(SunSetTime.c_str(),  1,  320 - 75,   240-45-26-3,   CLYELLOW);
+      DisplayText("Temperatura pred hiso", FONT_TITLE,  45,   8, CLWHITE);
+      DisplayText(SunRiseTime.c_str(), FONT_TXT,   5,          DspH-45-26-3,   CLYELLOW);
+      DisplayText(SunSetTime.c_str(),  FONT_TXT,  DspW - 75,   DspH-45-26-3,   CLYELLOW);
 
-      DisplayShowImage("/sunrise.bmp",  0,      240-45);
-      DisplayShowImage("/sunset.bmp",   320-53, 240-45);
+      DisplayShowImage("/sunrise.bmp",  0,       DspH-45);
+      DisplayShowImage("/sunset.bmp",   DspW-53, DspH-45);
 
       TempOutdoor1 = "- - -";
       if (HP_TCPclientRequest("Outdoor HP")) {
@@ -252,8 +250,8 @@ void loop() {
         HP_TCPresponse.concat(" C");
         TempOutdoor1 = HP_TCPresponse;
       }
-      DisplayText(TempOutdoor1.c_str(),    361,  92,  46, CLBLACK); // shadow
-      DisplayText(TempOutdoor1.c_str(),    361,  90,  44, CLORANGE);
+      tft.setTextDatum(TR_DATUM); // top right
+      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,  70, CLORANGE);
 
       TempOutdoor2 = "- - -";
       if (HP_TCPclientRequest("Outdoor")) {
@@ -263,34 +261,34 @@ void loop() {
         HP_TCPresponse.concat(" C");
         TempOutdoor2 = HP_TCPresponse;
       }
-      DisplayText(TempOutdoor2.c_str(),    361,  92, 102, CLBLACK); // shadow
-      DisplayText(TempOutdoor2.c_str(),    361,  90, 100, CLCYAN);
+      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350, 140, CLCYAN);
 
       char ShellyTxt[10];
       sprintf(ShellyTxt, "- - - kW");
       if (ShellyGetPower()) {
         sprintf(ShellyTxt, "%.2f kW", ShellyTotalPower/1000);
       }
-      DisplayText(ShellyTxt,               202, 102, 162, CLBLACK); // shadow
-      DisplayText(ShellyTxt,               202, 100, 160, CLRED);
+      DisplayText(ShellyTxt,               FONT_TITLE, 300, 200, CLRED);
+
+      tft.setTextDatum(TL_DATUM); // top left (default)
 
       // bazen
       if ((CurrentMonth >= 5) && (CurrentMonth <= 9)) {
         if (ShellyGetTemperature()) {}
-        DisplayText(sShellyTemperature.c_str(), 202, 102, 202, CLBLACK); // shadow
-        DisplayText(sShellyTemperature.c_str(), 202, 100, 200, CLLIGHTBLUE);
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 102, 230+2, CLBLACK); // shadow
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 100, 230, CLLIGHTBLUE);
 
         uint32_t clr = CLDARKGREY;
         if (ShellyGetSwitch1()) {
           if (Shelly1ON) {clr = CLLIGHTBLUE;} else {clr = CLBLACK;}
         }
-        tft.fillSmoothCircle(200, 210, 8, clr, CLDARKGREEN);
+        tft.fillSmoothCircle(200, 230, 8, clr, CLDARKGREEN);
         clr = CLDARKGREY;
         if (ShellyGetSwitch2()) {
           if (Shelly2ON) {clr = CLORANGE;} else {clr = CLBLACK;}
           if (Shelly2Power > 100) {clr = CLRED;}
         }
-        tft.fillSmoothCircle(230, 210, 8, clr, CLDARKGREEN);
+        tft.fillSmoothCircle(230, 230, 8, clr, CLDARKGREEN);
       } // month
       delay(7000);
     }
@@ -368,8 +366,8 @@ void loop() {
         // Not currently playing
         // 88 % complete, elapsed time: 5273 s, est time: 687 s
         DisplayClear(CLBLACK);
-        DisplayText("3D printer", 1, 50, 5, CLCYAN, false);
-        DisplayText(Smoothie_TCPresponse.c_str(), 1, 0, 45, CLYELLOW, true);
+        DisplayText("3D printer", FONT_TITLE, 70, 15, CLCYAN, false);
+        DisplayText(Smoothie_TCPresponse.c_str(), FONT_TXT, 10, 70, CLYELLOW, true);
         String sStr;
         int Procent = 0;
         int Elapsed = 0;
@@ -393,8 +391,8 @@ void loop() {
             Serial.println(Remaining);
             int Hh = Remaining / 3600;
             int Mm = (Remaining - (Hh * 3600))/60;
-            sStr = "Rem.: " + String(Hh) + "h " + String(Mm) + "m";
-            DisplayText(sStr.c_str(), 2, 10, 120, CLDARKBLUE);
+            sStr = "Remaining: " + String(Hh) + "h " + String(Mm) + "m";
+            DisplayText(sStr.c_str(), FONT_TITLE, 20, 170, CLBLUE);
           }
         }
         delay(10000);
@@ -414,7 +412,7 @@ void loop() {
     // check connectivity
     if (!inHomeLAN) {
       //DisplayClear();
-      //DisplayText("Test connectivity...\n", 0, 0, 10, CLGREY);
+      //DisplayText("Test connectivity...\n", FONT_SYS, 0, 10, CLGREY);
       String sPingIP;
       IPAddress pingIP;
       sPingIP = "216.58.205.46"; // google.com

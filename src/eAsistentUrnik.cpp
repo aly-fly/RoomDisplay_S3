@@ -451,7 +451,7 @@ void DrawEAsistent(int urnikNr) {
   }
 
   uint16_t color;
-  uint16_t font;
+  FontSize_t font;
   // process data for that day
   if (dayToShow > 0) {
     for (int i = 0; i < 10; i++)
@@ -462,9 +462,9 @@ void DrawEAsistent(int urnikNr) {
       if (i == 1) color = CLORANGE; else
       if (i % 2) color = CLLIGHTCYAN; else
         color = CLWHITE;
-      font = 20;
-      if (urnikNr == 0) font = 201;
-      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 0, i * 21, color, false);
+      font = FONT_URNIK_MM;
+      if (urnikNr == 0) font = FONT_URNIK_TT;
+      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 5, i * 25, color, false);
     }
   }
     delay(1500);
