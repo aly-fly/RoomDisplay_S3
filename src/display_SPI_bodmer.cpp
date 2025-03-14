@@ -1,13 +1,13 @@
 #include "__CONFIG.h"
 #include <Arduino.h>
 
-#include <SPI.h>
+//#include <SPI.h>
 #include <TFT_eSPI.h> // Hardware-specific library
 #include "display.h"
 // Font files are stored in SPIFFS, so load the library
 #include <SPIFFS.h>
 #include <FS.h>
-#include <SD.h>
+#include "SD_Card.h"
 
 signed int DspH;
 signed int DspW;
@@ -102,8 +102,6 @@ void DisplayInitFonts(void)
     Serial.println("\r\nFonts found OK.");
     DisplayText("Fonts found ok.\r\n", CLGREEN);
   }
-
-  DisplayFontTest();
 }
 
 void DisplayClear(uint16_t Color)
@@ -277,11 +275,6 @@ void DisplayShowImage_24bpp_only(const char *filename, int16_t x, int16_t y) {
 }
 */
 
-#ifdef IMAGES_ON_SD_CARD
-#define FILESYS SD
-#else
-#define FILESYS SPIFFS
-#endif
 
 void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgScaling)
 {
@@ -487,8 +480,8 @@ void DisplayFontTest(void)
   DisplayText(FN_URNIK_MM,    FONT_URNIK_MM,    20,  70, CLWHITE);
   DisplayText(FN_TXT,         FONT_TXT,         20, 100, CLWHITE);
   DisplayText(FN_TITLE,       FONT_TITLE,       20, 130, CLWHITE);
-  DisplayText(FN_TEMP_METEO,  FONT_TEMP_METEO,  20, 200, CLWHITE);
-  DisplayText(FN_TEMP_SINGLE, FONT_TEMP_SINGLE, 20, 250, CLWHITE);
+  DisplayText(FN_TEMP_METEO,  FONT_TEMP_METEO,  20, 170, CLWHITE);
+  DisplayText(FN_TEMP_SINGLE, FONT_TEMP_SINGLE, 20, 220, CLWHITE);
 
   tft.unloadFont(); // Remove the font to recover memory used
   delay(8000);

@@ -6,7 +6,7 @@ void ArsoPlotForecast(void) {
     Serial.println("ArsoPlotForecast()");
     String Line;
 
-    DisplayClear(CLWHITE);
+    DisplayClear(CLGREY);
 
     char FileName[30];
     sprintf(FileName, "/bg_sky_%dx%d.bmp", DspW, DspH);
@@ -45,9 +45,9 @@ void ArsoPlotForecast(void) {
 
     tft.setTextDatum(TR_DATUM); // top right
     DisplayText(ArsoWeather[0].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90,          230,   CLBLUE);
-    DisplayText(ArsoWeather[1].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90,          145,   CLRED);
+    DisplayText(ArsoWeather[1].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90,          155,   CLRED);
     DisplayText(ArsoWeather[2].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90+200+90,   230,   CLBLUE);
-    DisplayText(ArsoWeather[3].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90+200+90,   145,   CLRED);
+    DisplayText(ArsoWeather[3].Temperature.c_str(), FONT_TEMP_SINGLE,  40+90+200+90,   155,   CLRED);
 
     tft.setTextDatum(TL_DATUM); // top left (default)
     DisplayText(SunRiseTime.c_str(), FONT_TXT,    5,     DspH-23,   CLDARKGREEN);

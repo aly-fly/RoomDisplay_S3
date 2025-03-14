@@ -5,6 +5,7 @@
 #include <SPIFFS.h>
 #include "Version.h"
 #include "__CONFIG.h"
+#include "GlobalVariables.h"
 #include "display.h"
 #include "myWiFi.h"
 #include "Clock.h"
@@ -32,6 +33,7 @@ bool readAllData = false;
 
 void setup() {
   Serial.begin(115200);
+
   pinMode(GPIO_NUM_0, INPUT_PULLUP);
 
   // delay 2 sec on the start to connect from programmer to serial terminal
@@ -48,18 +50,8 @@ void setup() {
   Serial.print("Build: ");
   Serial.println(BUILD_TIMESTAMP);
 
-#ifndef FREE_JTAG_PINS
   DisplayInit();
-#endif  
-  /*
-  // TEST
-  if (!digitalRead(GPIO_NUM_0)) {
-      DisplayTest();
-      DisplayFontTest();
-  }
-  */
-  DisplayClear();
-
+  
   DisplayText("Init...\n", CLYELLOW);
   DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
   DisplayText("Version: ", CLWHITE);
@@ -74,6 +66,8 @@ void setup() {
   adcAttachPin(LDR_PIN);
   analogSetAttenuation(ADC_0db);
 #endif
+
+  globalVariablesInit();
 
   Serial.println("SPIFFS start...");
   DisplayText("SPIFFS start...");
@@ -128,6 +122,17 @@ void setup() {
 #endif
 
   DisplayInitFonts();
+  // TEST
+  if (!digitalRead(GPIO_NUM_0)) {
+      DisplayTest();
+      DisplayFontTest();
+      DisplayClear();  
+    }
+
+  log_d("Total heap: %d", ESP.getHeapSize());
+  log_d("Free heap: %d", ESP.getFreeHeap());
+  log_d("Total PSRAM: %d", ESP.getPsramSize());
+  log_d("Free PSRAM: %d", ESP.getFreePsram());  
 
   DisplayText("Init finished.", CLGREEN)    ;
   delay(2000);
@@ -185,6 +190,7 @@ void loop() {
   } // serial available
 
   if(GetCurrentTime()) {
+    Serial.println("Year: " + String(CurrentYear));
     Serial.println("Month: " + String(CurrentMonth));
     Serial.println("Day: " + String(CurrentDay));
     Serial.println("Hour: " + String(CurrentHour));
@@ -235,7 +241,7 @@ void loop() {
       char FileName[30];
       sprintf(FileName, "/bg_grass_%dx%d.bmp", DspW, DspH);
       DisplayShowImage(FileName,   0, 0);
-      DisplayText("Temperatura pred hiso", FONT_TITLE,  45,   8, CLWHITE);
+      //DisplayText("Temperatura pred hiso", FONT_TITLE,  45,   8, CLWHITE);
       DisplayText(SunRiseTime.c_str(), FONT_TXT,   5,          DspH-45-26-3,   CLYELLOW);
       DisplayText(SunSetTime.c_str(),  FONT_TXT,  DspW - 75,   DspH-45-26-3,   CLYELLOW);
 

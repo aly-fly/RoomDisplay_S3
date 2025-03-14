@@ -33,7 +33,7 @@
 #define FN_TXT_SMALL    "15-Noto-Sans-Bold"
 #define FN_URNIK_TT     "20-MVBoli" // "20-KristenITC"
 #define FN_URNIK_MM     "20-Ebrima-Bold"
-#define FN_TXT          "22-SegoeUI" // 20-Noto-Sans-Mono 
+#define FN_TXT          "25-NirmalaText"  // "22-SegoeUI" // 20-Noto-Sans-Mono 
 #define FN_TITLE        "30-SegoeUI-Bold"
 #define FN_TEMP_METEO   "40-Rockwell-ExtraBold"
 #define FN_TEMP_SINGLE  "60-Rockwell-ExtraBold"

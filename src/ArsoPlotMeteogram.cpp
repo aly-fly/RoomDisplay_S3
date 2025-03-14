@@ -166,7 +166,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 + 10, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 + 3, 2);
       delay(50);
     }
 
@@ -178,7 +178,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 50, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 55, 2);
       delay(60);
     }
 
@@ -201,7 +201,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 50, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 - 55, 2);
     }
     tft.unloadFont();
   }

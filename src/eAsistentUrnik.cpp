@@ -27,6 +27,11 @@ String Urnik[2][6][10];
 void ProcessDataInit (void);
 void ProcessData (int &urnikNr, String &DataIn);
 
+void UrnikClear(int urnikNr) {
+  for (int dan = 0; dan < 6; dan++) 
+    for (int ura = 0; ura < 10; ura++) 
+      Urnik[urnikNr][dan][ura].clear();
+}
 
 bool ReadEAsistentWebsite(int teden, int urnikNr) {
   Serial.println("ReadEAsistentWebsite()");
@@ -35,6 +40,8 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
       return false;
   }
 
+  UrnikClear(urnikNr);
+  
   setClock(); 
 
   DisplayClear();
@@ -379,6 +386,7 @@ void GetEAsistent(void) {
     StartYear--;
   }
   // 2.9.2024 = monday at 0:00
+  memset(&sStartTime, 0, sizeof(sStartTime));
   sStartTime.tm_year = StartYear - 1900;
   sStartTime.tm_mon = 9 - 1;
   sStartTime.tm_mday = FirstMondayInSeptember;
@@ -387,6 +395,7 @@ void GetEAsistent(void) {
   StartTime = mktime(&sStartTime);
   time(&CurrTime);
   TdiffSec = time_t(difftime(CurrTime, StartTime));
+  Serial.printf("Current time: %d; Start time: %d\r\n", CurrTime, StartTime);
   Serial.print("Seconds elapsed from school year start: ");
   Serial.println(TdiffSec);
   currentSchoolWeek = TdiffSec / (7 * 24 * 60 * 60);
@@ -397,6 +406,12 @@ void GetEAsistent(void) {
   if (CurrentWeekday > 5) { // weekend
     currentSchoolWeek++; // show monday in the next week
     Serial.print("Weekend: week++");
+  }
+  if ((currentSchoolWeek < 1) || (currentSchoolWeek > 41)) {
+    Serial.println("Error: wrong week number!");
+    UrnikClear(0);
+    UrnikClear(1);
+    return;
   }
 
   if ((millis() < (LastTimeUrnik1Refreshed + 2*60*60*1000)) && (LastTimeUrnik1Refreshed != 0)) {  // check server every 2 hours
@@ -464,7 +479,7 @@ void DrawEAsistent(int urnikNr) {
         color = CLWHITE;
       font = FONT_URNIK_MM;
       if (urnikNr == 0) font = FONT_URNIK_TT;
-      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 5, i * 25, color, false);
+      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27), color, false);
     }
   }
     delay(1500);

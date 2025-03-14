@@ -54,15 +54,8 @@
 #include "__CONFIG.h"
 #include <Arduino.h>
 #include <FS.h>
+#include "SD_Card.h"
 
-#if defined (USE_SD_CARD_SPI)
-  #include <SD.h>
-  #include <SPI.h>
-  SDFS myCard = SD;
-#elif defined (USE_SD_CARD_MMC)
-  #include <SD_MMC.h>
-  fs::SDMMCFS myCard = SD_MMC;
-#endif
 
 // ===========================================================================================================================
 
@@ -79,6 +72,7 @@ bool SDcardInit(void)
     Serial.println("SPI SD Card Mount Failed");
     return false;
   }
+  Serial.println("SPI SD Card Mount OK");
 #elif defined(USE_SD_CARD_MMC)
   SD_MMC.setPins(SD_MMC_CLK, SD_MMC_CMD, SD_MMC_D0);
   if (!SD_MMC.begin("/sdcard", true, true, SDMMC_FREQ_DEFAULT, 5))
@@ -86,17 +80,18 @@ bool SDcardInit(void)
     Serial.println("MMC SD Card Mount Failed");
     return false;
   }
+  Serial.println("MMC SD Card Mount OK");
 #endif
 
-  uint8_t cardType = myCard.cardType();
+  uint8_t cardType = FILESYS.cardType();
 
   if (cardType == CARD_NONE)
   {
-    Serial.println("No SD card attached");
+    Serial.println("Uknown SD Card Type!");
     return false;
   }
 
-  Serial.print("SD Card Type: ");
+  Serial.print("  SD Card Type: ");
   if (cardType == CARD_MMC)
   {
     Serial.println("MMC");
@@ -114,9 +109,9 @@ bool SDcardInit(void)
     Serial.println("UNKNOWN");
   }
 
-  Serial.printf("SD Card Size: %llu MB\n", myCard.cardSize() / (1024 * 1024));
-  Serial.printf("Total space: %llu MB\n", myCard.totalBytes() / (1024 * 1024));
-  Serial.printf("Used space: %llu MB\n", myCard.usedBytes() / (1024 * 1024));
+  Serial.printf("  SD Card Size: %llu MB\n", FILESYS.cardSize() / (1024 * 1024));
+  Serial.printf("  Total space: %llu MB\n", FILESYS.totalBytes() / (1024 * 1024));
+  Serial.printf("  Used space: %llu MB\n", FILESYS.usedBytes() / (1024 * 1024));
 
   return true;
 #else
@@ -331,17 +326,17 @@ void SD_TEST_testFileIO(fs::FS &fs, const char *path)
 void SD_TEST()
 {
 #if defined(USE_SD_CARD_SPI)||defined(USE_SD_CARD_MMC)  
-  SD_TEST_listDir(myCard, "/", 0);
-  SD_TEST_createDir(myCard, "/mydir");
-  SD_TEST_listDir(myCard, "/", 0);
-  SD_TEST_removeDir(myCard, "/mydir");
-  SD_TEST_listDir(myCard, "/", 2);
-  SD_TEST_writeFile(myCard, "/hello.txt", "Hello ");
-  SD_TEST_appendFile(myCard, "/hello.txt", "World!\n");
-  SD_TEST_readFile(myCard, "/hello.txt");
-  SD_TEST_deleteFile(myCard, "/foo.txt");
-  SD_TEST_renameFile(myCard, "/hello.txt", "/foo.txt");
-  SD_TEST_readFile(myCard, "/foo.txt");
-  SD_TEST_testFileIO(myCard, "/test.txt");
+  SD_TEST_listDir(FILESYS, "/", 0);
+  SD_TEST_createDir(FILESYS, "/mydir");
+  SD_TEST_listDir(FILESYS, "/", 0);
+  SD_TEST_removeDir(FILESYS, "/mydir");
+  SD_TEST_listDir(FILESYS, "/", 2);
+  SD_TEST_writeFile(FILESYS, "/hello.txt", "Hello ");
+  SD_TEST_appendFile(FILESYS, "/hello.txt", "World!\n");
+  SD_TEST_readFile(FILESYS, "/hello.txt");
+  SD_TEST_deleteFile(FILESYS, "/foo.txt");
+  SD_TEST_renameFile(FILESYS, "/hello.txt", "/foo.txt");
+  SD_TEST_readFile(FILESYS, "/foo.txt");
+  SD_TEST_testFileIO(FILESYS, "/test.txt");
 #endif
 }

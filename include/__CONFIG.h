@@ -62,7 +62,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 // ************ Hardware *********************
 
 //#define USE_SD_CARD_SPI
-//#define USE_SD_CARD_MMC
+#define USE_SD_CARD_MMC
 
 #ifdef USE_SD_CARD_SPI
   #define SD_MOSI       23
