@@ -98,7 +98,8 @@ if (gif.open((uint8_t *)GIF_IMAGE, sizeof(GIF_IMAGE), GIFrenderToLCD_callback))
 
   Serial.println("drawing image 10x");
   memcpy(&GIFimage, &GIF_IMAGE, sizeof(GIF_IMAGE));
-  DisplayGIF(GIFimage, sizeof(GIF_IMAGE), 10);
+  GIFimageSize = sizeof(GIF_IMAGE);
+  DisplayGIF(GIFimage, GIFimageSize, 10);
 
 
 #endif

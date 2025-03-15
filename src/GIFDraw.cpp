@@ -14,6 +14,7 @@ uint16_t usTemp[1][GIF_BUFFER_SIZE]; // Global to support DMA use
 bool dmaBuf = 0;
 
 AnimatedGIF gif;
+int iOffX = 0, iOffY = 0;
 
 // Draw a line of image directly on the LCD
 void GIFrenderToLCD_callback(GIFDRAW *pDraw)
@@ -70,7 +71,7 @@ void GIFrenderToLCD_callback(GIFDRAW *pDraw)
       if (iCount) // any opaque pixels?
       {
         // DMA would degrtade performance here due to short line segments
-        tft.setAddrWindow(pDraw->iX + x, y, iCount, 1);
+        tft.setAddrWindow(pDraw->iX + x + iOffX, y + iOffY, iCount, 1);
         tft.pushPixels(usTemp, iCount);
         x += iCount;
         iCount = 0;
@@ -106,7 +107,7 @@ void GIFrenderToLCD_callback(GIFDRAW *pDraw)
     tft.pushPixelsDMA(&usTemp[dmaBuf][0], iCount);
     dmaBuf = !dmaBuf;
 #else // 57.0 fps
-    tft.setAddrWindow(pDraw->iX, y, iWidth, 1);
+    tft.setAddrWindow(pDraw->iX + iOffX, y + iOffY, iWidth, 1);
     tft.pushPixels(&usTemp[0][0], iCount);
 #endif
 
@@ -137,17 +138,27 @@ void GIFrenderToLCD_callback(GIFDRAW *pDraw)
 // ======================================================================================================
 // ======================================================================================================
 
-bool DisplayGIF(uint8_t *imageData, int imageSize, uint8_t numberRepetitons)
+bool DisplayGIF(uint8_t *imageData, int imageSize, uint8_t numberRepetitons, int positionX = -1, int positionY = -1)
 {
   bool result = false;
   int rr = 0;
   if (gif.open((uint8_t *)imageData, imageSize, GIFrenderToLCD_callback))
   {
     Serial.printf("Successfully opened GIF; Canvas size = %d x %d\n", gif.getCanvasWidth(), gif.getCanvasHeight());
+    if (positionX == -1)  // center on the display
+    {
+      iOffX = (GIF_DISPLAY_WIDTH - gif.getCanvasWidth()) / 2;
+      iOffY = (GIF_DISPLAY_HEIGHT - gif.getCanvasHeight()) / 2;
+    }
+    else
+    {
+      iOffX = positionX;
+      iOffY = positionY;
+    }
     tft.startWrite(); // The TFT chip select is locked low
     for (uint8_t i = 0; i < numberRepetitons; i++)
     {
-      // it automatically restarts the gif
+      // it automatically restarts the gif from the beginning
       while (rr = gif.playFrame(true, NULL))
       {
         yield();
@@ -166,9 +177,7 @@ bool DisplayGIF(uint8_t *imageData, int imageSize, uint8_t numberRepetitons)
 // ======================================================================================================
 // ======================================================================================================
 
-
 void initGIF(void)
 {
   gif.begin(BIG_ENDIAN_PIXELS);
 }
-

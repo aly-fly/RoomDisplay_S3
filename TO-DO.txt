@@ -4,3 +4,5 @@
 - horizontalne črte za BTC
 - Radar .gif download and render
 - radio trenutni komad
+- certificate files to a file system or SD card
+

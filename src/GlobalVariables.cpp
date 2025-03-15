@@ -9,6 +9,7 @@
 __attribute__((section(".ext_ram.bss")))  uint8_t gBuffer[3000];
 __attribute__((section(".ext_ram.bss")))  uint8_t GIFimage[100000]; // 100 kB, typ image is 50 kB
 
+size_t GIFimageSize = 0;
 
 // use PSRAM
 uint8_t *gBuffer1 = nullptr;

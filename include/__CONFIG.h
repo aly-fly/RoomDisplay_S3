@@ -56,6 +56,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 #define ARSO_SERVER_FORECAST_XML_URL  "https://meteo.arso.gov.si/uploads/probase/www/fproduct/text/sl/fcast_SI_OSREDNJESLOVENSKA_latest.xml"
 #define ARSO_SERVER_METEOGRAM_XML_URL "https://meteo.arso.gov.si/uploads/probase/www/fproduct/text/sl/forecast_SI_OSREDNJESLOVENSKA_int3h.xml"
 #define MTG_NUMPTS 25
+#define ARSO_SERVER_RAIN_GIF_URL      "https://meteo.arso.gov.si/uploads/probase/www/observ/radar/si0_zm_pda_anim.gif"
 // also validate: include\Arso_https_certificate.h
 
 

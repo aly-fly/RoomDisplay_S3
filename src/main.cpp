@@ -14,6 +14,7 @@
 #include "ArsoXml.h"
 #include "ArsoPlotMeteogram.h"
 #include "ArsoPlotForecast.h"
+#include "ArsoRainGIF.h"
 #include "ShellyHttpClient.h"
 #include "CaptivePortalLogin.h"
 #include "CoinCapAPI.h"
@@ -56,7 +57,7 @@ void setup() {
   DisplayInit();
   initGIF();
 
-  gif_draw_test();
+  //gif_draw_test();
   
   DisplayText("Init...\n", CLYELLOW);
   DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
@@ -164,6 +165,7 @@ void loop() {
       case 'A':
         Serial.println("-> Invalidate ARSO data");
         InvalidateArsoData();
+        InvalidateArsoRain();
         break;
 
       case 'B':
@@ -320,15 +322,21 @@ void loop() {
     if (ok) delay(13000);
   }
 
-  // COIN CAP DATA PLOT
+  // Arso rain GIF
   if (ScreenNumber == 3) {  // -------------------------------------------------------------------------------------------------------------------------
+    ok = GetARSOrain();
+    if (ok) ShowARSOrainImage();
+  }
+
+  // COIN CAP DATA PLOT
+  if (ScreenNumber == 4) {  // -------------------------------------------------------------------------------------------------------------------------
     ok = GetCoinCapData_1H();
     PlotCoinCapData_1H();
     if (ok) delay(4000);
   }
 
   // COIN CAP DATA PLOT
-  if (ScreenNumber == 4) {  // -------------------------------------------------------------------------------------------------------------------------
+  if (ScreenNumber == 5) {  // -------------------------------------------------------------------------------------------------------------------------
     ScreenNumber++;
    /*    
       if (!NightMode) {
@@ -340,14 +348,14 @@ void loop() {
   }
 
   // JEDILNIK FENIKS
-  if (ScreenNumber == 5) {  // -------------------------------------------------------------------------------------------------------------------------
+  if (ScreenNumber == 6) {  // -------------------------------------------------------------------------------------------------------------------------
     GetFeniks();
     DrawFeniks();
     delay(13000);  
   }
 
   // JEDILNIK OŠ DOMŽALE
-  if (ScreenNumber == 6) {  // -------------------------------------------------------------------------------------------------------------------------
+  if (ScreenNumber == 7) {  // -------------------------------------------------------------------------------------------------------------------------
     if (inHomeLAN || readAllData) {
       if ((CurrentMonth < 7) || (CurrentMonth > 8) || readAllData) {
         GetJedilnikOsDomzale();
@@ -358,7 +366,7 @@ void loop() {
   }
 
   // URNIK OŠ DOMŽALE
-  if (ScreenNumber == 7) {  // -------------------------------------------------------------------------------------------------------------------------
+  if (ScreenNumber == 8) {  // -------------------------------------------------------------------------------------------------------------------------
     if (inHomeLAN || readAllData) {
       if ((CurrentMonth < 7) || (CurrentMonth > 8) || readAllData) {
         GetEAsistent();
@@ -370,7 +378,7 @@ void loop() {
     } else ScreenNumber++;
   }
 
-  if (ScreenNumber == 8) {  // -------------------------------------------------------------------------------------------------------------------------
+  if (ScreenNumber == 9) {  // -------------------------------------------------------------------------------------------------------------------------
     if (!inHomeLAN) {
       ScreenNumber++;
     } else {
@@ -414,7 +422,7 @@ void loop() {
 
 
   ScreenNumber++;
-  if (ScreenNumber >= 9) { // housekeeping at the end of display cycles
+  if (ScreenNumber >= 10) { // housekeeping at the end of display cycles
     if (inHomeLAN)
       ScreenNumber = 0; else
       ScreenNumber = 1;   // skip heat pump
