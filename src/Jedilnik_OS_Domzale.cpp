@@ -329,8 +329,16 @@ void GetJedilnikOsDomzale(void){
       int idxx = CelJedilnik.indexOf("202"); // 2024, 2025, ...
       if (idxx > 0) {
         JedilnikDatum = CelJedilnik.substring(idxx-15, idxx+4);
+        Serial.print("JedilnikDatum: ");
+        Serial.println(JedilnikDatum);  // "    17.  21. 3. 2025"
         JedilnikDatum.trim(); // remove leading and trailing spaces
         TrimDoubleSpaces(JedilnikDatum);
+        // insert dash between days (looks like original dash is lost during UTF conversion)
+        int p = JedilnikDatum.indexOf('.');
+        if (p >= 0)
+        {
+          JedilnikDatum.setCharAt(p+1, '-');
+        }
       }
 
       // remove footer

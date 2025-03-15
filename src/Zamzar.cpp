@@ -212,7 +212,8 @@ bool ConvertPdfToTxt(const String PdfUrl) {
    
       p = ZamzarData.indexOf("\"status\":\"successful\"");
       Finished = (p > 0) && (p < 130); // job finished, not import finished
-      ok = ((ZamzarData.indexOf("\"status\":\"initialising\"") > 0) || Finished);
+      ok = ((ZamzarData.indexOf("\"status\":\"initialising\"") > 0) ||
+            (ZamzarData.indexOf("\"status\":\"converting\"") > 0)   || Finished);
 
       if (!ok) {
         Serial.println("Fail Zamzar step 2b: job not successful");

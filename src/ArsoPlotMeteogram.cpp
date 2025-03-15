@@ -9,7 +9,7 @@ void ArsoPlotMeteogram(void) {
     float_t Xscaling = (float_t) DspW / (float_t)MTG_NUMPTS;
     Serial.printf("Scaling X: %f\r\n", Xscaling);
 
-    float Yoffset = -14; // vertical shift data plot and numbers
+    float Yoffset = 0; // vertical shift data plot and numbers (negative = down)
 
     float_t Minn, Maxx;
     Minn =  999999999;
@@ -27,9 +27,9 @@ void ArsoPlotMeteogram(void) {
     float_t X1, X2, Y1, Y2, Yscaling;
     Yscaling = (float(DspH) / (Maxx - Minn));
     Serial.printf("Scaling Y: %f\r\n", Yscaling);
-    if (Yscaling > 10) {
-      Yscaling = 10; // limit Y zoom
-      Yoffset =+ 45;
+    if (Yscaling > 12) {
+      Yscaling = 12; // limit Y zoom
+      Yoffset =+ 40; // shift up a bit, to make it centered
     }
     Serial.printf("Scaling Y limited: %f\r\n", Yscaling);
 
@@ -166,7 +166,7 @@ void ArsoPlotMeteogram(void) {
       X2 = (Xscaling / 2) + ((idx) * Xscaling);
       Y2 = (ArsoMeteogram[idx].TemperatureN - Minn) * Yscaling + Yoffset;
       Y2 = DspH - Y2;
-      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 + 15, 2);
+      tft.drawNumber(round(ArsoMeteogram[idx].TemperatureN), X2, Y2 + 20, 2);
       delay(50);
     }
 

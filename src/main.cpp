@@ -310,9 +310,12 @@ void loop() {
 
   // WEATHER FORECAST  
   if (ScreenNumber == 1) {  // -------------------------------------------------------------------------------------------------------------------------    
+    /*
     ok = GetARSOdata();
     if (ok) ArsoPlotForecast();
     if (ok) delay(8000);
+    */
+   ScreenNumber++;
   }
 
   // Arso meteogram
