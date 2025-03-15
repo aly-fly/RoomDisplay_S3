@@ -386,6 +386,7 @@ void GetEAsistent(void) {
     StartYear--;
   }
   // 2.9.2024 = monday at 0:00
+  // https://www.epochconverter.com/
   memset(&sStartTime, 0, sizeof(sStartTime));
   sStartTime.tm_year = StartYear - 1900;
   sStartTime.tm_mon = 9 - 1;

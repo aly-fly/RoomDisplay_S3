@@ -93,6 +93,8 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
   #define TFT_RST       -1 // connect to RESET pin / ESP32 EN pin
   #define TFT_CS        GPIO_NUM_14
 
+//#define GIF_USE_DMA       // ESP32 ~1.25x single frame rendering performance boost for badgers.h
+                            // Note: Do not use SPI DMA if reading GIF images from SPI SD card on same bus as TFT  
 
 // ************ BODMER LIBRARY CONFIG *********************
 
@@ -107,7 +109,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 
 #define SMOOTH_FONT
 
-#define SPI_FREQUENCY        25000000
+#define SPI_FREQUENCY        20000000
 #define SPI_READ_FREQUENCY   10000000
 #define DISABLE_ALL_LIBRARY_WARNINGS
 #define USER_SETUP_LOADED

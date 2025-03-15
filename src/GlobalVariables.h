@@ -5,7 +5,8 @@
 #include <stdint.h>
 
 // create static buffer for reading stream from the server
-extern uint8_t gBuffer[3000]; // 3 kB
+extern uint8_t gBuffer[3000];
+extern uint8_t GIFimage[100000];
 
 void globalVariablesInit(void);
 void globalVariablesFree(void);

@@ -37,6 +37,9 @@ void DisplayInit(void)
   DisplaySetBrightness(0); // baklight off
 
   tft.init();
+#ifdef GIF_USE_DMA
+  tft.initDMA();
+#endif
   tft.setRotation(3);
   tft.setTextWrap(true, true);
   DspH = tft.height();

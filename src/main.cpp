@@ -22,6 +22,7 @@
 #include "Jedilnik_Feniks.h"
 #include "eAsistentUrnik.h"
 #include "Smoothie_TCP.h"
+#include "GIFDraw.h"
 
 int ScreenNumber = 0;
 bool NightMode = false;
@@ -30,6 +31,8 @@ String TempOutdoor1, TempOutdoor2;
 bool ok;
 String sCmd;
 bool readAllData = false;
+
+void gif_draw_test();
 
 void setup() {
   Serial.begin(115200);
@@ -51,6 +54,9 @@ void setup() {
   Serial.println(BUILD_TIMESTAMP);
 
   DisplayInit();
+  initGIF();
+
+  gif_draw_test();
   
   DisplayText("Init...\n", CLYELLOW);
   DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);

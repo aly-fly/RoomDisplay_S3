@@ -2,10 +2,13 @@
 #include <stdint.h>
 #include <esp_heap_caps.h>
 
+// https://github.com/espressif/esp-idf/blob/master/components/esp_common/include/esp_attr.h#L121
 // create static buffer for reading stream from the server
 // uint8_t gBuffer[3000] = { 0 }; // 3 kB
 // EXT_RAM_BSS_ATTR uint8_t gBuffer[3000] = { 0 }; // 3 kB
 __attribute__((section(".ext_ram.bss")))  uint8_t gBuffer[3000];
+__attribute__((section(".ext_ram.bss")))  uint8_t GIFimage[100000]; // 100 kB, typ image is 50 kB
+
 
 // use PSRAM
 uint8_t *gBuffer1 = nullptr;
