@@ -8,7 +8,8 @@
 #include "myWiFi.h"
 #include <utils.h>
 #include "Clock.h"
-#include "Arso_https_certificate.h"
+#include "SD_Card.h"
+#include "GlobalVariables.h"
 #include "display.h"
 #include "GlobalVariables.h"
 #include "GIFDraw.h"
@@ -25,12 +26,15 @@ bool GetGIFimageFromServer(const char *URL)
     }
 
     setClock();
+    loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate));
+
     GIFimageSize = 0;
 
     WiFiClientSecure *client = new WiFiClientSecure;
     if (client)
     {
-        client->setCACert(rootCACertificate_Arso);
+        client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+        client->setCACert(Certificate);
 
         {
             // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is
@@ -111,7 +115,7 @@ bool GetARSOrain(void)
     else
     {
         DisplayText("Image size: ", CLWHITE);
-        DisplayText(String(GIFimageSize/1000).c_str(), CLWHITE);
+        DisplayText(String(GIFimageSize / 1000).c_str(), CLWHITE);
         DisplayText(" kB \nOK\n", CLGREEN);
         result = true;
     }

@@ -6,9 +6,9 @@
 #include "myWiFi.h"
 #include <utils.h>
 #include "Clock.h"
-#include "eAsistent_https_certificate.h"
-#include "display.h"
+#include "SD_Card.h"
 #include "GlobalVariables.h"
+#include "display.h"
 
 // https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/6/9421462
 
@@ -64,9 +64,12 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
   String sBufff;
   int NoMoreData;
 
+  loadFileFromSDcardToMerory("/cert/easistent-com.crt", Certificate, sizeof(Certificate));
+
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client -> setCACert(rootCACertificate_eAsistent);
+    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
 
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 

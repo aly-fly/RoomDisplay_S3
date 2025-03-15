@@ -13,7 +13,8 @@
 #include <utils.h>
 #include "Clock.h"
 #include "ArsoXml.h"
-#include "Arso_https_certificate.h"
+#include "SD_Card.h"
+#include "GlobalVariables.h"
 #include "display.h"
 
 unsigned long LastTimeArsoRefreshed = 0; // data is not valid
@@ -31,12 +32,13 @@ bool GetXmlDataFromServer(const char *URL) {
         return false;
     }
 
-  setClock(); 
+  setClock();
+  loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate));
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {
-    client -> setCACert(rootCACertificate_Arso);
-
+    client -> setHandshakeTimeout(10000);  // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;

@@ -1,5 +1,7 @@
 
 bool SDcardInit(void);
+bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize);
+
 void SD_TEST(void);
 
 #if defined(USE_SD_CARD_SPI)

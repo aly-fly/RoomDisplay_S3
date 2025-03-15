@@ -8,6 +8,7 @@
 extern uint8_t gBuffer[3000];
 extern uint8_t GIFimage[100000];
 extern size_t GIFimageSize;
+extern char Certificate[4000];
 
 
 void globalVariablesInit(void);

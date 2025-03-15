@@ -8,6 +8,7 @@
 // EXT_RAM_BSS_ATTR uint8_t gBuffer[3000] = { 0 }; // 3 kB
 __attribute__((section(".ext_ram.bss")))  uint8_t gBuffer[3000];
 __attribute__((section(".ext_ram.bss")))  uint8_t GIFimage[100000]; // 100 kB, typ image is 50 kB
+__attribute__((section(".ext_ram.bss")))  char Certificate[4000]; // typical certificate file is 2-3 kB
 
 size_t GIFimageSize = 0;
 
@@ -25,6 +26,7 @@ void globalVariablesInit(void)
     assert(gBuffer1);
     Serial.printf(" Address static:  %p\r\n", (void *)gBuffer);
     Serial.printf(" Address dynamic: %p\r\n", (void *)gBuffer1);    
+    memset(Certificate, 0, sizeof(Certificate));
 }
 
 void globalVariablesFree(void)

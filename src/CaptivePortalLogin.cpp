@@ -7,7 +7,8 @@
 #include "myWiFi.h"
 #include <utils.h>
 #include "Clock.h"
-#include "RLSwifi_https_certificate.h"
+#include "SD_Card.h"
+#include "GlobalVariables.h"
 #include "display.h"
 
 
@@ -84,11 +85,14 @@ bool HTTPSconnect(String URL) {
       return false;
   }
   bool result = false;
+  loadFileFromSDcardToMerory("/cert/rls.crt", Certificate, sizeof(Certificate));
+
   Serial.println("Connecting to: " + URL);
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {
-    client -> setCACert(rootCACertificate_RlsWifi);
+    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;

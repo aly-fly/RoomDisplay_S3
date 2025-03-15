@@ -6,8 +6,8 @@
 #include <utils.h>
 #include "Clock.h"
 #include "display.h"
+#include "SD_Card.h"
 #include "GlobalVariables.h"
-#include "Zamzar_htps_certificate.h"  // rootCACertificate_Zamzar
 #include "___CONFIG_SECRETS.h"
 
 
@@ -49,11 +49,14 @@ bool HTTPSconnect(const String URL, const bool PostRequest, const String PostDat
         return false;
     }
 
-  setClock(); 
+  setClock();
+
+  loadFileFromSDcardToMerory("/cert/api-zamzar-com.crt", Certificate, sizeof(Certificate));
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {
-    client -> setCACert(rootCACertificate_Zamzar);
+    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
 
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 

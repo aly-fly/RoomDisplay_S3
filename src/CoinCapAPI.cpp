@@ -11,7 +11,8 @@
 #include "myWiFi.h"
 #include <utils.h>
 #include "Clock.h"
-#include "CoinCap_https_certificate.h"
+#include "SD_Card.h"
+#include "GlobalVariables.h"
 #include "display.h"
 
 #define MAX_DATA_POINTS_1H (31*24 + 10)
@@ -52,11 +53,14 @@ bool GetDataFromCoinCapServer(void) {
       return false;
   }
 
-  setClock(); 
+  setClock();
+  loadFileFromSDcardToMerory("/cert/api-coincap-io.crt", Certificate, sizeof(Certificate));
+
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client -> setCACert(rootCACertificate_CoinCap);
+    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
 
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 

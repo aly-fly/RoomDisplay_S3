@@ -122,6 +122,44 @@ bool SDcardInit(void)
 // ===========================================================================================================================
 // ===========================================================================================================================
 
+bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize)
+{
+  Serial.printf("Reading file: %s\n", filename);
+  File file = FILESYS.open(filename);
+  if (!file)
+  {
+    Serial.printf("Failed to open file %s\n", filename);
+    return false;
+  }
+
+/*
+  size_t i = 0;
+  while (file.available())
+  {
+    buffer[i++] = file.read();
+  }
+  buffer[i] = '\0';
+*/
+
+  size_t fileSize = file.size();
+  Serial.printf("File size: %d bytes\n", fileSize);
+  if (fileSize > maxSize)
+  {
+    Serial.printf("File %s is too big\n", filename);
+    file.close();
+    return false;
+  }
+  
+  file.readBytes(buffer, fileSize);
+  buffer[fileSize] = '\0'; // Null-terminate the text
+  file.close();
+  return true;
+}
+
+  // ===========================================================================================================================
+  // ===========================================================================================================================
+
+
 void SD_TEST_listDir(fs::FS &fs, const char *dirname, uint8_t levels)
 {
   Serial.printf("Listing directory: %s\n", dirname);

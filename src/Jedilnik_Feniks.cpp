@@ -6,9 +6,9 @@
 #include "myWiFi.h"
 #include <utils.h>
 #include "Clock.h"
-#include "Feniks_https_certificate.h"
-#include "display.h"
+#include "SD_Card.h"
 #include "GlobalVariables.h"
+#include "display.h"
 #include "ArsoXml.h"  // current day
 
 String JedilnikCeloten;
@@ -37,9 +37,12 @@ bool ReadFeniksWebsite(void) {
   DisplayText("\n");
   String sBufOld;
 
+  loadFileFromSDcardToMerory("/cert/gostilnafeniks-si.crt", Certificate, sizeof(Certificate));
+
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client -> setCACert(rootCACertificate_Feniks);
+    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+    client -> setCACert(Certificate);
 
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 

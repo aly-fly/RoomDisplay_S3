@@ -138,7 +138,7 @@ void GIFrenderToLCD_callback(GIFDRAW *pDraw)
 // ======================================================================================================
 // ======================================================================================================
 
-bool DisplayGIF(uint8_t *imageData, int imageSize, uint8_t numberRepetitons, int positionX = -1, int positionY = -1)
+bool DisplayGIF(uint8_t *imageData, int imageSize, uint8_t numberRepetitons, int positionX, int positionY)
 {
   bool result = false;
   int rr = 0;
