@@ -33,9 +33,9 @@ bool GetGIFimageFromServer(const char *URL)
     WiFiClientSecure *client = new WiFiClientSecure;
     if (client)
     {
-        client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
+        client->setHandshakeTimeout(10); // seconds (default 120 s)
+        client->setTimeout(10);          // seconds (default  30 s)
         client->setCACert(Certificate);
-
         {
             // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is
             HTTPClient https;
@@ -141,7 +141,7 @@ void ShowARSOrainImage(void)
     }
 
     DisplayClear(CLGREY);
-    if (!DisplayGIF(GIFimage, GIFimageSize, 6))
+    if (!DisplayGIF(GIFimage, GIFimageSize, 4))
     {
         DisplayText("GIF draw error!", FONT_TITLE, 5, 20, CLRED);
         delay(2000);

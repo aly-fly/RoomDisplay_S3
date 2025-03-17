@@ -2,8 +2,8 @@
 #include "Arduino.h"
 #include "utils.h"
 
-const char* DAYS3[] = { "PON", "TOR", "SRE", "CET", "PET", "SOB", "NED" };
-const char* DAYSF[] = { "ponedeljek", "torek", "sreda", "cetrtek", "petek", "sobota", "nedelja" };
+const char* DAYS3[]    = { "PON", "TOR", "SRE", "CET", "PET", "SOB", "NED" };
+const char* DAYSFULL[] = { "ponedeljek", "torek", "sreda", "cetrtek", "petek", "sobota", "nedelja" };
 
 // remove non-printable chars
 void TrimNonPrintable (String& Str) {

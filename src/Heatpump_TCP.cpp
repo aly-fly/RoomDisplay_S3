@@ -17,10 +17,11 @@ bool HP_TCPclientConnect(void) {
     if (!WiFi.isConnected()) {
         return false;
     }
-    
+    #ifdef DISPLAY_TCP_MSGS
     DisplayText("TCP socket: ");
     DisplayText(HEATPUMP_HOST);
     DisplayText("\n");
+    #endif
 
     Serial.print("Connecting to ");
     Serial.println(HEATPUMP_HOST);
@@ -29,12 +30,16 @@ bool HP_TCPclientConnect(void) {
         Serial.println("Connected.");
         delay(300);
         if (!clientHP.connected()) {
+            #ifdef DISPLAY_TCP_MSGS
             DisplayText("CONN. DROPPED!\n", CLRED);
-            Serial.println("... and connection dropped.");
             delay (1500);
+            #endif
+            Serial.println("... and connection dropped.");
             return false;
         }
+        #ifdef DISPLAY_TCP_MSGS
         DisplayText("OK\n", CLGREEN);
+        #endif
         // check if server sent any welcome messages
         delay(300);
         String line = clientHP.readString();
@@ -42,12 +47,14 @@ bool HP_TCPclientConnect(void) {
         Serial.println(line);
         result = true;
     } else {
+        #ifdef DISPLAY_TCP_MSGS
         DisplayText("FAIL!\n", CLRED);
         delay(2000);
+        #endif
         Serial.println("Connection failed.");
         result = false;
     }
-    delay (1000);
+    delay (10);
     return result;
 }
 

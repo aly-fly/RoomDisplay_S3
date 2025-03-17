@@ -5,7 +5,7 @@
 #define SPACE 32
 
 extern const char* DAYS3[];
-extern const char* DAYSF[];
+extern const char* DAYSFULL[];
 
 void TrimNonPrintable (String& Str);
 void TrimNumDot (String& Str);

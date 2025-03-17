@@ -2,7 +2,6 @@
 - ikone za veter
 - lunina faza
 - horizontalne črte za BTC
-- Radar .gif download and render
+- Radar .gif scale x2
 - radio trenutni komad
-- certificate files to a file system or SD card
 

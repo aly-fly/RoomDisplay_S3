@@ -9,7 +9,6 @@
 #include "SD_Card.h"
 #include "GlobalVariables.h"
 #include "display.h"
-#include "ArsoXml.h"  // current day
 
 String JedilnikCeloten;
 String JedilnikF[5];
@@ -41,9 +40,9 @@ bool ReadFeniksWebsite(void) {
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
-    client -> setCACert(Certificate);
-
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;
@@ -183,6 +182,9 @@ bool ReadFeniksWebsite(void) {
 }
 
 
+// =======================================================================================================
+// =======================================================================================================
+// =======================================================================================================
 
 
 void GetFeniks(void){
@@ -241,8 +243,8 @@ void GetFeniks(void){
     for (int i = 0; i < 5; i++)
     {
       JedilnikF[i].clear();
-      idx1 = JedilnikCeloten.indexOf(DAYSF[i]);
-      idx2 = JedilnikCeloten.indexOf(DAYSF[i+1]);
+      idx1 = JedilnikCeloten.indexOf(DAYSFULL[i]);
+      idx2 = JedilnikCeloten.indexOf(DAYSFULL[i+1]);
       if (idx2 < 0) idx2 = JedilnikCeloten.length();
       JedilnikF[i] = JedilnikCeloten.substring(idx1, idx2);
     }
@@ -265,6 +267,11 @@ void GetFeniks(void){
       if (idx1 > 0) {
         JedilnikF[i].remove(idx1, 4);
       }
+      // add extra line break instead of space
+      idx1 = JedilnikF[i].indexOf("\n ");
+      if (idx1 > 0) {
+        JedilnikF[i].setCharAt(idx1+1, '\n');
+      }
     }
 
     // list extracted data
@@ -280,6 +287,9 @@ void GetFeniks(void){
 
 
 
+// =======================================================================================================
+// =======================================================================================================
+// =======================================================================================================
 
 
 
@@ -287,49 +297,34 @@ void GetFeniks(void){
 void DrawFeniks(void) {
   Serial.println("DrawFeniks()");
   DisplayClear();
-  String sToday = ArsoWeather[0].DayName;
-  sToday.toLowerCase();
-  sToday.remove(3);
-  Serial.print("Today = ");
-  Serial.println(sToday);
+  GetCurrentTime();
 
-
-  int processSingleDay = -1;
-  String DayF;
+  int processSingleDay = -1; // show whole week
+  GetCurrentTime();
   // Monday .. Friday
-  for (int day = 0; day < 5; day++) { // PON..PET
-    DayF = DAYSF[day];
-    DayF.remove(3);
-    if (sToday.indexOf(DayF) == 0) 
-    {
-      // show next day
-        if ((CurrentHour > 16) && (day < 4)) {
-          day++;
-          Serial.println("day++");
-        }
-      processSingleDay = day;
-      break; // day matched
+  if (CurrentWeekday < 6) { // day of the week (1 = Mon, 2 = Tue,.. 7 = Sun)
+    processSingleDay = CurrentWeekday - 1;
+    Serial.println("Workday = true");
+    // show next day
+    if ((CurrentHour > 16) && (CurrentWeekday < 4)) {
+      processSingleDay++;
+      Serial.println("day++");
     }
-  }
+  } // weekday
 
   // Sunday
-  DayF = DAYSF[6];
-  DayF.remove(3);  
-  if (sToday.indexOf(DayF) == 0) {
-    Serial.print("Today is Sunday");
+  if (CurrentWeekday == 7) {
+    Serial.println("Today is Sunday -> show Monday");
     // show next day
-      if (CurrentHour > 16) {
-        processSingleDay = 0; // Monday
-        Serial.print(" -> show Monday");
-      }
-      Serial.println();
+    processSingleDay = 0; // Monday
   }
 
   // process data for that day
   if (processSingleDay > -1) {
-      DisplayText("Feniks", FONT_TITLE, 200, 10, CLCYAN, true);
-      DisplayText(JedilnikF[processSingleDay].c_str(), FONT_TXT, 40, 70, CLWHITE, true);
+      DisplayText("Feniks", FONT_TITLE, 150, 10, CLCYAN, true);
+      DisplayText(JedilnikF[processSingleDay].c_str(), FONT_TXT, 40, 50, CLWHITE, true);
     } else { // weekend
+      DisplayText("Feniks", FONT_TITLE, 150, 10, CLCYAN, true);
       DisplayText("\n\n\n======================================\n", CLGREY);
       for (int i = 0; i < 3; i++) {
         DisplayText(JedilnikF[i].c_str(), CLYELLOW);

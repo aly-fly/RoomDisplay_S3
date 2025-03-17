@@ -29,8 +29,13 @@ void ProcessData (int &urnikNr, String &DataIn);
 
 void UrnikClear(int urnikNr) {
   for (int dan = 0; dan < 6; dan++) 
+  {
     for (int ura = 0; ura < 10; ura++) 
+    {
       Urnik[urnikNr][dan][ura].clear();
+    }
+    Urnik[urnikNr][dan][1] = "NO DATA";
+  }
 }
 
 bool ReadEAsistentWebsite(int teden, int urnikNr) {
@@ -68,9 +73,9 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
-    client -> setCACert(Certificate);
-
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;
@@ -449,9 +454,9 @@ void DrawEAsistent(int urnikNr) {
   DisplayClear();
   if (GetCurrentTime()) {
     Serial.print("Day of the week = ");
-    Serial.println(CurrentWeekday);
+    Serial.println(CurrentWeekday); // 1..7 = mon...sun
     Serial.print("Today = ");
-    Serial.println(DAYSF[CurrentWeekday-1]);
+    Serial.println(DAYSFULL[CurrentWeekday-1]);
     Serial.print("Hour = ");
     Serial.println(CurrentHour);
   } else {
@@ -459,7 +464,7 @@ void DrawEAsistent(int urnikNr) {
   }
   int dayToShow = CurrentWeekday;
 
-  if ((CurrentWeekday < 5) && (CurrentHour > 16)) { // work day 
+  if ((CurrentWeekday < 5) && (CurrentHour > 16)) { // mon...thu after 16:00
   // show next day
     dayToShow++;
     Serial.println("day++");
@@ -469,21 +474,24 @@ void DrawEAsistent(int urnikNr) {
     dayToShow = 1; // monday
   }
 
-  uint16_t color;
+  uint16_t selectedColor, drawColor;
   FontSize_t font;
+  int16_t Yshift = 0;
+  if (urnikNr == 0) selectedColor = CLPINK; 
+  if (urnikNr == 1) selectedColor = CLGREEN; 
   // process data for that day
   if (dayToShow > 0) {
+    tft.drawFastHLine(5, 7 + 27 + 5, 300, selectedColor);
     for (int i = 0; i < 10; i++)
     {
-      if ((i == 0) && (urnikNr == 0)) color = CLPINK; else 
-      if ((i == 0) && (urnikNr == 1)) color = CLGREEN; else 
-      if (Urnik[urnikNr][dayToShow][i].indexOf("ODPADLO") >= 0) color = CLRED; else
-      if (i == 1) color = CLORANGE; else
-      if (i % 2) color = CLLIGHTCYAN; else
-        color = CLWHITE;
-      font = FONT_URNIK_MM;
-      if (urnikNr == 0) font = FONT_URNIK_TT;
-      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27), color, false);
+      if (Urnik[urnikNr][dayToShow][i].indexOf("ODPADLO") >= 0) drawColor = CLRED; else
+      if (i == 1) drawColor = CLORANGE; else
+      if (i % 2) drawColor = CLWHITE; else
+        drawColor = selectedColor;
+      if (urnikNr == 0) font = FONT_URNIK_TT; else 
+      font = FONT_URNIK_TT;
+      if (i == 1) Yshift = 10; // gap between name and first hour
+      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
     }
   }
     delay(1500);

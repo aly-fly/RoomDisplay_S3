@@ -13,7 +13,6 @@
 #include <FS.h>
 #include <SPIFFS.h>
 #include <SD.h>
-#include "ArsoXml.h"
 
 #define FileName "/jOsDom.txt"
 #define DEVEL_FileNameDbg "/celJed.txt"
@@ -59,9 +58,9 @@ bool GetPdfLinkFromMainWebsite(void) {
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
-    client -> setCACert(Certificate);
-
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
     { // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;
   
@@ -967,40 +966,27 @@ void GetJedilnikOsDomzale(void){
 void DrawJedilnikOsDomzale(void) {
   Serial.println("DrawJedilnikOsDomzale()");
   DisplayClear();
-  String sToday = ArsoWeather[0].DayName;
-  sToday.toUpperCase();
-  sToday.remove(3);
-  Serial.print("Today = ");
-  Serial.println(sToday);
   
   int idx1, idx2;
   String Jed[4];
-  int processSingleDay = -1;
+  int processSingleDay = -1; // show whole week
+  GetCurrentTime();
   // Monday .. Friday
-  for (int day = 0; day < 5; day++) {
-    if (sToday.indexOf(DAYS3[day]) == 0) {
-      Serial.println("Workday = true");
-      // show next day
-        if ((CurrentHour > 16) && (day < 4)) {
-          day++;
-          sToday = DAYS3[day];
-          Serial.println("day++");
-        }
-      processSingleDay = day;
-      break; // day matched
-    } // day matched
-  } // for
+  if (CurrentWeekday < 6) { // day of the week (1 = Mon, 2 = Tue,.. 7 = Sun)
+    processSingleDay = CurrentWeekday - 1;
+    Serial.println("Workday = true");
+    // show next day
+    if ((CurrentHour > 16) && (CurrentWeekday < 4)) {
+      processSingleDay++;
+      Serial.println("day++");
+    }
+  } // weekday
 
   // Sunday
-  if (sToday.indexOf(DAYS3[6]) == 0) {
-    Serial.print("Today is Sunday");
+  if (CurrentWeekday == 7) {
+    Serial.println("Today is Sunday -> show Monday");
     // show next day
-      if (CurrentHour > 16) {
-        processSingleDay = 0; // Monday
-        sToday = DAYS3[0]; // Monday
-        Serial.print(" -> show Monday");
-      }
-      Serial.println();
+    processSingleDay = 0; // Monday
   }
 
   // process data for that day
@@ -1030,8 +1016,8 @@ void DrawJedilnikOsDomzale(void) {
 
   // display
   if (processSingleDay > -1) {
-    DisplayText(JedilnikDatum.c_str(), FONT_TITLE, 110, 15, CLBLUE);
-    DisplayText(sToday.c_str(), FONT_TXT, 20, 15, CLGREY);
+    DisplayText(DAYSFULL[CurrentWeekday-1], FONT_TXT, 15, 17, CLGREY);
+    DisplayText(JedilnikDatum.c_str(), FONT_TITLE, 170, 15, CLBLUE);
     DisplayText(Jed[1].c_str(), FONT_TXT, 1,  70, CLYELLOW, true);
     DisplayText(Jed[2].c_str(), FONT_TXT, 1, 180, CLCYAN, true);
   } else { // weekend

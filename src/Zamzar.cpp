@@ -55,9 +55,9 @@ bool HTTPSconnect(const String URL, const bool PostRequest, const String PostDat
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {
-    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
-    client -> setCACert(Certificate);
-
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;

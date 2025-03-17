@@ -56,9 +56,10 @@ void setup() {
 
   DisplayInit();
   initGIF();
-
   //gif_draw_test();
   
+  DisplayClear();
+  delay(100);
   DisplayText("Init...\n", CLYELLOW);
   DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
   DisplayText("Version: ", CLWHITE);

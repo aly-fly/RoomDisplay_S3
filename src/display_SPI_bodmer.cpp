@@ -113,7 +113,7 @@ void DisplayClear(uint16_t Color)
   tft.unloadFont();
   tft.setCursor(0, 0);
   tft.fillScreen(Color);
-  tft.setTextFont(1);
+  tft.setTextFont(1); // default system font
   tft.setCursor(0, 0);
   uint16_t TxtColor = TFT_WHITE;
   if (DspBgColor == TFT_WHITE)

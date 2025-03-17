@@ -59,9 +59,9 @@ bool GetDataFromCoinCapServer(void) {
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
-    client->setHandshakeTimeout(10000); // 10 seconds (default 120 s)
-    client -> setCACert(Certificate);
-
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
     {
       // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
       HTTPClient https;
@@ -371,8 +371,8 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
   tft.drawNumber(round(Minn), 75, DspH - 12, 1);
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
   tft.loadFont(FN_TITLE);
-  X = tft.drawNumber(round(DataArray[DataLen-1]), 140, 9);
-  tft.drawString("USD", 140 + X + 13, 9);
+  X = tft.drawNumber(round(DataArray[DataLen-1]), 250, 9);
+  tft.drawString("USD", 250 + X + 13, 9);
   tft.unloadFont();
 }
 
