@@ -33,7 +33,7 @@ bool GetXmlDataFromServer(const char *URL) {
     }
 
   setClock();
-  loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate));
+  loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate), true);
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {

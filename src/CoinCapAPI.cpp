@@ -54,7 +54,7 @@ bool GetDataFromCoinCapServer(void) {
   }
 
   setClock();
-  loadFileFromSDcardToMerory("/cert/api-coincap-io.crt", Certificate, sizeof(Certificate));
+  loadFileFromSDcardToMerory("/cert/api-coincap-io.crt", Certificate, sizeof(Certificate), true);
 
 
   WiFiClientSecure *client = new WiFiClientSecure;

@@ -25,6 +25,10 @@ void DisplaySetBrightness(uint8_t Brightness)
   ledcWrite(ledChannel, Brightness);
 }
 
+// preload fonts to RAM
+char * RAM_FONT_TEMP_METEO = nullptr;
+char * RAM_FONT_TEMP_SINGLE = nullptr;
+
 void DisplayInit(void)
 {
   Serial.println("Starting LCD...");
@@ -47,10 +51,10 @@ void DisplayInit(void)
   Serial.printf("LCD size: %d x %d \r\n", DspW, DspH);
   DisplayClear();
 
-  tft.drawPixel(30, 30, TFT_DARKGREY);
+  tft.drawPixel(2, 2, TFT_DARKGREY);
   Serial.print(" Pixel value written = ");
   Serial.println(TFT_DARKGREY, HEX);
-  uint32_t rd = tft.readPixel(30, 30);
+  uint32_t rd = tft.readPixel(2, 2);
   Serial.print(" Pixel value read    = ");
   Serial.println(rd, HEX);
 
@@ -104,6 +108,38 @@ void DisplayInitFonts(void)
   {
     Serial.println("\r\nFonts found OK.");
     DisplayText("Fonts found ok.\r\n", CLGREEN);
+    // preload fonts to RAM
+    size_t fontFileSize;
+    bool ok = false;
+
+    fontFileSize = GetFileSize_SD(FN_TEMP_SINGLE_SD);
+    if (fontFileSize > 0)
+    {
+      RAM_FONT_TEMP_SINGLE = (char *)ps_malloc(fontFileSize);
+      if (RAM_FONT_TEMP_SINGLE != NULL)
+      {
+        ok = loadFileFromSDcardToMerory(FN_TEMP_SINGLE_SD, RAM_FONT_TEMP_SINGLE, fontFileSize, false);
+      }
+    }
+
+    fontFileSize = GetFileSize_SD(FN_TEMP_METEO_SD);
+    if (fontFileSize > 0)
+    {
+      RAM_FONT_TEMP_METEO = (char *)ps_malloc(fontFileSize);
+      if (RAM_FONT_TEMP_METEO != NULL)
+      {
+        ok = loadFileFromSDcardToMerory(FN_TEMP_METEO_SD, RAM_FONT_TEMP_METEO, fontFileSize, false);
+      }
+    }
+  
+    if (!ok)
+    {
+      Serial.println("Error loading fonts from SD card to RAM!");
+      DisplayText("Error loading fonts from SD card to RAM!\r\n", CLRED);
+      while (1)
+        yield();
+  
+    }
   }
 }
 
@@ -149,7 +185,7 @@ void DisplayText(const char Text[], FontSize_t FontSize, int16_t X, int16_t Y, u
   switch (FontSize)
   {
   case FONT_TXT_SMALL:
-    tft.loadFont(FN_TXT_SMALL);
+    tft.loadFont(FN_TXT_SMALL); // loads parameters from a font vlw file
     break;
   case FONT_TXT:
     tft.loadFont(FN_TXT);
@@ -164,10 +200,12 @@ void DisplayText(const char Text[], FontSize_t FontSize, int16_t X, int16_t Y, u
     tft.loadFont(FN_TITLE);
     break;
   case FONT_TEMP_METEO:
-    tft.loadFont(FN_TEMP_METEO);
+    //tft.loadFont(FN_TEMP_METEO);
+    tft.loadFont((uint8_t *)RAM_FONT_TEMP_METEO);
     break;
   case FONT_TEMP_SINGLE:
-    tft.loadFont(FN_TEMP_SINGLE);
+    //tft.loadFont(FN_TEMP_SINGLE);
+    tft.loadFont((uint8_t *)RAM_FONT_TEMP_SINGLE);
     break;
   default:
     tft.unloadFont(); // Default small font
@@ -201,107 +239,12 @@ uint32_t read32(fs::File &f)
   return result;
 }
 
-/*
-// Bodmer's BMP image rendering function
-void DisplayShowImage_24bpp_only(const char *filename, int16_t x, int16_t y) {
-
-  if ((x >= tft.width()) || (y >= tft.height())) return;
-
-  if (!SPIFFS.exists(filename)) {
-    Serial.print("File not found: ");
-    Serial.println(filename);
-    return;
-  }
-
-  fs::File bmpFS;
-
-  // Open requested file
-  bmpFS = SPIFFS.open(filename, FILE_READ);
-
-  if (!bmpFS)
-  {
-    Serial.print("Error opening file: ");
-    Serial.println(filename);
-    return;
-  }
-
-  Serial.print("Loading: ");
-  Serial.println(filename);
-
-  uint32_t seekOffset;
-  uint16_t w, h, row, col;
-  uint8_t  r, g, b;
-
-  if (read16(bmpFS) == 0x4D42)
-  {
-    read32(bmpFS);
-    read32(bmpFS);
-    seekOffset = read32(bmpFS);
-    read32(bmpFS);
-    w = read32(bmpFS);
-    h = read32(bmpFS);
-
-    if ((read16(bmpFS) == 1) && (read16(bmpFS) == 24) && (read32(bmpFS) == 0))
-    {
-      y += h - 1;
-
-      bool oldSwapBytes = tft.getSwapBytes();
-      tft.setSwapBytes(true);
-      bmpFS.seek(seekOffset);
-
-      uint16_t padding = (4 - ((w * 3) & 3)) & 3;
-      uint8_t FileLineBuffer[w * 3 + padding];
-
-      for (row = 0; row < h; row++) {
-
-        bmpFS.read(FileLineBuffer, sizeof(FileLineBuffer));
-        uint8_t*  bptr = FileLineBuffer;
-        uint16_t* tptr = (uint16_t*)FileLineBuffer;
-        // Convert 24 to 16-bit colours
-        for (uint16_t col = 0; col < w; col++)
-        {
-          b = *bptr++;
-          g = *bptr++;
-          r = *bptr++;
-          *tptr++ = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
-        }
-
-        // Push the pixel row to screen, pushImage will crop the line if needed
-        // y is decremented as the BMP image is drawn bottom up
-        tft.pushImage(x, y--, w, 1, (uint16_t*)FileLineBuffer);
-      }
-      tft.setSwapBytes(oldSwapBytes);
-    }
-    else Serial.println("BMP format not recognized.");
-  }
-  bmpFS.close();
-}
-*/
-
 
 void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgScaling)
 {
   uint32_t StartTime = millis();
   if ((x >= tft.width()) || (y >= tft.height()))
     return;
-
-  /*
-  #ifdef IMAGES_ON_SD_CARD
-    if (imgScaling == 2) {
-      String FN = filename;
-      FN.remove(FN.indexOf("."));
-      FN.concat("2.bmp");
-      Serial.print("Searching for: ");
-      Serial.print(FN);
-      if (FILESYS.exists(FN)) {
-        Serial.println("...Found");
-        filename = FN.c_str();
-      } else {
-        Serial.println("...NOT found");
-      }
-    }
-  #endif
-  */
 
   /*
     // searching for a file on a SD card takes ages!
@@ -323,10 +266,12 @@ void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgSca
     return;
   }
 
+#ifdef DEBUG_OUTPUT
   Serial.print("Loading: ");
   Serial.println(filename);
+#endif
 
-#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_IMG_TIMING
   Serial.print("img file open time: ");
   Serial.println(millis() - StartTime);
 #endif
@@ -361,7 +306,7 @@ void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgSca
   read16(bmpFS);              // color planes (must be 1)
   bitDepth = read16(bmpFS);
 
-#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_IMG_TIMING
   Serial.print(" image W, H, BPP: ");
   Serial.print(imgW);
   Serial.print(", ");
@@ -407,7 +352,7 @@ void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgSca
 
   bmpFS.seek(seekOffset);
 
-#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_IMG_TIMING
   Serial.print("img header processing time: ");
   Serial.println(millis() - StartTime);
 #endif
@@ -468,7 +413,7 @@ void DisplayShowImage(const char *filename, int16_t x, int16_t y, int16_t imgSca
   } // row
   tft.setSwapBytes(oldSwapBytes);
   bmpFS.close();
-#ifdef DEBUG_OUTPUT
+#ifdef DEBUG_IMG_TIMING
   Serial.print("img load time: ");
   Serial.println(millis() - StartTime);
 #endif

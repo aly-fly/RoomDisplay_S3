@@ -11,6 +11,8 @@
 // ************ General config *********************
 #define DEBUG_OUTPUT
 //#define DEBUG_OUTPUT_DATA  // include received data
+//#define DEBUG_IMG_TIMING   // image loading metrics and timing
+//#define DEBUG_URNIK
 //#define DISPLAY_TCP_MSGS
 
 #define DEVICE_NAME "Display_v2"
@@ -41,6 +43,8 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 
 #define SMOOTHIE_HOST "10.38.11.101" // 3D printer
 #define SMOOTHIE_PORT  23
+
+#define RADIO_URL "http://10.38.11.201/?status"
 
 // Shelly
 // DOC: https://shelly-api-docs.shelly.cloud/gen1/#shelly-3em-settings-emeter-index
@@ -110,6 +114,7 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 //#define LOAD_GFXFF  // FreeFonts. Include access to the 48 Adafruit_GFX free fonts FF1 to FF48 and custom fonts
 
 #define SMOOTH_FONT
+#define CONFIG_SPIRAM_SUPPORT 
 
 #define SPI_FREQUENCY        20000000
 #define SPI_READ_FREQUENCY   10000000

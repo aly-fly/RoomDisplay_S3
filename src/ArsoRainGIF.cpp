@@ -26,7 +26,7 @@ bool GetGIFimageFromServer(const char *URL)
     }
 
     setClock();
-    loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate));
+    loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate), true);
 
     GIFimageSize = 0;
 
@@ -141,13 +141,13 @@ void ShowARSOrainImage(void)
     }
 
     DisplayClear(CLGREY);
-    if (!DisplayGIF(GIFimage, GIFimageSize, 4))
+    if (!DisplayGIF(GIFimage, GIFimageSize, 3))
     {
         DisplayText("GIF draw error!", FONT_TITLE, 5, 20, CLRED);
         delay(2000);
     }
 
-    delay(1000);
+    delay(50);
 }
 
 // ###############################################################################################################################################

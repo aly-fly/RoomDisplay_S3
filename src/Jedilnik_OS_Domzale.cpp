@@ -54,7 +54,7 @@ bool GetPdfLinkFromMainWebsite(void) {
   DisplayText(OSD_URL.c_str());
   DisplayText("\n");
 
-  loadFileFromSDcardToMerory("/cert/os-domzale-si.crt", Certificate, sizeof(Certificate));
+  loadFileFromSDcardToMerory("/cert/os-domzale-si.crt", Certificate, sizeof(Certificate), true);
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {

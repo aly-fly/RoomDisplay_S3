@@ -36,7 +36,7 @@ bool ReadFeniksWebsite(void) {
   DisplayText("\n");
   String sBufOld;
 
-  loadFileFromSDcardToMerory("/cert/gostilnafeniks-si.crt", Certificate, sizeof(Certificate));
+  loadFileFromSDcardToMerory("/cert/gostilnafeniks-si.crt", Certificate, sizeof(Certificate), true);
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
@@ -321,7 +321,7 @@ void DrawFeniks(void) {
 
   // process data for that day
   if (processSingleDay > -1) {
-      DisplayText("Feniks", FONT_TITLE, 150, 10, CLCYAN, true);
+      DisplayText("Feniks", FONT_TITLE, 180, 10, CLCYAN, true);
       DisplayText(JedilnikF[processSingleDay].c_str(), FONT_TXT, 40, 50, CLWHITE, true);
     } else { // weekend
       DisplayText("Feniks", FONT_TITLE, 150, 10, CLCYAN, true);

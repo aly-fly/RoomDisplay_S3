@@ -35,8 +35,10 @@
 #define FN_URNIK_MM     "20-Ebrima-Bold"
 #define FN_TXT          "25-NirmalaText"  // "22-SegoeUI" // 20-Noto-Sans-Mono 
 #define FN_TITLE        "30-SegoeUI-Bold"
-#define FN_TEMP_METEO   "40-Rockwell-ExtraBold"
-#define FN_TEMP_SINGLE  "60-Rockwell-ExtraBold"
+#define FN_TEMP_METEO            "40-Rockwell-ExtraBold"
+#define FN_TEMP_METEO_SD  "/fonts/40-Rockwell-ExtraBold.vlw"
+#define FN_TEMP_SINGLE           "60-Rockwell-ExtraBold"
+#define FN_TEMP_SINGLE_SD "/fonts/60-Rockwell-ExtraBold.vlw"
 
 enum FontSize_t {
   FONT_SYS,

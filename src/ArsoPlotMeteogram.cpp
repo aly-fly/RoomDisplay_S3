@@ -9,7 +9,7 @@ void ArsoPlotMeteogram(void) {
     float_t Xscaling = (float_t) DspW / (float_t)MTG_NUMPTS;
     Serial.printf("Scaling X: %f\r\n", Xscaling);
 
-    float Yoffset = 60; // vertical shift data plot and numbers (negative = down)
+    float Yoffset = 50; // vertical shift data plot and numbers (negative = down)
 
     float_t Minn, Maxx;
     Minn =  999999999;
@@ -27,8 +27,8 @@ void ArsoPlotMeteogram(void) {
     float_t X1, X2, Y1, Y2, Yscaling;
     Yscaling = (float(DspH) / (Maxx - Minn));
     Serial.printf("Scaling Y: %f\r\n", Yscaling);
-    if (Yscaling > 8) {
-      Yoffset =+ 30; // shift up a bit, to make the almost flat line centered
+    if (Yscaling > 9) {
+      Yoffset += 30; // shift up a bit, to make the almost flat line centered
     }
     if (Yscaling > 6) {
       Yscaling = 6; // limit Y zoom

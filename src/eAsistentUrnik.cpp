@@ -69,7 +69,7 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
   String sBufff;
   int NoMoreData;
 
-  loadFileFromSDcardToMerory("/cert/easistent-com.crt", Certificate, sizeof(Certificate));
+  loadFileFromSDcardToMerory("/cert/easistent-com.crt", Certificate, sizeof(Certificate), true);
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {
@@ -253,14 +253,18 @@ void ProcessData (int &urnikNr, String &DataIn) {
 
   if (section.indexOf("ednevnik_seznam_ur_odpadlo") >= 0) {
     odpadlaUra = true;
+    #ifdef DEBUG_URNIK
     Serial.println("ODPADLO");
+    #endif
     }
 
   if (section.indexOf("table")  == 0) {
     subTable = true; 
     subTableNum++;
+    #ifdef DEBUG_URNIK
     Serial.print("   Sub Table ");
     Serial.println(subTableNum);
+    #endif
     if (subTableNum > 1) {
       // korigiraj odpadle ure
       if (odpadlaUra) {
@@ -278,8 +282,10 @@ void ProcessData (int &urnikNr, String &DataIn) {
   }
 
   if (section.indexOf("/table") == 0) {
-    subTable = false; 
+    subTable = false;
+    #ifdef DEBUG_URNIK
     Serial.println("   Sub Table end");
+    #endif
     }
 
   if (subTable == false) { 
@@ -292,7 +298,9 @@ void ProcessData (int &urnikNr, String &DataIn) {
       subTableNum = 0;
       ura++;
       dan = 0;
+      #ifdef DEBUG_URNIK
       Serial.println("=== LINE END");
+      #endif
     }
     if ((section.indexOf("/td") == 0) || (section.indexOf("/th") == 0)) { // konec celice --> vpis podatkov v urnik
       saveDan = dan;
@@ -300,7 +308,9 @@ void ProcessData (int &urnikNr, String &DataIn) {
       dataReady = true;
       subTableNum = 0;
       dan++;
+      #ifdef DEBUG_URNIK
       Serial.println("+++ CELL END");
+      #endif
     }
   } // sub table
 
@@ -319,6 +329,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
       celica.trim(); // remove leading and trailing spaces
       TrimDoubleSpaces(celica);
       TrimNonPrintable(celica);
+      #ifdef DEBUG_URNIK
       Serial.print("C ");
       Serial.print("[");
       Serial.print(saveDan);
@@ -326,6 +337,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
       Serial.print(saveUra);
       Serial.print("] = ");
       Serial.println(celica);
+      #endif
 
       if ((saveDan < 6) && (saveUra < 10)) {
         Urnik[urnikNr][saveDan][saveUra] = celica;
@@ -347,6 +359,7 @@ void FinalizeData (int urnikNr, String sName) {
     Urnik[urnikNr][dan][0].concat(" " + sName);
   }
 
+  #ifdef DEBUG_OUTPUT
   Serial.println("######################");
   
   for (ura = 0; ura < 10; ura++) {
@@ -357,6 +370,7 @@ void FinalizeData (int urnikNr, String sName) {
     Serial.println();
   }
   Serial.println("######################");
+  #endif
 }
 
 //##################################################################################################################
@@ -481,7 +495,7 @@ void DrawEAsistent(int urnikNr) {
   if (urnikNr == 1) selectedColor = CLGREEN; 
   // process data for that day
   if (dayToShow > 0) {
-    tft.drawFastHLine(5, 7 + 27 + 5, 300, selectedColor);
+    tft.drawFastHLine(5, 7 + 27, 300, selectedColor);
     for (int i = 0; i < 10; i++)
     {
       if (Urnik[urnikNr][dayToShow][i].indexOf("ODPADLO") >= 0) drawColor = CLRED; else

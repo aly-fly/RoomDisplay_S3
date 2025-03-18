@@ -122,7 +122,27 @@ bool SDcardInit(void)
 // ===========================================================================================================================
 // ===========================================================================================================================
 
-bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize)
+size_t GetFileSize_SD(const char *filename)
+{
+  size_t fileSize = 0;
+  Serial.printf("Checking file: %s\n", filename);
+  File file = FILESYS.open(filename);
+  if (!file)
+  {
+    Serial.printf("Failed to open file %s\n", filename);
+    return 0;
+  }
+
+  fileSize = file.size();
+  Serial.printf("File size: %d bytes\n", fileSize);
+  file.close();
+  return fileSize;
+}
+
+// ===========================================================================================================================
+// ===========================================================================================================================
+
+bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize, bool NullTerminate)
 {
   Serial.printf("Reading file: %s\n", filename);
   File file = FILESYS.open(filename);
@@ -143,7 +163,9 @@ bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSi
 
   size_t fileSize = file.size();
   Serial.printf("File size: %d bytes\n", fileSize);
-  if (fileSize > maxSize)
+  size_t maxSize1 = maxSize;
+  if (NullTerminate) maxSize1--; // occupies one more byte at the end
+  if (fileSize > maxSize1)
   {
     Serial.printf("File %s is too big\n", filename);
     file.close();
@@ -151,7 +173,8 @@ bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSi
   }
   
   file.readBytes(buffer, fileSize);
-  buffer[fileSize] = '\0'; // Null-terminate the text
+  if (NullTerminate)
+    buffer[fileSize] = '\0'; // Null-terminate the text
   file.close();
   return true;
 }

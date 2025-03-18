@@ -1,6 +1,7 @@
 
 bool SDcardInit(void);
-bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize);
+size_t GetFileSize_SD(const char *filename);
+bool loadFileFromSDcardToMerory(const char *filename, char *buffer, size_t maxSize, bool NullTerminate);
 
 void SD_TEST(void);
 
