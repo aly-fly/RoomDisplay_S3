@@ -28,6 +28,8 @@ bool Smoothie_TCPclientConnect(void) {
     Serial.print("Connecting to ");
     Serial.println(SMOOTHIE_HOST);
 
+    clientSMO.setTimeout(1); // seconds
+
     if (clientSMO.connect(SMOOTHIE_HOST, SMOOTHIE_PORT)) {
         Serial.println("Connected.");
         delay(100);

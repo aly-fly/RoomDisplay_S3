@@ -58,7 +58,7 @@ bool GetGIFimageFromServer(const char *URL)
                     {
 
                         WiFiClient *stream = https.getStreamPtr();
-                        stream->setTimeout(500);
+                        stream->setTimeout(2); // seconds
                         GIFimageSize = stream->readBytes(GIFimage, sizeof(GIFimage));
                         result = (GIFimageSize > 1000);
                         Serial.printf("GIF image size: %d bytes\r\n", GIFimageSize);

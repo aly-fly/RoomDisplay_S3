@@ -267,8 +267,8 @@ void loop() {
         TempOutdoor1 = HP_TCPresponse;
       }
       tft.setTextDatum(TR_DATUM); // top right
-      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350+3,  70+3, CLGREY); // shadow
-      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,    70,   CLORANGE);
+      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350+3,  60+3, CLGREY); // shadow
+      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,    60,   CLORANGE);
 
       TempOutdoor2 = "- - -";
       if (HP_TCPclientRequest("Outdoor")) {
@@ -278,35 +278,36 @@ void loop() {
         HP_TCPresponse.concat(" C");
         TempOutdoor2 = HP_TCPresponse;
       }
-      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350+3, 140+3, CLGREY); // shadow
-      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350,   140,   CLCYAN);
+      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350+3, 130+3, CLGREY); // shadow
+      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350,   130,   CLCYAN);
 
       char ShellyTxt[10];
       sprintf(ShellyTxt, "- - - kW");
       if (ShellyGetPower()) {
         sprintf(ShellyTxt, "%.2f kW", ShellyTotalPower/1000);
       }
-      DisplayText(ShellyTxt,               FONT_TITLE, 300, 200, CLRED);
+      DisplayText(ShellyTxt,               FONT_TITLE, 300, 190, CLRED);
 
       tft.setTextDatum(TL_DATUM); // top left (default)
 
       // bazen
-      if ((CurrentMonth >= 5) && (CurrentMonth <= 9)) {
+      if ((CurrentMonth >= 5) && (CurrentMonth <= 9)) 
+{
         if (ShellyGetTemperature()) {}
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 102+2, 230+2, CLBLACK); // shadow
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 100,   230,   CLLIGHTBLUE);
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 152+2, 230+2, CLBLACK); // shadow
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 150,   230,   CLLIGHTBLUE);
 
         uint32_t clr = CLDARKGREY;
         if (ShellyGetSwitch1()) {
           if (Shelly1ON) {clr = CLLIGHTBLUE;} else {clr = CLBLACK;}
         }
-        tft.fillSmoothCircle(200, 230, 8, clr, CLDARKGREEN);
+        tft.fillSmoothCircle(250, 230+14, 11, clr, CLDARKGREEN);
         clr = CLDARKGREY;
         if (ShellyGetSwitch2()) {
           if (Shelly2ON) {clr = CLORANGE;} else {clr = CLBLACK;}
           if (Shelly2Power > 100) {clr = CLRED;}
         }
-        tft.fillSmoothCircle(230, 230, 8, clr, CLDARKGREEN);
+        tft.fillSmoothCircle(290, 230+14, 11, clr, CLDARKGREEN);
       } // month
 
       if (RadioGet(RADIO_URL))
