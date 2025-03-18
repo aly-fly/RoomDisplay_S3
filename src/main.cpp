@@ -24,6 +24,7 @@
 #include "eAsistentUrnik.h"
 #include "Smoothie_TCP.h"
 #include "GIFDraw.h"
+#include "RadioHttpClient.h"
 
 int ScreenNumber = 0;
 bool NightMode = false;
@@ -32,8 +33,6 @@ String TempOutdoor1, TempOutdoor2;
 bool ok;
 String sCmd;
 bool readAllData = false;
-
-void gif_draw_test();
 
 void setup() {
   Serial.begin(115200);
@@ -56,7 +55,6 @@ void setup() {
 
   DisplayInit();
   initGIF();
-  //gif_draw_test();
   
   DisplayClear();
   delay(100);
@@ -250,12 +248,15 @@ void loop() {
       char FileName[30];
       sprintf(FileName, "/bg_grass_%dx%d.bmp", DspW, DspH);
       DisplayShowImage(FileName,   0, 0);
+
       //DisplayText("Temperatura pred hiso", FONT_TITLE,  45,   8, CLWHITE);
+      /*
       DisplayText(SunRiseTime.c_str(), FONT_TXT,   5,          DspH-45-26-3,   CLYELLOW);
       DisplayText(SunSetTime.c_str(),  FONT_TXT,  DspW - 75,   DspH-45-26-3,   CLYELLOW);
 
       DisplayShowImage("/sunrise.bmp",  0,       DspH-45);
       DisplayShowImage("/sunset.bmp",   DspW-53, DspH-45);
+      */
 
       TempOutdoor1 = "- - -";
       if (HP_TCPclientRequest("Outdoor HP")) {
@@ -266,7 +267,8 @@ void loop() {
         TempOutdoor1 = HP_TCPresponse;
       }
       tft.setTextDatum(TR_DATUM); // top right
-      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,  70, CLORANGE);
+      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350+3,  70+3, CLGREY); // shadow
+      DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,    70,   CLORANGE);
 
       TempOutdoor2 = "- - -";
       if (HP_TCPclientRequest("Outdoor")) {
@@ -276,7 +278,8 @@ void loop() {
         HP_TCPresponse.concat(" C");
         TempOutdoor2 = HP_TCPresponse;
       }
-      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350, 140, CLCYAN);
+      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350+3, 140+3, CLGREY); // shadow
+      DisplayText(TempOutdoor2.c_str(),    FONT_TEMP_SINGLE,  350,   140,   CLCYAN);
 
       char ShellyTxt[10];
       sprintf(ShellyTxt, "- - - kW");
@@ -290,8 +293,8 @@ void loop() {
       // bazen
       if ((CurrentMonth >= 5) && (CurrentMonth <= 9)) {
         if (ShellyGetTemperature()) {}
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 102, 230+2, CLBLACK); // shadow
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 100, 230, CLLIGHTBLUE);
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 102+2, 230+2, CLBLACK); // shadow
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 100,   230,   CLLIGHTBLUE);
 
         uint32_t clr = CLDARKGREY;
         if (ShellyGetSwitch1()) {
@@ -305,8 +308,14 @@ void loop() {
         }
         tft.fillSmoothCircle(230, 230, 8, clr, CLDARKGREEN);
       } // month
+
+      if (RadioGet(RADIO_URL))
+      {
+        DisplayText(RadioResponse.c_str(), FONT_TXT,  5,  DspH - 50, CLCYAN, true);
+      }
+
       delay(7000);
-    }
+    } // home LAN
   }
 
   // WEATHER FORECAST  
