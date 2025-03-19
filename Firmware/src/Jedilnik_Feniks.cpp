@@ -297,7 +297,6 @@ void GetFeniks(void){
 void DrawFeniks(void) {
   Serial.println("DrawFeniks()");
   DisplayClear();
-  GetCurrentTime();
 
   int processSingleDay = -1; // show whole week
   GetCurrentTime();
@@ -306,7 +305,7 @@ void DrawFeniks(void) {
     processSingleDay = CurrentWeekday - 1;
     Serial.println("Workday = true");
     // show next day
-    if ((CurrentHour > 16) && (CurrentWeekday < 4)) {
+    if ((CurrentHour > 16) && (CurrentWeekday < 5)) {
       processSingleDay++;
       Serial.println("day++");
     }

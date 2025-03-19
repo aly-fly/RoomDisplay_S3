@@ -6,8 +6,8 @@
 #include "myWiFi.h"
 
 String ShellyJsonResponse;
-String sTotalPower, sShellyTemperature;
-float ShellyTotalPower; //, ShellyTemperature;
+String sShellyTemperature;
+float ShellyTotalPowerHP, ShellyTotalPowerAll;
 bool Shelly1ON = false, Shelly2ON = false;
 float Shelly2Power = 0;
 
@@ -40,25 +40,31 @@ bool ShellyReadServer(String URL) {
     }
 
 
-bool ShellyGetPower(void) {
+bool ShellyGetPower(String URL, float &power) {
     Serial.println("ShellyGetPower()");
     bool result = false;
-    sTotalPower = "n/a";
-    ShellyTotalPower = 0;
-    if (ShellyReadServer(SHELLY_3EM_URL)) {
+    String sTotalPower = "0";
+    power = 0;
+    if (ShellyReadServer(URL)) {
         // Serial.println(JsonData);
-        // do nout use JSON parser, as we are only interested in one segment ("total_power":74.62,)
-        int idx = ShellyJsonResponse.indexOf("total_power");
+        // do nout use JSON parser, as we are only interested in one segment ("total_power":74.62,) or ("total_act_power": 2969.071,)
+        String jsonParam;
+        if (URL.indexOf("GetStatus") > 0) { // GEN2 device
+            jsonParam = "total_act_power";
+        } else { // GEN1 device
+            jsonParam = "total_power";
+        }
+        int idx = ShellyJsonResponse.indexOf(jsonParam);
         if (idx > 0) {
             unsigned int idxBegin = ((unsigned int) idx) + 13;
             unsigned int idxEnd = ShellyJsonResponse.indexOf(",", idxBegin);
             sTotalPower = ShellyJsonResponse.substring(idxBegin, idxEnd);
             TrimNumDot(sTotalPower);
-            ShellyTotalPower = sTotalPower.toFloat();
+            power = sTotalPower.toFloat();
             Serial.print("Data: ");
             Serial.print(sTotalPower);
             Serial.print(" = ");
-            Serial.print(ShellyTotalPower);
+            Serial.print(power);
             Serial.println();
             result = true;
         }

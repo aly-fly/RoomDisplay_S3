@@ -2,6 +2,7 @@
 #include "display.h"
 #include "ArsoXml.h"
 #include "utils.h"
+#include "Clock.h"
 
 void ArsoPlotMeteogram(void) {
     Serial.println("ArsoPlotMeteogram()");
@@ -95,28 +96,13 @@ void ArsoPlotMeteogram(void) {
 
 
     // day names:
-    // 1. find out which day number and day name is today.
-    uint8_t CurrDay;
-    bool Found;
-    String sToday = ArsoWeather[0].DayName;
-    int8_t iToday = ArsoWeather[0].DayN;
-    sToday.toUpperCase();
-    for (uint8_t i = 0; i < 7; i++) {
-      Found = sToday.indexOf(DAYS3[i]) > -1;
-      if (Found) {
-        CurrDay = i;
-        Serial.print("Today is: ");
-        Serial.print(iToday);
-        Serial.print(", ");
-        Serial.println(DAYS3[CurrDay]);
-        break;
-      }
-    }
+    // 1. Sync time and date
+    GetCurrentTime();
 
     // 2. Find on which index starts today in meteogram
     int TodayIdx = 0;
     for (uint8_t i = 0; i < MTG_NUMPTS; i++) {
-      if (ArsoMeteogram[i].DayN == iToday) {
+      if (ArsoMeteogram[i].DayN == CurrentDay) {
         TodayIdx = i;
         break;
       }
@@ -136,7 +122,7 @@ void ArsoPlotMeteogram(void) {
 
       X = round((Xscaling / 2) + (((float_t)idx) * Xscaling)) + 25;
       
-      DayIdx = CurrDay + i + DayShift;
+      DayIdx = CurrentWeekday-1 + i + DayShift;
       if (DayIdx > 6) DayIdx -=7; // overflow
       if (DayIdx < 0) DayIdx +=7; // underflow
       DisplayText(DAYS3[DayIdx], FONT_TITLE, X, DspH-60, CLGREY);

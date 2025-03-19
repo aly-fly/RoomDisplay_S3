@@ -976,7 +976,7 @@ void DrawJedilnikOsDomzale(void) {
     processSingleDay = CurrentWeekday - 1;
     Serial.println("Workday = true");
     // show next day
-    if ((CurrentHour > 16) && (CurrentWeekday < 4)) {
+    if ((CurrentHour > 16) && (CurrentWeekday < 5)) {
       processSingleDay++;
       Serial.println("day++");
     }
@@ -1016,7 +1016,7 @@ void DrawJedilnikOsDomzale(void) {
 
   // display
   if (processSingleDay > -1) {
-    DisplayText(DAYSFULL[CurrentWeekday-1], FONT_TXT, 15, 17, CLGREY);
+    DisplayText(DAYSFULL[processSingleDay], FONT_TXT, 15, 17, CLGREY);
     DisplayText(JedilnikDatum.c_str(), FONT_TITLE, 170, 15, CLBLUE);
     DisplayText(Jed[1].c_str(), FONT_TXT, 1,  70, CLYELLOW, true);
     DisplayText(Jed[2].c_str(), FONT_TXT, 1, 180, CLCYAN, true);

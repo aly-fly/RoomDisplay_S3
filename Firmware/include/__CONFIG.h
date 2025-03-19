@@ -48,7 +48,9 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 
 // Shelly
 // DOC: https://shelly-api-docs.shelly.cloud/gen1/#shelly-3em-settings-emeter-index
-#define SHELLY_3EM_URL "http://10.38.22.63/status"  // Poraba TC
+#define SHELLY_3EM_HP_URL "http://10.38.22.63/status"  // Poraba TC
+// DOC: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/EM#emgetstatus-example
+#define SHELLY_3EM_ALL_URL "http://10.38.22.92/rpc/EM.GetStatus?id=0" // Poraba hise
 // DOC: https://shelly-api-docs.shelly.cloud/gen2/Addons/ShellySensorAddon#sensoraddongetperipherals-example
 // DOC: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Temperature#temperaturegetstatus-example
 #define SHELLY_1PM_ADDON_URL "http://10.38.22.221/rpc/Temperature.GetStatus?id=101" // Bazen temperatura

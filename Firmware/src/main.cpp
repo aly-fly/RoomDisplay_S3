@@ -266,7 +266,7 @@ void loop() {
         HP_TCPresponse.concat(" C");
         TempOutdoor1 = HP_TCPresponse;
       }
-      tft.setTextDatum(TR_DATUM); // top right
+      tft.setTextDatum(TR_DATUM); // top right - right aligned
       DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350+3,  60+3, CLGREY); // shadow
       DisplayText(TempOutdoor1.c_str(),    FONT_TEMP_SINGLE,  350,    60,   CLORANGE);
 
@@ -283,10 +283,16 @@ void loop() {
 
       char ShellyTxt[10];
       sprintf(ShellyTxt, "- - - kW");
-      if (ShellyGetPower()) {
-        sprintf(ShellyTxt, "%.2f kW", ShellyTotalPower/1000);
+      if (ShellyGetPower(SHELLY_3EM_HP_URL, ShellyTotalPowerHP)) {
+        sprintf(ShellyTxt, "%.2f kW", ShellyTotalPowerHP/1000);
       }
-      DisplayText(ShellyTxt,               FONT_TITLE, 300, 190, CLRED);
+      DisplayText(ShellyTxt,               FONT_TITLE, 350, 190, CLDARKRED);
+
+      sprintf(ShellyTxt, "- - - kW");
+      if (ShellyGetPower(SHELLY_3EM_ALL_URL, ShellyTotalPowerAll)) {
+        sprintf(ShellyTxt, "%.2f kW", ShellyTotalPowerAll/1000);
+      }
+      DisplayText(ShellyTxt,               FONT_TITLE, 150, 190, CLBLACK);
 
       tft.setTextDatum(TL_DATUM); // top left (default)
 
