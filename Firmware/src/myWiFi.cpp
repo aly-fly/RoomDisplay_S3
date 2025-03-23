@@ -34,11 +34,18 @@ void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info){
       break;
     case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
       //WifiState = disconnected;
+      wifi_err_reason_t reasonNum = info.wifi_sta_disconnected.reason;
+      const char* reasonTxt = WiFi.disconnectReasonName(reasonNum); // https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/wifi.html#wi-fi-reason-code
+
       Serial.print("WiFi lost connection. Reason: ");
-      Serial.println(info.wifi_sta_disconnected.reason);
+      Serial.print(reasonNum);
+      Serial.print(" - ");
+      Serial.println(reasonTxt);
       DisplayClear();
       DisplayText("WiFi lost connection. Reason: ");
-      DisplayText(String(info.wifi_sta_disconnected.reason).c_str());
+      DisplayText(String(reasonNum).c_str());
+      DisplayText(" - ");
+      DisplayText(reasonTxt);
       DisplayText("\n");
       break;
     default:
