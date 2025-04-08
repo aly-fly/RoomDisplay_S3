@@ -165,16 +165,19 @@ void loop() {
         Serial.println("-> Invalidate ARSO data");
         InvalidateArsoData();
         InvalidateArsoRain();
+        ScreenNumber = 2;
         break;
 
       case 'B':
         Serial.println("-> Invalidate Bitcoin data");
         InvalidateCoinCapData();
+        ScreenNumber = 4;
         break;
       
       case 'J':
         Serial.println("-> Invalidate Jedilnik");
         InvalidateJedilnikOS();
+        ScreenNumber = 7;
         break;
       
       case 'N':  // "3N\r"

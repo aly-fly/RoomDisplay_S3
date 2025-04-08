@@ -40,17 +40,17 @@ HEADER_FILE = """
 
 if os.environ.get('PLATFORMIO_INCLUDE_DIR') is not None:
     VERSION_HEADER = os.environ.get('PLATFORMIO_INCLUDE_DIR') + os.sep + VERSION_HEADER
-elif os.path.exists("include"):
-    VERSION_HEADER = "include" + os.sep + VERSION_HEADER
 else:
-    PROJECT_DIR = env.subst("$PROJECT_DIR")
-    os.mkdir(PROJECT_DIR + os.sep + "include")
-    VERSION_HEADER = "include" + os.sep + VERSION_HEADER
+    INCLUDE_DIR = env.subst("$PROJECT_INCLUDE_DIR")
+    VERSION_HEADER = INCLUDE_DIR + os.sep + VERSION_HEADER
 
-
+print("Updating version header file: {}".format(VERSION_HEADER))
 
 with open(VERSION_HEADER, 'w+') as FILE:
     FILE.write(HEADER_FILE)
 
 
 print("Done.")
+
+# https://github.com/platformio/platformio-core/blob/develop/platformio/builder/main.py#L122
+

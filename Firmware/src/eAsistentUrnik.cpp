@@ -94,9 +94,12 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
         if (httpCode > 0) {
           // HTTP header has been send and Server response header has been handled
           Serial.printf("[HTTPS] GET... code: %d\r\n", httpCode);
+          Serial.println(https.headerFirstLine());
           DisplayText(String(httpCode).c_str());
           DisplayText("\n");
-  
+          DisplayText(https.headerFirstLine().c_str());
+          DisplayText("\n");
+
           // file found at server
           if (httpCode == HTTP_CODE_OK) {
                 Serial.println("[HTTPS] Code OK");
@@ -505,6 +508,9 @@ void DrawEAsistent(int urnikNr) {
       if (urnikNr == 0) font = FONT_URNIK_TT; else 
       font = FONT_URNIK_TT;
       if (i == 1) Yshift = 10; // gap between name and first hour
+      if (Urnik[urnikNr][dayToShow][i].length() < 1)
+      DisplayText(Urnik[urnikNr][0][i].c_str(), FONT_TXT_SMALL, 8, 7 + (i * 27) + Yshift, CLCYAN, false);
+      else
       DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
     }
   }

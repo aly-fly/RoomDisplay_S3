@@ -14,6 +14,10 @@ WiFiMulti wifiMulti;
 //uint32_t TimeOfWifiReconnectAttempt = 0;
 bool inHomeLAN = false;
 
+void WifiPrintStatus(void)
+{
+  Serial.printf("WiFi connected. SSID: %s, IP: %s, Channel: %d, RSSI: %d, BSSID: %s\r\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str(), WiFi.channel(), WiFi.RSSI(), WiFi.BSSIDstr().c_str());
+}
 
 void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info){
   IPAddress myIP;
@@ -30,11 +34,12 @@ void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info){
       Serial.print("Got IP: ");
       Serial.println(myIP);
       inHomeLAN = ((myIP[0] == HomeIP0) && (myIP[1] == HomeIP1));
+      WifiPrintStatus();
       //WifiState = connected;
       break;
     case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
       //WifiState = disconnected;
-      wifi_err_reason_t reasonNum = info.wifi_sta_disconnected.reason;
+      wifi_err_reason_t reasonNum = (wifi_err_reason_t)info.wifi_sta_disconnected.reason;
       const char* reasonTxt = WiFi.disconnectReasonName(reasonNum); // https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/wifi.html#wi-fi-reason-code
 
       Serial.print("WiFi lost connection. Reason: ");
@@ -47,8 +52,6 @@ void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info){
       DisplayText(" - ");
       DisplayText(reasonTxt);
       DisplayText("\n");
-      break;
-    default:
       break;
   }
 }
@@ -129,10 +132,7 @@ void WifiInit(void)  {
   DisplayText("\n");
   
   Serial.println();
-  Serial.print("Connected to ");
-  Serial.println(WiFi.SSID());
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());  
+  WifiPrintStatus();
   delay(200);
 }
 

@@ -177,10 +177,14 @@ char utf8ascii ( char ascii )
         break ;
       case 0x82: if ( ascii == 0xAC )
         {
-          res = 'E' ;                 // Special case Euro-symbol
+          res = 'E' ;                 // Special case Euro-symbol (\xe2\x82\xac)
+        }
+      case 0x80: if ( ascii == 0x93 )
+        {
+          res = '-' ;                 // Special case long minus sign (\xE2\x80\x93)
         }
     }
-    c1 = ascii ;                      // Remember actual character
+    c1 = ascii ;                      // Remember actual character for processing of the next byte
   }
   return res ;                        // Otherwise: return zero, if character has to be ignored
 }

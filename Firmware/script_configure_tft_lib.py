@@ -15,8 +15,8 @@ print("===== copying TFT config files ===== ")
 # "copy" changes file timestamp -> lib is always recompiled.
 # "copy2" keeps file timestamp -> lib is compiled once
 #shutil.copy2('./include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_JLINK_debug/TFT_eSPI/User_Setup.h')
-shutil.copy2('./include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_RELEASE/TFT_eSPI/User_Setup.h')
-shutil.copy2('./include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_DEBUG/TFT_eSPI/User_Setup.h')
+shutil.copy2('./Firmware/include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_RELEASE/TFT_eSPI/User_Setup.h')
+shutil.copy2('./Firmware/include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_DEBUG/TFT_eSPI/User_Setup.h')
 
 # copy using Windows command line
 # native "copy" command keeps file timestamp -> lib is compiled once

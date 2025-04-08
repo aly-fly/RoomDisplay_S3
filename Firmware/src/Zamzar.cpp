@@ -77,6 +77,11 @@ bool HTTPSconnect(const String URL, const bool PostRequest, const String PostDat
         if (httpCode > 0) {
           // HTTP header has been send and Server response header has been handled
           Serial.printf("[HTTPS] GET... code: %d\r\n", httpCode);
+          Serial.println(https.headerFirstLine());
+          DisplayText(String(httpCode).c_str());
+          DisplayText("\n");
+          DisplayText(https.headerFirstLine().c_str());
+          DisplayText("\n");
   
           // file found at server
           if ((httpCode == HTTP_CODE_OK) || (httpCode == HTTP_CODE_CREATED) || (httpCode == HTTP_CODE_ACCEPTED) || (httpCode == HTTP_CODE_MOVED_PERMANENTLY)) {

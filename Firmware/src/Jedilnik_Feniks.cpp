@@ -61,9 +61,12 @@ bool ReadFeniksWebsite(void) {
         if (httpCode > 0) {
           // HTTP header has been send and Server response header has been handled
           Serial.printf("[HTTPS] GET... code: %d\r\n", httpCode);
+          Serial.println(https.headerFirstLine());
           DisplayText(String(httpCode).c_str());
           DisplayText("\n");
-  
+          DisplayText(https.headerFirstLine().c_str());
+          DisplayText("\n");
+
           // file found at server
           if (httpCode == HTTP_CODE_OK) {
                 Serial.println("[HTTPS] Streaming data from server in 3k byte chunks.");
