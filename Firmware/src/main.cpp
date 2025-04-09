@@ -360,14 +360,7 @@ void loop() {
 
   // COIN CAP DATA PLOT
   if (ScreenNumber == 5) {  // -------------------------------------------------------------------------------------------------------------------------
-    ScreenNumber++;
-   /*    
-      if (!NightMode) {
-      ok = GetCoinCapData_5M();
-      PlotCoinCapData_5M();
-      if (ok) delay(4000);
-      } else ScreenNumber++;
-   */      
+    ScreenNumber++;   
   }
 
   // JEDILNIK FENIKS

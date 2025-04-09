@@ -440,21 +440,23 @@ void GetEAsistent(void) {
     return;
   }
 
-  if ((millis() < (LastTimeUrnik1Refreshed + 2*60*60*1000)) && (LastTimeUrnik1Refreshed != 0)) {  // check server every 2 hours
+  if (! HasTimeElapsed(&LastTimeUrnik1Refreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Urnik 1: Data is valid.");
   } else {
     if (ReadEAsistentWebsite(currentSchoolWeek, 0)) {
       FinalizeData(0, "TINKARA");
-      LastTimeUrnik1Refreshed = millis();
+    } else {
+      LastTimeUrnik1Refreshed = 0; // retry      
     }
   }
 
-  if ((millis() < (LastTimeUrnik2Refreshed + 2*60*60*1000)) && (LastTimeUrnik2Refreshed != 0)) {  // check server every 2 hours
+  if (! HasTimeElapsed(&LastTimeUrnik2Refreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Urnik 2: Data is valid.");
   } else {
     if (ReadEAsistentWebsite(currentSchoolWeek, 1)) {
       FinalizeData(1, "MARCEL");
-      LastTimeUrnik2Refreshed = millis();
+    } else {
+      LastTimeUrnik2Refreshed = 0; // retry      
     }
   }
 }
@@ -494,6 +496,7 @@ void DrawEAsistent(int urnikNr) {
   uint16_t selectedColor, drawColor;
   FontSize_t font;
   int16_t Yshift = 0;
+  bool timeShown = false;
   if (urnikNr == 0) selectedColor = CLPINK; 
   if (urnikNr == 1) selectedColor = CLGREEN; 
   // process data for that day
@@ -508,10 +511,16 @@ void DrawEAsistent(int urnikNr) {
       if (urnikNr == 0) font = FONT_URNIK_TT; else 
       font = FONT_URNIK_TT;
       if (i == 1) Yshift = 10; // gap between name and first hour
-      if (Urnik[urnikNr][dayToShow][i].length() < 1)
-      DisplayText(Urnik[urnikNr][0][i].c_str(), FONT_TXT_SMALL, 8, 7 + (i * 27) + Yshift, CLCYAN, false);
+      if ((Urnik[urnikNr][dayToShow][i].length() < 1) && (!timeShown)) // empty line
+      {
+        DisplayText(Urnik[urnikNr][0][i].substring(6, Urnik[urnikNr][0][i].indexOf('-', 7)).c_str(), FONT_TXT_SMALL, 12, 7 + (i * 27) + Yshift + 3, CLCYAN, false);
+        timeShown = true;
+      }
       else
-      DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
+      {
+        DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
+        timeShown = false;
+      }
     }
   }
     delay(1500);

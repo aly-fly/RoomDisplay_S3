@@ -6,7 +6,7 @@ import os
 
 Import("env")
 
-VERSION_FILE = 'version.txt'
+VERSION_FILE = '.\\Firmware\\version.txt'
 VERSION_HEADER = 'Version.h'
 VERSION_PREFIX = '0.1.'
 VERSION_PATCH_NUMBER = 0

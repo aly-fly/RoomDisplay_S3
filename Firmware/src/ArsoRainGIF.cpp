@@ -100,7 +100,7 @@ bool GetARSOrain(void)
     Serial.println("GetARSOrain()");
     bool result = false;
 
-    if ((millis() < (LastTimeArsoRainRefreshed + 6 * 60 * 1000)) && (LastTimeArsoRainRefreshed != 0))
+    if (! HasTimeElapsed(&LastTimeArsoRainRefreshed, 6 * 60 * 1000))
     { // check server every 6 minutes
         Serial.println("ARSO rain is valid.");
         return true; // data is already valid
@@ -113,6 +113,7 @@ bool GetARSOrain(void)
     if (!GetGIFimageFromServer(ARSO_SERVER_RAIN_GIF_URL))
     {
         GIFimageSize = 0;
+        LastTimeArsoRainRefreshed = 0; // retry
         DisplayText("FAILED!\n", CLRED);
         delay(2000);
         return false;
@@ -124,8 +125,6 @@ bool GetARSOrain(void)
         DisplayText(" kB \nOK\n", CLGREEN);
         result = true;
     }
-
-    LastTimeArsoRainRefreshed = millis();
 
     delay(500);
     return result;

@@ -68,9 +68,11 @@ void WifiInit(void)  {
 */  
 
   WiFi.mode(WIFI_OFF);
-  Serial.print("My old MAC = ");
+  WiFi.disconnect(true, true); // complete reset
+  Serial.print("My MAC = ");
   Serial.println(WiFi.macAddress());
 
+/*  
 //  esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
   esp_err_t err = esp_wifi_set_mac(WIFI_IF_STA, newMACAddress);
   if (err == ESP_OK) {
@@ -81,7 +83,7 @@ void WifiInit(void)  {
 
   Serial.print("My new MAC = ");
   Serial.println(WiFi.macAddress());
-
+*/
   //WifiState = disconnected;
   DisplayText("WiFi start");
 

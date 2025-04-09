@@ -239,7 +239,7 @@ void GetJedilnikOsDomzale(void){
   Serial.println("GetJedilnikOsDomzale()");
   bool PdfOk, FileOk, NeedFreshData;
 
-  if ((millis() < (LastTimeJedilnikRefreshed + 2*60*60*1000)) && (LastTimeJedilnikRefreshed != 0)) {  // check server every 2 hours
+  if (! HasTimeElapsed(&LastTimeJedilnikRefreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Jedilnik OS: Data is valid.");
     return;  // data is already valid
   }
@@ -250,8 +250,8 @@ void GetJedilnikOsDomzale(void){
   FileOk = ReadSavedFile();
   NeedFreshData = false;
 
-  if (PdfOk) LastTimeJedilnikRefreshed = millis();
-
+  if (! PdfOk) LastTimeJedilnikRefreshed = 0; // retry
+  
   if (PdfOk && FileOk) {
     Serial.print("Comparing URLs.. ");
     DisplayText("Comparing URLs.. ");

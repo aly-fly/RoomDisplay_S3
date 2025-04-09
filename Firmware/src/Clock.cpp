@@ -5,6 +5,7 @@
 #include "__CONFIG.h"
 #include "display.h"
 #include "myWiFi.h"
+#include "utils.h"
 
 unsigned long LastTimeClockSynced = 0; // data is not valid
 
@@ -48,7 +49,7 @@ void setClock(void) {
     }
     */
 
-  if ((millis() < (LastTimeClockSynced + 60*60*1000)) && (LastTimeClockSynced != 0)) {  // check every hour
+  if (! HasTimeElapsed(&LastTimeClockSynced, 60*60*1000), false) {  // check every hour
     return;  // clock is already synced
   }
 
@@ -73,9 +74,7 @@ void setClock(void) {
   Serial.print("Current time: ");
   Serial.print(asctime(&timeinfo));
   DisplayText(asctime(&timeinfo), CLCYAN);
-  
-  LastTimeClockSynced = millis();
-}
+  }
 
 /* https://cplusplus.com/reference/ctime/tm/
 Member	Type	Meaning	Range

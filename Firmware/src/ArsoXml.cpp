@@ -108,7 +108,7 @@ bool GetARSOdata(void) {
     Serial.println("GetARSOdata()");
     bool result = false;
 
-    if ((millis() < (LastTimeArsoRefreshed + 60*60*1000)) && (LastTimeArsoRefreshed != 0)) {  // check server every hour
+    if (! HasTimeElapsed(&LastTimeArsoRefreshed, 60*60*1000)) {  // check server every hour
       Serial.println("ARSO data is valid.");
       return true;  // data is already valid
     }
@@ -118,6 +118,7 @@ bool GetARSOdata(void) {
     Serial.println("Requesting current weather data from ARSO server...");
     DisplayText("Reading ARSO server current...\n", CLYELLOW);
     if (!GetXmlDataFromServer(ARSO_SERVER_CURRENT_XML_URL)) {
+        LastTimeArsoRefreshed = 0; // retry
         XMLdata = "";  // free memory
         DisplayText("FAILED!\n", CLRED);
         delay(2000);
@@ -187,6 +188,7 @@ bool GetARSOdata(void) {
     Serial.println("Requesting forecast data from ARSO server...");
     DisplayText("Reading ARSO server forecast...\n", CLYELLOW);
     if (!GetXmlDataFromServer(ARSO_SERVER_FORECAST_XML_URL)) {
+        LastTimeArsoRefreshed = 0; // retry
         XMLdata = "";  // free memory
         DisplayText("FAILED!\n", CLRED);
         delay(2000);
@@ -250,7 +252,6 @@ bool GetARSOdata(void) {
 
 
     result = true;
-    LastTimeArsoRefreshed = millis();
 
     for (uint8_t i = 0; i < 4; i++)
     {
@@ -281,7 +282,7 @@ bool GetARSOmeteogram(void) {
     Serial.println("GetARSOmeteogram()");
     bool result = false;
 
-    if ((millis() < (LastTimeArsoMeteogramRefreshed + 60*60*1000)) && (LastTimeArsoMeteogramRefreshed != 0)) {  // check server every hour
+    if (! HasTimeElapsed(&LastTimeArsoMeteogramRefreshed, 60*60*1000)) {  // check server every hour
       Serial.println("ARSO meteogram data is valid.");
       return true;  // data is already valid
     }
@@ -291,6 +292,7 @@ bool GetARSOmeteogram(void) {
     Serial.println("Requesting meteogram data from ARSO server...");
     DisplayText("Reading ARSO server meteogram...\n", CLYELLOW);
     if (!GetXmlDataFromServer(ARSO_SERVER_METEOGRAM_XML_URL)) {
+        LastTimeArsoMeteogramRefreshed  = 0; // retry
         XMLdata = "";  // free memory
         DisplayText("FAILED!\n", CLRED);
         delay(2000);
@@ -396,7 +398,6 @@ bool GetARSOmeteogram(void) {
 
 
     result = true;
-    LastTimeArsoMeteogramRefreshed = millis();
 
     for (uint8_t i = 0; i < MTG_NUMPTS; i++)
     {

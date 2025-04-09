@@ -353,3 +353,23 @@ calculated_crc = ~(CRC_SPI_97_64bit(dw_CRCinputData))& 0xFF; //inverted CRC
 }
 */
 
+
+float roundToOneDecimal(float value) 
+{
+  value = value * 10;
+  value = round(value);
+  value = value / 10;
+  return value;
+}
+
+
+// millis() rolls over every 49.7 days. This is fixed here.
+bool HasTimeElapsed(unsigned long * LastTime, unsigned long Miliseconds)
+{
+  //Serial.printf("     Last: %d, Now: %d, Interval: %d  .... ", *LastTime, millis(), Miliseconds);
+  bool elapsed = (((millis() - *LastTime) > Miliseconds) || (*LastTime == 0)); // this line also handles overflows
+  if (elapsed) *LastTime = millis();
+  //Serial.println(*LastTime);
+  return elapsed;
+} // more info: https://arduino.stackexchange.com/questions/12587/how-can-i-handle-the-millis-rollover
+

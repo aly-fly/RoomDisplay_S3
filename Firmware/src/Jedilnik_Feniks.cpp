@@ -193,13 +193,12 @@ bool ReadFeniksWebsite(void) {
 void GetFeniks(void){
   Serial.println("GetFeniks()");
 
-  if ((millis() < (LastTimeFeniksRefreshed + 2*60*60*1000)) && (LastTimeFeniksRefreshed != 0)) {  // check server every 2 hours
+  if (! HasTimeElapsed(&LastTimeFeniksRefreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Jedilnik Feniks: Data is valid.");
     return;  // data is already valid
   }
 
   if (ReadFeniksWebsite()) {
-    LastTimeFeniksRefreshed = millis();
 
     /*
     Serial.println("==========================================");
@@ -284,6 +283,8 @@ void GetFeniks(void){
         Serial.println(JedilnikF[i]);
         Serial.println("-------------------");
       }
+  } else {
+    LastTimeFeniksRefreshed = 0; // retry
   }
 }
 

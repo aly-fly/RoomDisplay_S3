@@ -5,3 +5,4 @@
 - Radar .gif scale x2
 - radio trenutni komad
 
+/clear_modSHRA.bmp
