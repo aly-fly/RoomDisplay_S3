@@ -1,0 +1,11 @@
+We are deprecating this version of the CoinCap API on March 31, 2025. Sign up for our new V3 API at https://pro.coincap.io/dashboard
+
+Free (Current Plan)
+$0/mo
+2,500 credits/month*
+
+*Each API call charges a base cost of 1 credit, then 1 additional credit per 2500 bytes of data. Web-socket charges 1 credit per minute of use.
+
+1 API call (1H) = 129 kB data = 52+1 = 53 credits = 47 API calls / month
+
+max 4 calls / minute

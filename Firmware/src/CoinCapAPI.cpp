@@ -1,7 +1,11 @@
 
 
-// https://docs.coincap.io/
-// Free Tier (No API Key): 200 requests per minute
+// https://pro.coincap.io/api-docs/
+// https://pro.coincap.io/dashboard
+// Free (Current Plan) = 2,500 credits/month*
+// *Each API call charges a base cost of 1 credit, then 1 additional credit per 2500 bytes of data. Web-socket charges 1 credit per minute of use.
+// 1 API call (1H) = 129 kB data = 52+1 = 53 credits = 47 API calls / month
+// real data: 1 call = 41 credits
 
 #include <Arduino.h>
 #include <stdint.h>
@@ -15,30 +19,20 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
-#define MAX_DATA_POINTS_1H (31*24 + 10)
-//#define MAX_DATA_POINTS_5M ( 1440 + 10)
-
-#define REQ_DATA_POINTS_1H (31*24 - 70)
-//#define REQ_DATA_POINTS_5M ( 1440 - 70)
+#define MAX_DATA_POINTS_1H (31*24)  // real data = 720 points
+#define REQ_DATA_POINTS_1H   DspW  // enough to fill the display
 
 float_t CoinCapData_1H[MAX_DATA_POINTS_1H];  // data for 1 month = 3 kB (4B / point)
-//float_t CoinCapData_5M[MAX_DATA_POINTS_5M];  // data = 5,8 kB
 unsigned int CoinCapDataLength_1H = 0;
-//unsigned int CoinCapDataLength_5M = 0;
 
 unsigned long LastTimeCoinCapRefreshed_1H = 0; // data is not valid
-//unsigned long LastTimeCoinCapRefreshed_5M = 0; // data is not valid
 
 // reference: "C:\Users\yyyyy\.platformio\packages\framework-arduinoespressif32\libraries\HTTPClient\examples\BasicHttpsClient\BasicHttpsClient.ino"
 //            "C:\Users\yyyyy\.platformio\packages\framework-arduinoespressif32\libraries\HTTPClient\examples\StreamHttpClient\StreamHttpClient.ino"
 
-// value every 5 min: https://api.coincap.io/v2/assets/bitcoin/history?interval=m5
-// value every hour:  https://api.coincap.io/v2/assets/bitcoin/history?interval=h1
-// average every day: https://api.coincap.io/v2/assets/bitcoin/history?interval=d1
 
-#define COINCAP_1H_URL  "https://api.coincap.io/v2/assets/bitcoin/history?interval=h1"
-//#define COINCAP_5M_URL  "https://api.coincap.io/v2/assets/bitcoin/history?interval=m5"
 
+#define COINCAP_1H_URL  "https://rest.coincap.io/v3/assets/bitcoin/history?interval=h1"
 
 bool GetDataFromCoinCapServer(void) {
   bool result = false;
@@ -69,6 +63,9 @@ bool GetDataFromCoinCapServer(void) {
       Serial.print("[HTTPS] begin...\r\n");
       DisplayText("HTTPS begin\n");
       if (https.begin(*client, COINCAP_1H_URL)) {  // HTTPS
+        // set hearders
+        https.addHeader("accept", "application/json");
+        https.addHeader("Authorization", COINCAP_API_KEY_1);
         yield(); // watchdog reset
         Serial.print("[HTTPS] GET...\r\n");
         DisplayText("HTTPS get request: ");
@@ -163,6 +160,9 @@ bool GetDataFromCoinCapServer(void) {
             DisplayText("\n");
             result = Finished;
           } // HTTP code > 0
+          else {
+            Serial.printf("Result / extra data provided by the server: %s \r\n", https.getString());
+          }
         } else {
           Serial.printf("[HTTPS] GET... failed, error: %s\r\n", https.errorToString(httpCode).c_str());
           DisplayText("Error: ");
@@ -202,7 +202,7 @@ bool GetCoinCapData_1H(void) {
     Serial.println("GetCoinCapData_1H()");
     bool result = false;
 
-    if ((millis() < (LastTimeCoinCapRefreshed_1H + 30*60*1000)) && (LastTimeCoinCapRefreshed_1H != 0)) {  // check server every 1/2 hour
+    if (! HasTimeElapsed(&LastTimeCoinCapRefreshed_1H, 24*60*60*1000)) {  // check server every 1/2 hour
       Serial.println("CoinCap data 1H is valid.");
       return true;  // data is already valid
     }
@@ -211,6 +211,7 @@ bool GetCoinCapData_1H(void) {
     DisplayClear();
     DisplayText("Contacting COINCAP server (1H)\n", CLYELLOW);
     if (!GetDataFromCoinCapServer()) {
+        // LastTimeCoinCapRefreshed_1H = 0; // retry
         DisplayText("FAILED!\n", CLRED);
         delay (2000);
         return false;
@@ -221,7 +222,6 @@ bool GetCoinCapData_1H(void) {
     DisplayText(Txt);
 
     if (CoinCapDataLength_1H > REQ_DATA_POINTS_1H) {
-      LastTimeCoinCapRefreshed_1H = millis();
       result = true;
     } else {
       Serial.println("Not enough data points!");
@@ -235,55 +235,6 @@ bool GetCoinCapData_1H(void) {
     return result;
 }
 
-
-
-
-bool GetCoinCapData_5M(void) {
-    Serial.println("GetCoinCapData_5M()");
-    bool result = false;
-    /*
-
-    if ((millis() < (LastTimeCoinCapRefreshed_5M + 5*60*1000)) && (LastTimeCoinCapRefreshed_5M != 0)) {  // check server every 1/2 hour
-      Serial.println("CoinCap data 5M is valid.");
-      return true;  // data is already valid
-    }
-
-    Serial.println("Requesting data 5M from CoinCap server...");
-    DisplayClear();
-    DisplayText("Contacting COINCAP server (5M)\n", CLYELLOW);
-    if (!GetDataFromCoinCapServer(true)) {
-        DisplayText("FAILED!\n", CLRED);
-        delay (2000);
-        return false;
-    }
-    Serial.println("Number of data points: " + String(CoinCapDataLength_5M));
-    char Txt[20];
-    sprintf(Txt, "Data points: %u\n", CoinCapDataLength_5M);
-    DisplayText(Txt);
-
-    if (CoinCapDataLength_5M > REQ_DATA_POINTS_5M) {
-      LastTimeCoinCapRefreshed_5M = millis();
-      result = true;
-    } else {
-      Serial.println("Not enough data points!");
-      DisplayText("Not enough data points!\n", CLRED);
-      delay (500);
-      return false;
-    }
-*/
-/*
-    Serial.println("------------");
-    for (uint16_t i = 0; i < CoinCapDataLength; i++)
-    {
-      Serial.println(String(CoinCapData[i]));
-    }
-    Serial.println("------------");
-*/    
-
-    DisplayText("Finished\n", CLGREEN);
-    delay (500);
-    return result;
-}
 
 
 
@@ -380,9 +331,6 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
 }
 
 
-void PlotCoinCapData_5M(void) {
-//  PlotCoinCapData(CoinCapData_5M, CoinCapDataLength_5M, 288, 'd'); // 1 px = 5 min. 288 px = 24 h.
-}
 
 void PlotCoinCapData_1H(void) {
   PlotCoinCapData(CoinCapData_1H, CoinCapDataLength_1H, 168, 'w'); // 1 px = 1 h. 168 px = 1 week.
