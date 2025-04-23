@@ -51,7 +51,10 @@ bool HTTPSconnect(const String URL, const bool PostRequest, const String PostDat
 
   setClock();
 
-  loadFileFromSDcardToMerory("/cert/api-zamzar-com.crt", Certificate, sizeof(Certificate), true);
+  if (!loadFileFromSDcardToMerory("/cert/api-zamzar-com.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if(client) {

@@ -27,9 +27,11 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 */
 #define TIMEZONE "CET-1CEST,M3.5.0,M10.5.0/3"  // Europe/Ljubljana
 
-#define DAY_TIME     7
-#define NIGHT_TIME  22
-#define NIGHT_TIME_BRIGHTNESS  20
+#define MORNING_TIME  6
+#define DAY_TIME      7
+#define EVENING_TIME 22
+#define NIGHT_TIME   23
+#define EVENING_TIME_BRIGHTNESS  20
 
 // ************ WiFi config *********************
 //#define WIFI_SSID  "..." -> enter into the file __CONFIG_SECRETS.h

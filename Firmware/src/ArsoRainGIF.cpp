@@ -26,7 +26,10 @@ bool GetGIFimageFromServer(const char *URL)
     }
 
     setClock();
-    loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate), true);
+    if (!loadFileFromSDcardToMerory("/cert/meteo-arso-gov-si.crt", Certificate, sizeof(Certificate), true))
+    {
+      return false;
+    }
 
     GIFimageSize = 0;
 

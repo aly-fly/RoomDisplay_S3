@@ -17,7 +17,7 @@
 #include "ArsoRainGIF.h"
 #include "ShellyHttpClient.h"
 #include "CaptivePortalLogin.h"
-#include "CoinCapAPI.h"
+#include "CoinRankingAPI.h"
 #include "myPing.h"
 #include "Jedilnik_OS_Domzale.h"
 #include "Jedilnik_Feniks.h"
@@ -28,8 +28,12 @@
 #include "OTA.h"
 #include "utils.h"
 
+enum displayMode_t {
+  Day, Morning_Evening, Night
+};
+
 int ScreenNumber = 0;
-bool NightMode = false;
+displayMode_t displayMode = Day;
 uint16_t LDRvalue;
 String TempOutdoor1, TempOutdoor2;
 bool ok;
@@ -58,7 +62,7 @@ void loopSerialCommands (void)
 
       case 'B':
         Serial.println("-> Invalidate Bitcoin data");
-        InvalidateCoinCapData();
+        InvalidateCoinData();
         ScreenNumber = 4;
         break;
       
@@ -225,10 +229,14 @@ void loop() {
     Serial.println("Month: " + String(CurrentMonth));
     Serial.println("Day: " + String(CurrentDay));
     Serial.println("Hour: " + String(CurrentHour));
-    NightMode = ((CurrentHour >= NIGHT_TIME) || (CurrentHour < DAY_TIME));
+    if ((CurrentHour >= NIGHT_TIME) || (CurrentHour < MORNING_TIME))
+      displayMode = Night; else
+    if ((CurrentHour >= EVENING_TIME) || (CurrentHour < DAY_TIME))
+      displayMode = Morning_Evening; else
+      displayMode = Day;
   } else {
     Serial.println("Getting current time failed!");
-    NightMode = false;
+    displayMode = Day;
   }
 
   // debug
@@ -244,25 +252,20 @@ void loop() {
   Serial.println("[IDLE] Largest available block: " + String(info.largest_free_block) + " bytes");
   Serial.println("[IDLE] Minimum free ever: " + String(info.minimum_free_bytes) + " bytes");
 
-  #ifdef LDR_PIN
-  LDRvalue = analogRead(LDR_PIN); //     0 is full brightness, higher values == darker; Default is 12 bits (range from 0 to 4096).
-  Serial.print("LDR: ");
-  Serial.println(LDRvalue);
-
-  DisplayText(String (LDRvalue).c_str());
-  DisplayText("\n");
-
-  delay(500);
-  return;
-
-  #else
-  if (NightMode) {
-    DisplaySetBrightness(NIGHT_TIME_BRIGHTNESS);
-  } else { // lower brightness at night
-    DisplaySetBrightness(); // full power
+ 
+  if (displayMode == Night) {
+    DisplaySetBrightness(0);
+    DisplayClear();
+    myDelay(30000);
+    Serial.println("Night time.");
+    return; // do not execute anything below!
   }
-  #endif
 
+  if (displayMode == Morning_Evening)
+    DisplaySetBrightness(EVENING_TIME_BRIGHTNESS);
+  if (displayMode == Day)
+    DisplaySetBrightness(); // full power
+ 
   //  HEAT PUMP DATA
   if (ScreenNumber == 0) {  // -------------------------------------------------------------------------------------------------------------------------
     if (!inHomeLAN) {
@@ -374,8 +377,8 @@ void loop() {
 
   // COIN CAP DATA PLOT
   if (ScreenNumber == 4) {  // -------------------------------------------------------------------------------------------------------------------------
-    ok = GetCoinCapData_1H();
-    PlotCoinCapData_1H();
+    ok = GetCoinData();
+    PlotCoinData();
     if (ok) myDelay(4000);
   }
 

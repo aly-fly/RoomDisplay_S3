@@ -1,11 +1,10 @@
 
 
-// https://pro.coincap.io/api-docs/
-// https://pro.coincap.io/dashboard
-// Free (Current Plan) = 2,500 credits/month*
-// *Each API call charges a base cost of 1 credit, then 1 additional credit per 2500 bytes of data. Web-socket charges 1 credit per minute of use.
-// 1 API call (1H) = 129 kB data = 52+1 = 53 credits = 47 API calls / month
-// real data: 1 call = 41 credits
+// https://developers.coinranking.com/api/documentation/coins/coin-price-history
+// https://account.coinranking.com/dashboard/api
+// Free (Current Plan) = 5000 API calls/month & 5 calls/second
+// real usage = each hour = 744 calls / month
+
 
 #include <Arduino.h>
 #include <stdint.h>
@@ -19,36 +18,39 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
-#define MAX_DATA_POINTS_1H (31*24)  // real data = 720 points
-#define REQ_DATA_POINTS_1H   DspW  // enough to fill the display
+#define MAX_DATA_POINTS (31*24)  // real data = 720 points
+#define REQ_DATA_POINTS   DspW  // enough to fill the display
 
-float_t CoinCapData_1H[MAX_DATA_POINTS_1H];  // data for 1 month = 3 kB (4B / point)
-unsigned int CoinCapDataLength_1H = 0;
+float_t CoinData[MAX_DATA_POINTS];  // data for 1 month = 3 kB (4B / point)
+unsigned int CoinDataLength = 0;
 
-unsigned long LastTimeCoinCapRefreshed_1H = 0; // data is not valid
+unsigned long LastTimeCoinRefreshed = 0; // data is not valid
 
 // reference: "C:\Users\yyyyy\.platformio\packages\framework-arduinoespressif32\libraries\HTTPClient\examples\BasicHttpsClient\BasicHttpsClient.ino"
 //            "C:\Users\yyyyy\.platformio\packages\framework-arduinoespressif32\libraries\HTTPClient\examples\StreamHttpClient\StreamHttpClient.ino"
 
 
 
-#define COINCAP_1H_URL  "https://rest.coincap.io/v3/assets/bitcoin/history?interval=h1"
+#define COINRANKING_URL  "https://api.coinranking.com/v2/coin/Qwsogvtv82FCd/price-history?timePeriod=30d"
 
-bool GetDataFromCoinCapServer(void) {
+bool GetDataFromCoinServer(void) {
   bool result = false;
   unsigned long StartTime = millis();
   bool Timeout = false;
   bool Finished = false;
   String sBufff;
 
-  CoinCapDataLength_1H = 0;
+  CoinDataLength = 0;
     
   if (!WiFi.isConnected()) {
       return false;
   }
 
   setClock();
-  loadFileFromSDcardToMerory("/cert/api-coincap-io.crt", Certificate, sizeof(Certificate), true);
+  if (!loadFileFromSDcardToMerory("/cert/api-coinranking-com.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
 
 
   WiFiClientSecure *client = new WiFiClientSecure;
@@ -62,10 +64,10 @@ bool GetDataFromCoinCapServer(void) {
   
       Serial.print("[HTTPS] begin...\r\n");
       DisplayText("HTTPS begin\n");
-      if (https.begin(*client, COINCAP_1H_URL)) {  // HTTPS
+      if (https.begin(*client, COINRANKING_URL)) {  // HTTPS
         // set hearders
-        https.addHeader("accept", "application/json");
-        https.addHeader("Authorization", COINCAP_API_KEY_1);
+//      https.addHeader("accept", "application/json");
+        https.addHeader("x-access-token", COINRANKING_API_KEY_1);
         yield(); // watchdog reset
         Serial.print("[HTTPS] GET...\r\n");
         DisplayText("HTTPS get request: ");
@@ -85,6 +87,9 @@ bool GetDataFromCoinCapServer(void) {
 
           // file found at server
           if (httpCode == HTTP_CODE_OK) {
+                DisplayText("API credits left: ", CLYELLOW);
+                DisplayText(https.header("X-RateLimit-Remaining-Month").c_str(), CLYELLOW);
+                DisplayText("\n");
                 Serial.println("[HTTPS] Streaming data from server.");
                 DisplayText("Reading data", CLYELLOW);
                 // get tcp stream
@@ -101,25 +106,25 @@ bool GetDataFromCoinCapServer(void) {
                     if (firstBuffer) { Serial.println(sBufff); }
                     firstBuffer = false;
                   #endif
-                  Serial.print(".");
+                  Serial.print("+");
                   DisplayText(".");
                   // process received data
                   if (sBufff.length() > 10) {
                     pos = 0;
-                    sVal = FindJsonParam(sBufff, "priceUsd", pos);
+                    sVal = FindJsonParam(sBufff, "price", pos);
                     //Serial.println(pos);
                     if (pos >= 0) {
                       TrimNumDot(sVal);  // delete everything except numbers and "."
                       #ifdef DEBUG_OUTPUT_DATA
-                        if(CoinCapDataLength_1H < 5) { 
+                        if(CoinDataLength < 5) { 
                           Serial.println(sVal); 
                         }
                       #endif
                       Val = sVal.toFloat();
                       if ((Val > 10000) && (Val < 123000)) {
-                        CoinCapData_1H[CoinCapDataLength_1H] = Val;
-                        CoinCapDataLength_1H++;
-                        if (CoinCapDataLength_1H > MAX_DATA_POINTS_1H) {
+                        CoinData[CoinDataLength] = Val;
+                        CoinDataLength++;
+                        if (CoinDataLength > MAX_DATA_POINTS) {
                           Serial.println();
                           Serial.println("MAX NUMBER OF DATA POINTS REACHED!");
                           DisplayText("\nMax number of data points reached!\n");
@@ -137,19 +142,20 @@ bool GetDataFromCoinCapServer(void) {
                         Serial.println(Val);
                       } // weird data
                     } // if data found
-                    // last section was received; it finishes off with "timestamp"
-                    if (sBufff.indexOf("timestamp") >= 0) {
-                      Serial.println();
-                      Serial.println("End identifier found.");
-                      DisplayText("\nEnd identifier found.\n", CLGREEN);
-                      Finished = true;
-                    }  // end found
                   } // if data available
+                  // last section was received; it finishes off with "}]}}"
+                  if (sBufff.indexOf("]") >= 0) {
+                    Serial.println();
+                    Serial.println("End identifier found.");
+                    DisplayText("\nEnd identifier found.\n", CLGREEN);
+                    Finished = true;
+                  }  // end found
                   // timeout
                   Timeout = (millis() > (StartTime + 20 * 1000));  // 20 seconds
                   if (Timeout || Finished) { break; }
-                } // connected or not finished
+                } // while: connected or not finished
                 Serial.println();
+                Serial.printf("Number data points received: %d\n", CoinDataLength);
                 if (Timeout) {
                   Serial.println("[HTTPS] Timeout.");
                   DisplayText("Timeout.\n");
@@ -185,7 +191,7 @@ bool GetDataFromCoinCapServer(void) {
   }
 
   if (!result) {
-    CoinCapDataLength_1H = 0;
+    CoinDataLength = 0;
   }
   sBufff.clear();
   Serial.print("Time needed (ms): ");
@@ -198,30 +204,30 @@ bool GetDataFromCoinCapServer(void) {
 
 
 
-bool GetCoinCapData_1H(void) {
-    Serial.println("GetCoinCapData_1H()");
+bool GetCoinData(void) {
+    Serial.println("GetCoinData()");
     bool result = false;
 
-    if (! HasTimeElapsed(&LastTimeCoinCapRefreshed_1H, 24*60*60*1000)) {  // check server every 1/2 hour
-      Serial.println("CoinCap data 1H is valid.");
+    if (! HasTimeElapsed(&LastTimeCoinRefreshed, 1*60*60*1000)) {  // check server every hour
+      Serial.println("Coin data is valid.");
       return true;  // data is already valid
     }
 
-    Serial.println("Requesting data 1H from CoinCap server...");
+    Serial.println("Requesting data from CoinRanking server...");
     DisplayClear();
-    DisplayText("Contacting COINCAP server (1H)\n", CLYELLOW);
-    if (!GetDataFromCoinCapServer()) {
-        // LastTimeCoinCapRefreshed_1H = 0; // retry
+    DisplayText("Contacting CoinRanking server\n", CLYELLOW);
+    if (!GetDataFromCoinServer()) {
+        // LastTimeCoinRefreshed = 0; // retry
         DisplayText("FAILED!\n", CLRED);
         delay (2000);
         return false;
     }
-    Serial.println("Number of data points: " + String(CoinCapDataLength_1H));
+    Serial.println("Number of data points: " + String(CoinDataLength));
     char Txt[20];
-    sprintf(Txt, "Data points: %u\n", CoinCapDataLength_1H);
+    sprintf(Txt, "Data points: %u\n", CoinDataLength);
     DisplayText(Txt);
 
-    if (CoinCapDataLength_1H > REQ_DATA_POINTS_1H) {
+    if (CoinDataLength > REQ_DATA_POINTS) {
       result = true;
     } else {
       Serial.println("Not enough data points!");
@@ -238,8 +244,8 @@ bool GetCoinCapData_1H(void) {
 
 
 
-void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSpacing, const char BgImage) {
-  Serial.println("PlotCoinCapData()");
+void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpacing, const char BgImage) {
+  Serial.println("PlotCoinData()");
   DisplayClear();
 
   if (DataLen < DspW) {
@@ -332,11 +338,11 @@ void PlotCoinCapData(const float *DataArray, const int DataLen, const int LineSp
 
 
 
-void PlotCoinCapData_1H(void) {
-  PlotCoinCapData(CoinCapData_1H, CoinCapDataLength_1H, 168, 'w'); // 1 px = 1 h. 168 px = 1 week.
+void PlotCoinData(void) {
+  PlotCoinData(CoinData, CoinDataLength, 168, 'w'); // 1 px = 1 h. 168 px = 1 week.
 }
 
 
-void InvalidateCoinCapData(void) {
-  LastTimeCoinCapRefreshed_1H = 0; // data is not valid
+void InvalidateCoinData(void) {
+  LastTimeCoinRefreshed = 0; // data is not valid
 }

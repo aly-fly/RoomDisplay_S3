@@ -31,8 +31,8 @@ void OTA_init(void)
 
                        // stop any interrupts or background tasks here...
                        DisplayClear();
-                       DisplayText("OTA start", FONT_TITLE, 5, 20, CLGREEN);
-                       DisplayText(".", FONT_SYS, 5, 40, CLWHITE, true);
+                       DisplayText("OTA start", FONT_TXT, 5, 20, CLYELLOW);
+                       DisplayText(".", FONT_SYS, 5, 60, CLWHITE, true);
 
                        divisor = 99; // update LEDs imediatelly
                      });
@@ -50,7 +50,7 @@ void OTA_init(void)
   ArduinoOTA.onEnd([]()
                    {
     Serial.println("OTA Update Finished.");
-    DisplayText("OTA FINISHED", FONT_TXT, 5, 100, CLGREEN);
+    DisplayText("OTA FINISHED", FONT_TXT, 5, 150, CLGREEN);
     delay (600); });
 
   ArduinoOTA.onError([](ota_error_t error)
@@ -77,8 +77,8 @@ void OTA_init(void)
       msgb = "End Failed" ;
     }
     Serial.printf("OTA Error: %s\n", msgb);
-    DisplayText("OTA ERROR", FONT_TXT, 5, 100, CLRED);
-    DisplayText(msgb, FONT_TXT, 5, 120, CLRED);
+    DisplayText("OTA ERROR", FONT_TXT, 5, 150, CLRED);
+    DisplayText(msgb, FONT_TXT, 5, 180, CLRED);
     delay (2000); });
 
   ArduinoOTA.begin(); // Initialize

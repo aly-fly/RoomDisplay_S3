@@ -73,7 +73,10 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
   String sBufff;
   int NoMoreData;
 
-  loadFileFromSDcardToMerory("/cert/easistent-com.crt", Certificate, sizeof(Certificate), true);
+  if (!loadFileFromSDcardToMerory("/cert/easistent-com.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {

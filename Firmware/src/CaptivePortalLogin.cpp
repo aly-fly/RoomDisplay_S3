@@ -85,7 +85,10 @@ bool HTTPSconnect(String URL) {
       return false;
   }
   bool result = false;
-  loadFileFromSDcardToMerory("/cert/rls.crt", Certificate, sizeof(Certificate), true);
+  if (!loadFileFromSDcardToMerory("/cert/rls.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
 
   Serial.println("Connecting to: " + URL);
 

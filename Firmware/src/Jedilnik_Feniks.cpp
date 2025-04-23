@@ -36,7 +36,10 @@ bool ReadFeniksWebsite(void) {
   DisplayText("\n");
   String sBufOld;
 
-  loadFileFromSDcardToMerory("/cert/gostilnafeniks-si.crt", Certificate, sizeof(Certificate), true);
+  if (!loadFileFromSDcardToMerory("/cert/gostilnafeniks-si.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
 
   WiFiClientSecure *client = new WiFiClientSecure;
   if (client) {

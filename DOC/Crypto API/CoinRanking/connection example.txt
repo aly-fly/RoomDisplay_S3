@@ -1,0 +1,28 @@
+[ 73495][D][HTTPClient.cpp:1176] connect():  connected to api.coinranking.com:443
+[ 73502][V][ssl_client.cpp:369] send_ssl_data(): Writing HTTP request with 276 bytes...
+[ 73682][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'HTTP/1.1 200 OK'
+[ 73689][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Date: Wed, 23 Apr 2025 19:40:20 GMT'
+[ 73699][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Content-Type: application/json; charset=utf-8'
+[ 73709][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Content-Length: 38111'
+[ 73716][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Connection: keep-alive'
+[ 73724][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'RateLimit-Remaining: 4'
+[ 73732][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-RateLimit-Remaining-Month: 4999'
+[ 73741][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-RateLimit-Limit-Month: 5000'
+[ 73749][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'RateLimit-Reset: 1'
+[ 73757][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-RateLimit-Remaining-Second: 4'
+[ 73765][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-RateLimit-Limit-Second: 5'
+[ 73774][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'RateLimit-Limit: 5'
+[ 73781][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-Cache-Key: eaf062ca091629105369417ec00fec48'
+[ 73791][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'X-Cache-Status: Miss'
+[ 73798][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Cache-Control: max-age=60'
+[ 73807][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'ETag: W/"94df-xeUuf9Zi7OoBnRXqUZ+H0JtS9Lo"'
+[ 73816][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: 'Access-Control-Allow-Origin: *'
+[ 73825][V][HTTPClient.cpp:1270] handleHeaderResponse(): RX: ''
+[ 73830][D][HTTPClient.cpp:1328] handleHeaderResponse(): code: 200
+[ 73836][D][HTTPClient.cpp:1331] handleHeaderResponse(): size: 38111
+[ 73842][D][HTTPClient.cpp:642] sendRequest(): sendRequest code=200
+
+[HTTPS] GET... code: 200
+HTTP/1.1 200 OK
+[HTTPS] Streaming data from server.
+{"status":"success","data":{"change":"5.66","history":[{"price":"93669.73003028602","timestamp":1745434800
