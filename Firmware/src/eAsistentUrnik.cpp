@@ -10,7 +10,11 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
+// os domzale:
 // https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/6/9421462
+// zdr lju:
+// https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/590415/0/0/0/33/0
+
 
 const String eAsistent_URL1 = "https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/";
 const String eAsistent_URL2 = "/0/0/0/";
@@ -511,12 +515,15 @@ void DrawEAsistent(int urnikNr) {
       if (urnikNr == 0) font = FONT_URNIK_TT; else 
       font = FONT_URNIK_TT;
       if (i == 1) Yshift = 10; // gap between name and first hour
-      if ((Urnik[urnikNr][dayToShow][i].length() < 1) && (!timeShown)) // empty line
+      if (Urnik[urnikNr][dayToShow][i].length() < 1) // empty line
       {
-        DisplayText(Urnik[urnikNr][0][i].substring(6, Urnik[urnikNr][0][i].indexOf('-', 7)).c_str(), FONT_TXT_SMALL, 12, 7 + (i * 27) + Yshift + 3, CLCYAN, false);
-        timeShown = true;
+        if ((!timeShown) && (i > 1)) 
+        {
+          DisplayText(Urnik[urnikNr][0][i].substring(6, Urnik[urnikNr][0][i].indexOf('-', 7)).c_str(), FONT_TXT_SMALL, 12, 7 + (i * 27) + Yshift + 3, CLCYAN, false);
+          timeShown = true;
+        }
       }
-      else
+      else // not empty line
       {
         DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
         timeShown = false;

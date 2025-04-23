@@ -25,6 +25,8 @@
 #include "Smoothie_TCP.h"
 #include "GIFDraw.h"
 #include "RadioHttpClient.h"
+#include "OTA.h"
+#include "utils.h"
 
 int ScreenNumber = 0;
 bool NightMode = false;
@@ -34,122 +36,8 @@ bool ok;
 String sCmd;
 bool readAllData = false;
 
-void setup() {
-  Serial.begin(115200);
-
-  pinMode(GPIO_NUM_0, INPUT_PULLUP);
-
-  // delay 2 sec on the start to connect from programmer to serial terminal
-  int i;
-  for (i=0; i<10; i++){
-    Serial.print("*");
-    delay(100);
-  }
-  Serial.println();
-
-  Serial.println("Project: github.com/aly-fly/RoomDisplay");
-  Serial.print("Version: ");
-  Serial.println(VERSION);
-  Serial.print("Build: ");
-  Serial.println(BUILD_TIMESTAMP);
-
-  DisplayInit();
-  initGIF();
-  
-  DisplayClear();
-  delay(100);
-  DisplayText("Init...\n", CLYELLOW);
-  DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
-  DisplayText("Version: ", CLWHITE);
-  DisplayText(VERSION, CLCYAN);
-  DisplayText("\n", CLWHITE);
-  DisplayText("Build: ", CLWHITE);
-  DisplayText(BUILD_TIMESTAMP, CLCYAN);
-  DisplayText("\n", CLWHITE);
-
-#ifdef LDR_PIN
-  pinMode(LDR_PIN, ANALOG);
-  adcAttachPin(LDR_PIN);
-  analogSetAttenuation(ADC_0db);
-#endif
-
-  globalVariablesInit();
-
-  Serial.println("SPIFFS start...");
-  DisplayText("SPIFFS start...");
-  if (!SPIFFS.begin()) {
-    Serial.println("SPIFFS initialisation failed!");
-    DisplayText("FAILED!\n", CLRED);
-    while (1) yield(); // Stay here twiddling thumbs waiting
-  }
-  Serial.println("SPIFFS available!");
-  DisplayText("OK\n", CLGREEN);
-
-#ifdef IMAGES_ON_SD_CARD
-  Serial.println("SD Card start...");
-  DisplayText("SD Card start...");
-  if (!SDcardInit()) {
-    Serial.println("SD Card initialisation failed!");
-    DisplayText("FAILED!\n", CLRED);
-    while (1) yield(); // Stay here twiddling thumbs waiting
-  }
-  Serial.println("SD Card available!");
-  DisplayText("OK\n", CLGREEN);
-  // TEST
-  if (!digitalRead(GPIO_NUM_0)) {
-    Serial.println("SD Card TEST!");
-      SD_TEST();
-  }
-#endif
-
-  WifiInit();
-
-  if (!inHomeLAN) {
-   bool connOk = CheckConnectivityAndHandleCaptivePortalLogin();
-   if (!connOk) {
-      Serial.println("=== REBOOT ===");
-      DisplayText("=== REBOOT ===\n", CLORANGE);
-      delay (30000);
-      ESP.restart();  // retry everything from the beginning
-   }
-  }
-
-  String sPingIP;
-  IPAddress pingIP;
-  sPingIP = "216.58.205.46"; // google.com
-  pingIP.fromString(sPingIP);
-  Serial.println(sPingIP);
-  ppiinngg(pingIP, true);
-
-  setClock(); 
-
-#if DEVEL_JEDILNIK_OS != 0 // DEVEL mode
-  ScreenNumber = 5;
-#endif
-
-  DisplayInitFonts();
-  // TEST
-  if (!digitalRead(GPIO_NUM_0)) {
-      DisplayTest();
-      DisplayFontTest();
-      DisplayClear();  
-    }
-
-  log_d("Total heap: %d", ESP.getHeapSize());
-  log_d("Free heap: %d", ESP.getFreeHeap());
-  log_d("Total PSRAM: %d", ESP.getPsramSize());
-  log_d("Free PSRAM: %d", ESP.getFreePsram());  
-
-  DisplayText("Init finished.", CLGREEN)    ;
-  delay(2000);
-  DisplayClear();
-  Serial.println("INIT FINISHED.");
-}
-
-
-// ===============================================================================================================================================================
-
-void loop() {
+void loopSerialCommands (void)
+{
   // RX commands
   if (Serial.available() > 0) {
     sCmd.concat(Serial.readString()); // add new data to the existing queue
@@ -198,6 +86,139 @@ void loop() {
       sCmd.clear(); // one at a time
     }
   } // serial available
+}
+
+
+void myDelay (unsigned long delayMs)
+{
+  unsigned long startTime = millis();
+  while ((! HasTimeElapsed (&startTime, delayMs)) && (digitalRead(GPIO_NUM_0)))
+  {
+    loopSerialCommands();
+    OTA_loop();
+    delay(10);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(GPIO_NUM_0, INPUT_PULLUP);
+
+  // delay 2 sec on the start to connect from programmer to serial terminal
+  int i;
+  for (i=0; i<10; i++){
+    Serial.print("*");
+    delay(100);
+  }
+  Serial.println();
+
+  Serial.println("Project: github.com/aly-fly/RoomDisplay");
+  Serial.print("Version: ");
+  Serial.println(VERSION);
+  Serial.print("Build: ");
+  Serial.println(BUILD_TIMESTAMP);
+
+  DisplayInit();
+  initGIF();
+  
+  DisplayClear();
+  delay(100);
+  DisplayText("Init...\n", CLYELLOW);
+  DisplayText("Project: github.com/aly-fly/RoomDisplay_S3\n", CLWHITE);
+  DisplayText("Version: ", CLWHITE);
+  DisplayText(VERSION, CLCYAN);
+  DisplayText("\n", CLWHITE);
+  DisplayText("Build: ", CLWHITE);
+  DisplayText(BUILD_TIMESTAMP, CLCYAN);
+  DisplayText("\n", CLWHITE);
+
+#ifdef LDR_PIN
+  pinMode(LDR_PIN, ANALOG);
+  adcAttachPin(LDR_PIN);
+  analogSetAttenuation(ADC_0db);
+#endif
+
+  //globalVariablesInit();
+
+  Serial.println("SPIFFS start...");
+  DisplayText("SPIFFS start...");
+  if (!SPIFFS.begin()) {
+    Serial.println("SPIFFS initialisation failed!");
+    DisplayText("FAILED!\n", CLRED);
+    while (1) yield(); // Stay here twiddling thumbs waiting
+  }
+  Serial.println("SPIFFS available!");
+  DisplayText("OK\n", CLGREEN);
+
+#ifdef IMAGES_ON_SD_CARD
+  Serial.println("SD Card start...");
+  DisplayText("SD Card start...");
+  if (!SDcardInit()) {
+    Serial.println("SD Card initialisation failed!");
+    DisplayText("FAILED!\n", CLRED);
+    while (1) yield(); // Stay here twiddling thumbs waiting
+  }
+  Serial.println("SD Card available!");
+  DisplayText("OK\n", CLGREEN);
+  // TEST
+  if (!digitalRead(GPIO_NUM_0)) {
+    Serial.println("SD Card TEST!");
+      SD_TEST();
+  }
+#endif
+
+  WifiInit();
+
+  if (!inHomeLAN) {
+   bool connOk = CheckConnectivityAndHandleCaptivePortalLogin();
+   if (!connOk) {
+      Serial.println("=== REBOOT ===");
+      DisplayText("=== REBOOT ===\n", CLORANGE);
+      delay (30000);
+      ESP.restart();  // retry everything from the beginning
+   }
+  }
+
+  OTA_init();
+
+  String sPingIP;
+  IPAddress pingIP;
+  sPingIP = "216.58.205.46"; // google.com
+  pingIP.fromString(sPingIP);
+  Serial.println(sPingIP);
+  ppiinngg(pingIP, true);
+
+  setClock(); 
+
+#if DEVEL_JEDILNIK_OS != 0 // DEVEL mode
+  ScreenNumber = 5;
+#endif
+
+  DisplayInitFonts();
+  // TEST
+  if (!digitalRead(GPIO_NUM_0)) {
+      DisplayTest();
+      DisplayFontTest();
+      DisplayClear();  
+    }
+
+  log_d("Total heap: %d", ESP.getHeapSize());
+  log_d("Free heap: %d", ESP.getFreeHeap());
+  log_d("Total PSRAM: %d", ESP.getPsramSize());
+  log_d("Free PSRAM: %d", ESP.getFreePsram());  
+
+  DisplayText("Init finished.", CLGREEN)    ;
+  delay(2000);
+  DisplayClear();
+  Serial.println("INIT FINISHED.");
+}
+
+
+// ===============================================================================================================================================================
+
+void loop() {
+  loopSerialCommands();
 
   if(GetCurrentTime()) {
     Serial.println("Year: " + String(CurrentYear));
@@ -324,7 +345,7 @@ void loop() {
         DisplayText(RadioResponse.c_str(), FONT_TXT,  5,  DspH - 50, CLCYAN, true);
       }
 
-      delay(7000);
+      myDelay(7000);
     } // home LAN
   }
 
@@ -333,7 +354,7 @@ void loop() {
     /*
     ok = GetARSOdata();
     if (ok) ArsoPlotForecast();
-    if (ok) delay(8000);
+    if (ok) myDelay(8000);
     */
    ScreenNumber++;
   }
@@ -342,7 +363,7 @@ void loop() {
   if (ScreenNumber == 2) {  // -------------------------------------------------------------------------------------------------------------------------
     ok = GetARSOmeteogram();
     if (ok) ArsoPlotMeteogram();
-    if (ok) delay(13000);
+    if (ok) myDelay(13000);
   }
 
   // Arso rain GIF
@@ -355,7 +376,7 @@ void loop() {
   if (ScreenNumber == 4) {  // -------------------------------------------------------------------------------------------------------------------------
     ok = GetCoinCapData_1H();
     PlotCoinCapData_1H();
-    if (ok) delay(4000);
+    if (ok) myDelay(4000);
   }
 
   // COIN CAP DATA PLOT
@@ -367,7 +388,7 @@ void loop() {
   if (ScreenNumber == 6) {  // -------------------------------------------------------------------------------------------------------------------------
     GetFeniks();
     DrawFeniks();
-    delay(13000);  
+    myDelay(13000);  
   }
 
   // JEDILNIK OŠ DOMŽALE
@@ -376,7 +397,7 @@ void loop() {
       if ((CurrentMonth < 7) || (CurrentMonth > 8) || readAllData) {
         GetJedilnikOsDomzale();
         DrawJedilnikOsDomzale();
-        delay(13000);
+        myDelay(13000);
       }
     } else ScreenNumber++;
   }
@@ -387,9 +408,9 @@ void loop() {
       if ((CurrentMonth < 7) || (CurrentMonth > 8) || readAllData) {
         GetEAsistent();
         DrawEAsistent(0);
-        delay (7000);
+        myDelay (7000);
         DrawEAsistent(1);
-        delay (7000);
+        myDelay (7000);
       }
     } else ScreenNumber++;
   }
@@ -431,7 +452,7 @@ void loop() {
             DisplayText(sStr.c_str(), FONT_TITLE, 20, 170, CLBLUE);
           }
         }
-        delay(10000);
+        myDelay(10000);
       } // connect & request
     } // home lan
   }
@@ -470,7 +491,7 @@ void loop() {
     }
   }
 
-  delay(1000);
+  myDelay(1000);
 } // loop
 
 
