@@ -39,6 +39,9 @@ String TempOutdoor1, TempOutdoor2;
 bool ok;
 String sCmd;
 bool readAllData = false;
+touch_value_t touchIdle = 0;
+touch_value_t touchMax = 10;
+touch_value_t touchThreshold = 5;
 
 void loopSerialCommands (void)
 {
@@ -92,15 +95,27 @@ void loopSerialCommands (void)
   } // serial available
 }
 
+bool isTouchPressed(void) {
+  touch_value_t touch = touchRead(TOUCH_PIN_NEXT);
+  //Serial.println(touch);
+  bool result = (touch > touchThreshold);
+  if (touch > touchMax)
+  {
+    touchMax = touch;
+    touchThreshold = (touchIdle + touchMax) / 2;
+    Serial.printf("Touch max = %d\n", touchMax);
+  }
+  return result;
+}
 
 void myDelay (unsigned long delayMs)
 {
   unsigned long startTime = millis();
-  while ((! HasTimeElapsed (&startTime, delayMs)) && (digitalRead(GPIO_NUM_0)))
+  while ((! HasTimeElapsed (&startTime, delayMs)) && (digitalRead(GPIO_NUM_0)) && (!isTouchPressed()))
   {
     loopSerialCommands();
     OTA_loop();
-    delay(10);
+    delay(100);
   }
 }
 
@@ -206,6 +221,11 @@ void setup() {
       DisplayFontTest();
       DisplayClear();  
     }
+
+  touchIdle = touchRead(TOUCH_PIN_NEXT);
+  Serial.printf("Touch sensor idle = %d\n", touchIdle);
+  touchMax = touchIdle + 100;
+  touchThreshold = (touchIdle + touchMax) / 2;
 
   log_d("Total heap: %d", ESP.getHeapSize());
   log_d("Free heap: %d", ESP.getFreeHeap());
@@ -327,8 +347,8 @@ void loop() {
       if ((CurrentMonth >= 5) && (CurrentMonth <= 9)) 
 {
         if (ShellyGetTemperature()) {}
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 152+2, 230+2, CLBLACK); // shadow
-        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 150,   230,   CLLIGHTBLUE);
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 130+2, 230+2, CLBLACK); // shadow
+        DisplayText(sShellyTemperature.c_str(), FONT_TITLE, 130,   230,   CLLIGHTBLUE);
 
         uint32_t clr = CLDARKGREY;
         if (ShellyGetSwitch1()) {
@@ -372,7 +392,7 @@ void loop() {
   // Arso rain GIF
   if (ScreenNumber == 3) {  // -------------------------------------------------------------------------------------------------------------------------
     ok = GetARSOrain();
-    if (ok) ShowARSOrainImage();
+    if (ok) ShowARSOrainImage(); // wwwwwwwwwwwwww
   }
 
   // COIN CAP DATA PLOT
@@ -419,7 +439,9 @@ void loop() {
   }
 
   if (ScreenNumber == 9) {  // -------------------------------------------------------------------------------------------------------------------------
-    if (!inHomeLAN) {
+      ScreenNumber++;
+/*
+      if (!inHomeLAN) {
       ScreenNumber++;
     } else {
       if (Smoothie_TCPclientRequest("progress\r")) {  // CR line ending
@@ -458,6 +480,7 @@ void loop() {
         myDelay(10000);
       } // connect & request
     } // home lan
+  */
   }
 
 

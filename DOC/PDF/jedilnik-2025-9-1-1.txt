@@ -1,0 +1,117 @@
+===== File contents ==========================================
+
+
+                                                                                                                                            Jagodna marmelada,
+                                                      Prosena kasa, jabolka,             Pletenka z makom, bela    Popeceni kruhki, cesnjev
+       ZAJTRK                        /                                                                                                      pirin kruh, tekoci jogurt,
+                                                      kakavov posip z oreski             zitna kava, hruske        paradiznik, caj
+                                                                                                                                            jabolka
+                                                                                         Sirni namaz, koruzni
+                        Koruzni kosmici, navadni      Pecen prsut, rzen kruh,            kruh, paprika, caj        Rogljicek s kaljenimi      Skutin namaz z zelisci,
+   DOP. MALICA          tekoci jogurt, slive          olive, limonada                    Dodatno iz EU Solske      semeni, kakav, hruske      rzen kruh, caj, lubenica
+                                                                                         sheme: kumare*
+                                                                                                                   Polnozrnati siroki
+                                                      Pire krompir s cvetaco,                                                                 Brokolijeva juha, rizota s
+                        Sirovi tortelini s                                                                         rezanci, tuna v
+                                                      piscancji zrezek v                 Boranja, polenta, sadna                              piscancem in buckami*,
+       KOSILO           paradiznikovo omako,                                                                       smetanovi omaki, zelena
+                                                      naravni omaki, zelje in            solata                                               kumare in paradiznik v
+                        zelena solata* s ciceriko                                                                  solata z radicem in
+                                                      korenje* v solati                                                                       solati
+                                                                                                                   koruzo
+                                                                                                                                              bio pirin kruh, zelenjavni
+                                                      Pinjenec, grozdje, rizevi          Rzen kruh, piscancja      Grski jogurt, breskev,
+    POP. MALICA                      /                                                                                                        namaz s papriko,
+                                                      vaflji                             prsa, zelena solata       grisini
+                                                                                                                                              korenje
+
+
+
+
+
+==============================================================
+===== DEVEL 2 - fixed line endings ===========================
+                                                                                                                                            Jagodna marmelada,#                                                      Prosena kasa, jabolka,             Pletenka z makom, bela    Popeceni kruhki, cesnjev#       ZAJTRK                        /                                                                                                      pirin kruh, tekoci jogurt,#                                                      kakavov posip z oreski             zitna kava, hruske        paradiznik, caj#                                                                                                                                            jabolka#                                                                                         Sirni namaz, koruzni#                        Koruzni kosmici, navadni      Pecen prsut, rzen kruh,            kruh, paprika, caj        Rogljicek s kaljenimi      Skutin namaz z zelisci,#   DOP. MALICA          tekoci jogurt, slive          olive, limonada                    dodatno iz eu solske      semeni, kakav, hruske      rzen kruh, caj, lubenica#                                                                                         sheme: kumare*#                                                                                                                   Polnozrnati siroki#                                                      Pire krompir s cvetaco,                                                                 Brokolijeva juha, rizota s#                        Sirovi tortelini s                                                                         rezanci, tuna v#                                                      piscancji zrezek v                 Boranja, polenta, sadna                              piscancem in buckami*,#       KOSILO           paradiznikovo omako,                                                                       smetanovi omaki, zelena#                                                      naravni omaki, zelje in            solata                                               kumare in paradiznik v#                        zelena solata* s ciceriko                                                                  solata z radicem in#                                                      korenje* v solati                                                                       solati#                                                                                                                   koruzo#                                                                                                                                              bio pirin kruh, zelenjavni#                                                      Pinjenec, grozdje, rizevi          Rzen kruh, piscancja      Grski jogurt, breskev,#    POP. MALICA                      /                                                                                                        namaz s papriko,#                                                      vaflji                             prsa, zelena solata       grisini#                                                                                                                                              korenje#
+==============================================================
+===== DEVEL 3 - separate lines ================================
+0:                                                                                                                                             Jagodna marmelada,
+1:                                                       Prosena kasa, jabolka,             Pletenka z makom, bela    Popeceni kruhki, cesnjev
+2:        ZAJTRK                        /                                                                                                      pirin kruh, tekoci jogurt,
+3:                                                       kakavov posip z oreski             zitna kava, hruske        paradiznik, caj
+4:                                                                                                                                             jabolka
+5:                                                                                          Sirni namaz, koruzni
+6:                         Koruzni kosmici, navadni      Pecen prsut, rzen kruh,            kruh, paprika, caj        Rogljicek s kaljenimi      Skutin namaz z zelisci,
+7:    DOP. MALICA          tekoci jogurt, slive          olive, limonada                    dodatno iz eu solske      semeni, kakav, hruske      rzen kruh, caj, lubenica
+8:                                                                                          sheme: kumare*
+9:                                                                                                                    Polnozrnati siroki
+10:                                                       Pire krompir s cvetaco,                                                                 Brokolijeva juha, rizota s
+11:                         Sirovi tortelini s                                                                         rezanci, tuna v
+12:                                                       piscancji zrezek v                 Boranja, polenta, sadna                              piscancem in buckami*,
+13:        KOSILO           paradiznikovo omako,                                                                       smetanovi omaki, zelena
+14:                                                       naravni omaki, zelje in            solata                                               kumare in paradiznik v
+15:                         zelena solata* s ciceriko                                                                  solata z radicem in
+16:                                                       korenje* v solati                                                                       solati
+17:                                                                                                                    koruzo
+18:                                                                                                                                               bio pirin kruh, zelenjavni
+19:                                                       Pinjenec, grozdje, rizevi          Rzen kruh, piscancja      Grski jogurt, breskev,
+20:     POP. MALICA                      /                                                                                                        namaz s papriko,
+21:                                                       vaflji                             prsa, zelena solata       grisini
+22:                                                                                                                                               korenje
+23: 
+24: 
+==============================================================
+Longest line = 168
+===== DEVEL 4 - all lines same lenghth =======================
+                                                                                                                                            Jagodna marmelada,          
+                                                      Prosena kasa, jabolka,             Pletenka z makom, bela    Popeceni kruhki, cesnjev                             
+       ZAJTRK                        /                                                                                                      pirin kruh, tekoci jogurt,  
+                                                      kakavov posip z oreski             zitna kava, hruske        paradiznik, caj                                      
+                                                                                                                                            jabolka                     
+                                                                                         Sirni namaz, koruzni                                                           
+                        Koruzni kosmici, navadni      Pecen prsut, rzen kruh,            kruh, paprika, caj        Rogljicek s kaljenimi      Skutin namaz z zelisci,   
+   DOP. MALICA          tekoci jogurt, slive          olive, limonada                    dodatno iz eu solske      semeni, kakav, hruske      rzen kruh, caj, lubenica  
+                                                                                         sheme: kumare*                                                                 
+                                                                                                                   Polnozrnati siroki                                   
+                                                      Pire krompir s cvetaco,                                                                 Brokolijeva juha, rizota s
+                        Sirovi tortelini s                                                                         rezanci, tuna v                                      
+                                                      piscancji zrezek v                 Boranja, polenta, sadna                              piscancem in buckami*,    
+       KOSILO           paradiznikovo omako,                                                                       smetanovi omaki, zelena                              
+                                                      naravni omaki, zelje in            solata                                               kumare in paradiznik v    
+                        zelena solata* s ciceriko                                                                  solata z radicem in                                  
+                                                      korenje* v solati                                                                       solati                    
+                                                                                                                   koruzo                                               
+                                                                                                                                              bio pirin kruh, zelenjavni
+                                                      Pinjenec, grozdje, rizevi          Rzen kruh, piscancja      Grski jogurt, breskev,                               
+    POP. MALICA                      /                                                                                                        namaz s papriko,          
+                                                      vaflji                             prsa, zelena solata       grisini                                              
+                                                                                                                                              korenje                   
+                                                                                                                                                                        
+                                                                                                                                                                        
+==============================================================
+Ignore first columns: 17
+Sections starting at: 24 54 89 115 140 
+colNumChars: 0;0;0;0;0;0;0;5;5;5;5;5;5;2;4;5;5;5;5;5;6;3;5;2;5;4;4;2;2;2;2;1;0;0;0;0;0;10;10;10;10;9;9;8;6;8;7;8;9;7;7;7;7;7;6;5;6;5;6;4;1;1;0;0;0;0;0;0;0;0;0;0;10;10;10;10;9;6;8;8;7;9;6;8;7;8;7;8;8;6;6;5;2;2;1;0;0;0;11;11;11;11;11;10;9;8;6;7;9;6;9;7;8;7;4;7;6;5;5;3;2;1;0;3;3;12;12;12;10;11;9;8;8;9;5;8;8;7;9;8;7;6;6;7;7;6;7;5;4;1;2;
+colNumCapitals: 0;0;0;0;0;0;0;2;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;1;0;2;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+===== DEVEL 5 - text in columns with spaces ==================
+                                                                         /                                                                                                          Koruzni kosmici, navadni      tekoci jogurt, slive                                                                                                    Sirovi tortelini s                                          paradiznikovo omako,                                        zelena solata* s ciceriko                                                                                                                                          /                                                                                                                                        
+---------------
+                                   Prosena kasa, jabolka,                                                kakavov posip z oreski                                                                                   Pecen prsut, rzen kruh,            olive, limonada                                                                                          Pire krompir s cvetaco,                                               piscancji zrezek v                                                    naravni omaki, zelje in                                               korenje* v solati                                                                                        Pinjenec, grozdje, rizevi                                             vaflji                                                                                                                                      
+---------------
+                          Pletenka z makom, bela                              zitna kava, hruske                                  Sirni namaz, koruzni      kruh, paprika, caj        dodatno iz eu solske      sheme: kumare*                                                                                          Boranja, polenta, sadna                             solata                                                                                                                            Rzen kruh, piscancja                                prsa, zelena solata                                                                                     
+---------------
+                         Popeceni kruhki, cesnjev                          paradiznik, caj                                                            Rogljicek s kaljenimi    semeni, kakav, hruske                             Polnozrnati siroki                                rezanci, tuna v                                   smetanovi omaki, zelena                           solata z radicem in                               koruzo                                            Grski jogurt, breskev,                            grisini                                                                                             
+---------------
+Jagodna marmelada,                                      pirin kruh, tekoci jogurt,                              jabolka                                                   Skutin namaz z zelisci,     rzen kruh, caj, lubenica                                                            Brokolijeva juha, rizota s                              piscancem in buckami*,                                  kumare in paradiznik v                                  solati                                                  bio pirin kruh, zelenjavni                              namaz s papriko,                                        korenje                                                                           
+---------------
+==============================================================
+-------------------
+https://www.os-domzale.si/files/2025/09/jedilnik-2025-9-1-1.pdf
+-------------------
+1. - 5. 9. 2025
+-------------------
+/ Koruzni kosmici, navadni tekoci jogurt, slive Sirovi tortelini s paradiznikovo omako, zelena solata s ciceriko /
+Prosena kasa, jabolka, kakavov posip z oreski Pecen prsut, rzen kruh, olive, limonada Pire krompir s cvetaco, piscancji zrezek v naravni omaki, zelje in korenje v solati Pinjenec, grozdje, rizevi vaflji
+Pletenka z makom, bela zitna kava, hruske Sirni namaz, koruzni kruh, paprika, caj kumare Boranja, polenta, sadna solata Rzen kruh, piscancja prsa, zelena solata
+Popeceni kruhki, cesnjev paradiznik, caj Rogljicek s kaljenimi semeni, kakav, hruske Polnozrnati siroki rezanci, tuna v smetanovi omaki, zelena solata z radicem in koruzo Grski jogurt, breskev, grisini
+Jagodna marmelada, pirin kruh, tekoci jogurt, jabolka Skutin namaz z zelisci, rzen kruh, caj, lubenica Brokolijeva juha, rizota s piscancem in buckami, kumare in paradiznik v solati bio pirin kruh, zelenjavni namaz s papriko, korenje
+-------------------

@@ -18,7 +18,7 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
-#define MAX_DATA_POINTS (31*24)  // real data = 720 points
+#define MAX_DATA_POINTS (31*24)  // real data = 720 points (each point is 1 hour)
 #define REQ_DATA_POINTS   DspW  // enough to fill the display
 
 float_t CoinData[MAX_DATA_POINTS];  // data for 1 month = 3 kB (4B / point)
@@ -244,11 +244,11 @@ bool GetCoinData(void) {
 
 
 
-void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpacing, const char BgImage) {
+void PlotCoinData(void) {
   Serial.println("PlotCoinData()");
   DisplayClear();
 
-  if (DataLen < DspW) {
+  if (CoinDataLength < DspW) {
     Serial.println("BTC: Not enough data to plot!");
     DisplayText("BTC: NOT ENOUGH DATA", FONT_TITLE, 5, 20, CLRED);
     delay(500);
@@ -256,20 +256,15 @@ void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpaci
   }
 
   char FileName[30];
-  sprintf(FileName, "/bg_btc_%dx%d_%c.bmp", DspW, DspH, BgImage);
+  sprintf(FileName, "/bg_btc_%dx%d_w.bmp", DspW, DspH);
   DisplayShowImage(FileName,   0, 0);
 
   // vertical line
-  String sTxt;
-  if (BgImage == 'd') {
-    sTxt = "day";
-  } else {
-    sTxt = "week";
-  }
-  int LineX1 = DspW - LineSpacing;
-  int LineX2 = DspW - LineSpacing * 2;
+  // 1 px = 1 h;  168 px = 1 week
+  int LineX1 = DspW - 168;
+  int LineX2 = DspW - 168 * 2;
   tft.setTextColor(TFT_DARKGREY, TFT_BLACK);
-  tft.drawString(sTxt, LineX1 + 4, DspH - 22, 1);
+  tft.drawString("week", LineX1 + 4, DspH - 22, 1);
   int numDots = DspH / 6;
   for (int i = 0; i < numDots; i++)
   {
@@ -280,16 +275,17 @@ void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpaci
   float_t Minn, Maxx;
   Minn =  999999999;
   Maxx = -999999999;
-  uint16_t IgnoreFirst = DataLen - DspW;
+  uint16_t IgnoreOldDataPoints = CoinDataLength - DspW;
   Serial.print("All data: ");
-  Serial.println(DataLen);
-  Serial.print("Ignored first points: ");
-  Serial.println(IgnoreFirst);
+  Serial.println(CoinDataLength);
+  Serial.print("Ignored old points: ");
+  Serial.println(IgnoreOldDataPoints);
 
-  for (uint16_t i = IgnoreFirst; i < DataLen; i++)
+  // newest data is in the beginning; oldedt is at the end of the array
+  for (uint16_t i = 0; i < (CoinDataLength - IgnoreOldDataPoints); i++)
   {
-    if (DataArray[i] > Maxx) {Maxx = DataArray[i];}
-    if (DataArray[i] < Minn) {Minn = DataArray[i];}
+    if (CoinData[i] > Maxx) {Maxx = CoinData[i];}
+    if (CoinData[i] < Minn) {Minn = CoinData[i];}
   }
   Serial.println("Min: " + String(Minn));
   Serial.println("Max: " + String(Maxx));
@@ -307,7 +303,7 @@ void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpaci
 
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   for (X = 0; X < DspW; X++) {
-    fY = (DataArray[IgnoreFirst + X] - MinnD) * Scaling;
+    fY = (CoinData[DspW - X - 1] - MinnD) * Scaling;
     iY = round(fY);
     if (iY < 0) iY = 0;
     if (iY >= DspH) iY = DspH-1;
@@ -331,16 +327,12 @@ void PlotCoinData(const float *DataArray, const int DataLen, const int LineSpaci
   tft.drawNumber(round(Minn), 75, DspH - 12, 1);
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
   tft.loadFont(FN_TITLE);
-  X = tft.drawNumber(round(DataArray[DataLen-1]), 250, 9);
+  X = tft.drawNumber(round(CoinData[0]), 250, 9);
   tft.drawString("USD", 250 + X + 13, 9);
   tft.unloadFont();
 }
 
 
-
-void PlotCoinData(void) {
-  PlotCoinData(CoinData, CoinDataLength, 168, 'w'); // 1 px = 1 h. 168 px = 1 week.
-}
 
 
 void InvalidateCoinData(void) {

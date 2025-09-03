@@ -49,7 +49,7 @@ bool HTTPSconnect(const String URL, const bool PostRequest, const String PostDat
         return false;
     }
 
-  setClock();
+  //setClock();
 
   if (!loadFileFromSDcardToMerory("/cert/api-zamzar-com.crt", Certificate, sizeof(Certificate), true))
   {
@@ -207,7 +207,7 @@ bool ConvertPdfToTxt(const String PdfUrl) {
       DisplayText(".");
       RetryCont++;
       ZamzarData.clear();
-      delay(2000);
+      delay(3500);
       ok = HTTPSconnect(URL, false, "", true);
       if (!ok) {
         Serial.println("Fail Zamzar step 2: GET job status");

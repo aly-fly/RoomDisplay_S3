@@ -1,8 +1,23 @@
+
+2024 - 2025
+
 https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/5/9421462
 https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/6/9421462
 
 https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600887/0/0/0/5/9621355
 https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600887/0/0/0/6/9621355
+
+2025 - 2026
+
+7.c:
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/0
+id:
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/9588622
+
+1.m:
+https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/1/0
+
+
 
 https://forum.arduino.cc/t/parse-http-data-from-website/576407/5
 

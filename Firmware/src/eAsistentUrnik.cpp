@@ -10,22 +10,31 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
-// os domzale:
-// https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/600999/0/0/0/6/9421462
-// zdr lju:
-// https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/590415/0/0/0/33/0
+/*
+os domzale; 2025 - 2026; 7.c razred:
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/0
+id:
+https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/9588622
 
+sr. zdravstvena lj; 1.m razred:
+https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/1/0
+*/
 
-const String eAsistent_URL1 = "https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/";
-const String eAsistent_URL2 = "/0/0/0/";
+const String eAsistent_T_URL1 = "https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0";
+const String eAsistent_T_URL2 = "9588622";
 
-const int FirstMondayInSeptember = 2;
+const String eAsistent_M_URL1 = "https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0";
+const String eAsistent_M_URL2 = "0";
+
+const int FirstMondayInSeptember = 1;
 
 unsigned long LastTimeUrnik1Refreshed = 0;
 unsigned long LastTimeUrnik2Refreshed = 0;
 
+#define numberOfHours (9+3)
+
 // Class, day, hour
-String Urnik[2][6][10];
+String Urnik[2][6][numberOfHours];
 
 // declarations
 void ProcessDataInit (void);
@@ -34,7 +43,7 @@ void ProcessData (int &urnikNr, String &DataIn);
 void UrnikClear(int urnikNr) {
   for (int dan = 0; dan < 6; dan++) 
   {
-    for (int ura = 0; ura < 10; ura++) 
+    for (int ura = 0; ura < numberOfHours; ura++) 
     {
       Urnik[urnikNr][dan][ura].clear();
     }
@@ -58,15 +67,12 @@ bool ReadEAsistentWebsite(int teden, int urnikNr) {
   DisplayText(String(urnikNr).c_str(), CLPINK);
   DisplayText("\n");
 
-  String ucenec, razred;
-  if (urnikNr == 0) {
-    ucenec = "9621355";  // T
-    razred = "600887";
-  } else {
-    ucenec = "9421462";  // M
-    razred = "600999";
+  String URL;
+  if (urnikNr == 0) { // T
+    URL = eAsistent_T_URL1 + '/' + String(teden) + '/' + eAsistent_T_URL2;
+  } else {            // M
+    URL = eAsistent_M_URL1 + '/' + String(teden) + '/' + eAsistent_M_URL2;
   }
-  String URL = eAsistent_URL1 + razred + eAsistent_URL2 + '/' + String(teden) + '/' + ucenec;
   DisplayText("Contacting: ", CLYELLOW);
   DisplayText(URL.c_str(), CLBLUE);
   DisplayText("\n");
@@ -247,7 +253,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
   if (txt.length() > 0) {
     txt.concat(' '); // just one space at the end
     TrimDoubleSpaces(txt);
-    #ifdef DEBUG_OUTPUT_DATA
+    #ifdef DEBUG_URNIK
     Serial.print("T = ");
     Serial.println(txt);
     #endif
@@ -256,7 +262,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
   // text is now in the cell, do not use txt anymore from here down.
 
   section = DataIn.substring(delimiterPos+1, DataIn.length());  // to the end
-  #ifdef DEBUG_OUTPUT_DATA
+  #ifdef DEBUG_URNIK
   Serial.print("S = ");
   Serial.println(section);
   #endif
@@ -264,14 +270,14 @@ void ProcessData (int &urnikNr, String &DataIn) {
   if (section.indexOf("ednevnik_seznam_ur_odpadlo") >= 0) {
     odpadlaUra = true;
     #ifdef DEBUG_URNIK
-    Serial.println("ODPADLO");
+    Serial.println("ODPADLA URA");
     #endif
     }
 
   if (section.indexOf("table")  == 0) {
     subTable = true; 
     subTableNum++;
-    #ifdef DEBUG_URNIK
+    #ifdef DEBUG_URNIK_DETAIL
     Serial.print("   Sub Table ");
     Serial.println(subTableNum);
     #endif
@@ -286,17 +292,17 @@ void ProcessData (int &urnikNr, String &DataIn) {
           celica = "ODPADLO ";
         }
         odpadlaUra = false;
-      }
+      } // odpadla ura
       celica.concat (" & ");
     }
   }
 
   if (section.indexOf("/table") == 0) {
     subTable = false;
-    #ifdef DEBUG_URNIK
+    #ifdef DEBUG_URNIK_DETAIL
     Serial.println("   Sub Table end");
     #endif
-    }
+  }
 
   if (subTable == false) { 
       if (section == "/tr") { // konec vrstice --> vpis podatkov v urnik
@@ -308,7 +314,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
       subTableNum = 0;
       ura++;
       dan = 0;
-      #ifdef DEBUG_URNIK
+      #ifdef DEBUG_URNIK_DETAIL
       Serial.println("=== LINE END");
       #endif
     }
@@ -318,28 +324,40 @@ void ProcessData (int &urnikNr, String &DataIn) {
       dataReady = true;
       subTableNum = 0;
       dan++;
-      #ifdef DEBUG_URNIK
+      #ifdef DEBUG_URNIK_DETAIL
       Serial.println("+++ CELL END");
       #endif
     }
   } // sub table
 
   if (dataReady) {
-        // korigiraj odpadle ure
-        if (odpadlaUra) {
-          int pp = celica.lastIndexOf('&');
-          if (pp >= 0) {  // naslednja sekcija iste celice
-            celica.remove(pp+1);
-            celica.concat(" ODPADLO");
-          } else {
-            celica = "ODPADLO ";
-          }
-          odpadlaUra = false;
+      // korigiraj odpadle ure
+      if (odpadlaUra) {
+        int pp = celica.lastIndexOf('&');
+        if (pp >= 0) {  // naslednja sekcija iste celice
+          celica.remove(pp+1);
+          celica.concat(" ODPADLO");
+        } else {
+          celica = "ODPADLO ";
         }
+        odpadlaUra = false;
+      }
+
+      // pobrisi nerelevanten del
+      if ((celica.indexOf("Dekleta") > 0) && (urnikNr == 1)) {
+        int pp = celica.indexOf('&');
+        if (pp > 1) {
+          celica.remove(pp-2);
+          #ifdef DEBUG_URNIK
+          Serial.println("Brisem del \"Dekleta\"");
+          #endif
+        }
+      }        
+
       celica.trim(); // remove leading and trailing spaces
       TrimDoubleSpaces(celica);
       TrimNonPrintable(celica);
-      #ifdef DEBUG_URNIK
+      #ifdef DEBUG_URNIK_DETAIL
       Serial.print("C ");
       Serial.print("[");
       Serial.print(saveDan);
@@ -349,7 +367,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
       Serial.println(celica);
       #endif
 
-      if ((saveDan < 6) && (saveUra < 10)) {
+      if ((saveDan < 6) && (saveUra < numberOfHours)) {
         Urnik[urnikNr][saveDan][saveUra] = celica;
         //Serial.println("Save."); 
       }
@@ -372,7 +390,7 @@ void FinalizeData (int urnikNr, String sName) {
   #ifdef DEBUG_OUTPUT
   Serial.println("######################");
   
-  for (ura = 0; ura < 10; ura++) {
+  for (ura = 0; ura < numberOfHours; ura++) {
     for (dan = 0; dan < 6; dan++) {
       Serial.print(Urnik[urnikNr][dan][ura]);
       Serial.print("  |  ");
@@ -440,7 +458,7 @@ void GetEAsistent(void) {
     currentSchoolWeek++; // show monday in the next week
     Serial.print("Weekend: week++");
   }
-  if ((currentSchoolWeek < 1) || (currentSchoolWeek > 41)) {
+  if ((currentSchoolWeek < 1) || (currentSchoolWeek > 43)) {
     Serial.println("Error: wrong week number!");
     UrnikClear(0);
     UrnikClear(1);
@@ -508,8 +526,8 @@ void DrawEAsistent(int urnikNr) {
   if (urnikNr == 1) selectedColor = CLGREEN; 
   // process data for that day
   if (dayToShow > 0) {
-    tft.drawFastHLine(5, 7 + 27, 300, selectedColor);
-    for (int i = 0; i < 10; i++)
+    tft.drawFastHLine(5, 5 + 21, 300, selectedColor);
+    for (int i = 0; i < numberOfHours; i++)
     {
       if (Urnik[urnikNr][dayToShow][i].indexOf("ODPADLO") >= 0) drawColor = CLRED; else
       if (i == 1) drawColor = CLORANGE; else
@@ -517,18 +535,18 @@ void DrawEAsistent(int urnikNr) {
         drawColor = selectedColor;
       if (urnikNr == 0) font = FONT_URNIK_TT; else 
       font = FONT_URNIK_TT;
-      if (i == 1) Yshift = 10; // gap between name and first hour
+      if (i == 1) Yshift = 6; // gap between name and first hour
       if (Urnik[urnikNr][dayToShow][i].length() < 1) // empty line
       {
         if ((!timeShown) && (i > 1)) 
         {
-          DisplayText(Urnik[urnikNr][0][i].substring(6, Urnik[urnikNr][0][i].indexOf('-', 7)).c_str(), FONT_TXT_SMALL, 12, 7 + (i * 27) + Yshift + 3, CLCYAN, false);
+          DisplayText(Urnik[urnikNr][0][i].substring(7, Urnik[urnikNr][0][i].indexOf('-', 8)).c_str(), FONT_TXT_SMALL, 20, 5 + (i * 25) + Yshift + 3, CLCYAN, false);
           timeShown = true;
         }
       }
       else // not empty line
       {
-        DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 7 + (i * 27) + Yshift, drawColor, false);
+        DisplayText(Urnik[urnikNr][dayToShow][i].c_str(), font, 8, 5 + (i * 25) + Yshift, drawColor, false);
         timeShown = false;
       }
     }

@@ -148,7 +148,7 @@ void ShowARSOrainImage(void)
     }
 
     DisplayClear(CLGREY);
-    if (!DisplayGIF(GIFimage, GIFimageSize, 3))
+    if (!DisplayGIF(GIFimage, GIFimageSize, 2))
     {
         DisplayText("GIF draw error!", FONT_TITLE, 5, 20, CLRED);
         delay(2000);

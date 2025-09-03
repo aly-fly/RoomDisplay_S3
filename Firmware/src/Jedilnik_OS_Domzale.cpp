@@ -34,7 +34,7 @@ bool ReloadRequired = false;
 */
 
 
-const String OSD_URL = "https://www.os-domzale.si/";
+const String OSD_URL = "https://www.os-domzale.si/jedilnik/";
 String PDF_URL, Saved_PDF_URL;
 
 
@@ -93,7 +93,7 @@ bool GetPdfLinkFromMainWebsite(void) {
             DisplayText("Reading data..\n");
             // get tcp stream
             WiFiClient * stream = https.getStreamPtr();
-            bool HeaderFound = stream->find("Pomembne povezave");
+            bool HeaderFound = stream->find("Jedilnik</h1>");
             if (HeaderFound) {
               Serial.println("Header found.");
               DisplayText("Header found.\n", CLGREEN);
@@ -101,7 +101,7 @@ bool GetPdfLinkFromMainWebsite(void) {
               sBufff = stream->readStringUntil('<'); // move cursor forward
               sBufff = "x"; // length > 0
               // scan all "<a href=...</a>" strings for the one containing "Jedilnik"
-              // <li><a href="https://www.os-domzale.si/files/2024/04/jedilnik-2024-5-1.pdf">Jedilnik</a></li>
+              // <p><a href="https://www.os-domzale.si/files/2025/09/jedilnik-2025-9-1-1.pdf"><strong>Jedilnik &#8211; OŠ Domžale</strong></a></p>
               Serial.println("Searching for the link");
               DisplayText("Searching for the link", CLYELLOW);
               while ((sBufff.length() > 0) && (!LinkFound)) {
@@ -120,7 +120,7 @@ bool GetPdfLinkFromMainWebsite(void) {
                     Serial.println(idx1);
                     Serial.println(idx2);
                   #endif
-                  if ((idx1 >= 0) && (idx2 > idx1) && (sBufff.indexOf("Jedilnik") > 0)) {
+                  if ((idx1 >= 0) && (idx2 > idx1) && (sBufff.indexOf("jedilnik") > 0)) {
                     aHref = sBufff.substring(idx1+8, idx2);
                     Serial.print("\nLink found: ");
                     DisplayText("\nLink found: ", CLGREEN);
@@ -169,7 +169,7 @@ bool GetPdfLinkFromMainWebsite(void) {
     Serial.println(PDF_URL);
     DisplayText(PDF_URL.c_str(), CLCYAN);
     Serial.println("Website read OK");
-    DisplayText("Website read OK\n", CLGREEN);
+    DisplayText("\nWebsite read OK\n", CLGREEN);
   } else {
     Serial.println("Website read & PDF search FAILED");
     DisplayText("Website read & PDF search FAILED\n", CLRED);
@@ -557,7 +557,9 @@ void GetJedilnikOsDomzale(void){
         if (p11 >=0) {
           p22 = Jedilnik[i].indexOf(':', p11);
           if (p22 > p11) {
-            Jedilnik[i].remove(p11, p22-p11+2);
+            Jedilnik[i].remove(p11, p22-p11+1);
+            Jedilnik[i][p11+1] = ',';
+            Jedilnik[i][p11+1] = ' ';
           }
         }
       }

@@ -10,9 +10,10 @@
 
 // ************ General config *********************
 #define DEBUG_OUTPUT
-#define DEBUG_OUTPUT_DATA  // include received data
+//#define DEBUG_OUTPUT_DATA  // include received data
 //#define DEBUG_IMG_TIMING   // image loading metrics and timing
-//#define DEBUG_URNIK
+#define DEBUG_URNIK
+//#define DEBUG_URNIK_DETAIL
 //#define DISPLAY_TCP_MSGS
 
 #define DEVICE_NAME "Display_v2"
@@ -70,6 +71,8 @@ decoding of the string: https://www.gnu.org/software/libc/manual/html_node/TZ-Va
 
 
 // ************ Hardware *********************
+
+#define TOUCH_PIN_NEXT  GPIO_NUM_1
 
 //#define USE_SD_CARD_SPI
 #define USE_SD_CARD_MMC
