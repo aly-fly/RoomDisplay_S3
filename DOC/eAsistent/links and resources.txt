@@ -17,6 +17,30 @@ https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/
 1.m:
 https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/1/0
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2025-10 ->
+
+7.c:
+https://urniki.easistent.com/urniki/12296fadef0fe622b9f04637b58002abc872259c/razredi/704875
+print:
+https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/7/0
+
+1.m:
+https://urniki.easistent.com/urniki/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/razredi/689763
+print:
+https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/7/0
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.m fantje:
+https://urniki.easistent.com/urniki/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/razredi/689763/dijak/11026635
+https://urniki.easistent.com/urniki/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/razredi/689763/dijak/11026691
+https://urniki.easistent.com/urniki/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/razredi/689763/dijak/11026699
+https://urniki.easistent.com/urniki/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/razredi/689763/dijak/11026731
+
+
+
 
 
 https://forum.arduino.cc/t/parse-http-data-from-website/576407/5

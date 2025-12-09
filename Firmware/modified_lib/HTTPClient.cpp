@@ -1078,7 +1078,7 @@ void HTTPClient::collectHeaders(const char* headerKeys[], const size_t headerKey
     }
 }
 
-String HTTPClient::headerFirstLine()
+String HTTPClient::headerFirstLine()  // NEW !!!!!!!!!!!!!
 {
     return _headerFirstLine;
 }
@@ -1276,7 +1276,7 @@ int HTTPClient::handleHeaderResponse()
                 }
                 int codePos = headerLine.indexOf(' ') + 1;
                 _returnCode = headerLine.substring(codePos, headerLine.indexOf(' ', codePos)).toInt();
-                _headerFirstLine = headerLine;
+                _headerFirstLine = headerLine; // NEW !!!!!!!!!!!!!
             } else if(headerLine.indexOf(':')) {
                 String headerName = headerLine.substring(0, headerLine.indexOf(':'));
                 String headerValue = headerLine.substring(headerLine.indexOf(':') + 1);

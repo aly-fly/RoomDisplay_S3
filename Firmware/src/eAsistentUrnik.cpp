@@ -12,19 +12,21 @@
 
 /*
 os domzale; 2025 - 2026; 7.c razred:
-https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/0
+https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/17/0
 id:
-https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/1/9588622
+https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/17/9621355
 
 sr. zdravstvena lj; 1.m razred:
-https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/1/0
+https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/17/0
+id:
+https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/17/11026731
 */
 
-const String eAsistent_T_URL1 = "https://www.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0";
-const String eAsistent_T_URL2 = "9588622";
+const String eAsistent_T_URL1 = "https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0";
+const String eAsistent_T_URL2 = "9621355";
 
-const String eAsistent_M_URL1 = "https://www.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0";
-const String eAsistent_M_URL2 = "0";
+const String eAsistent_M_URL1 = "https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0";
+const String eAsistent_M_URL2 = "11026731";
 
 const int FirstMondayInSeptember = 1;
 
@@ -267,7 +269,7 @@ void ProcessData (int &urnikNr, String &DataIn) {
   Serial.println(section);
   #endif
 
-  if (section.indexOf("ednevnik_seznam_ur_odpadlo") >= 0) {
+  if (section.indexOf("Odpadla ura") >= 0) {
     odpadlaUra = true;
     #ifdef DEBUG_URNIK
     Serial.println("ODPADLA URA");
@@ -529,19 +531,18 @@ void DrawEAsistent(int urnikNr) {
     tft.drawFastHLine(5, 5 + 21, 300, selectedColor);
     for (int i = 0; i < numberOfHours; i++)
     {
-      if (Urnik[urnikNr][dayToShow][i].indexOf("ODPADLO") >= 0) drawColor = CLRED; else
+      if (Urnik[urnikNr][dayToShow][i].indexOf("ODP") >= 0) drawColor = CLRED; else
       if (i == 1) drawColor = CLORANGE; else
       if (i % 2) drawColor = CLWHITE; else
         drawColor = selectedColor;
-      if (urnikNr == 0) font = FONT_URNIK_TT; else 
-      font = FONT_URNIK_TT;
+      if (urnikNr == 0) font = FONT_URNIK_TT; else font = FONT_URNIK_TT;
       if (i == 1) Yshift = 6; // gap between name and first hour
       if (Urnik[urnikNr][dayToShow][i].length() < 1) // empty line
       {
-        if ((!timeShown) && (i > 1)) 
+        if ((!timeShown) && (i > 0)) 
         {
           DisplayText(Urnik[urnikNr][0][i].substring(7, Urnik[urnikNr][0][i].indexOf('-', 8)).c_str(), FONT_TXT_SMALL, 20, 5 + (i * 25) + Yshift + 3, CLCYAN, false);
-          timeShown = true;
+          //timeShown = true;
         }
       }
       else // not empty line

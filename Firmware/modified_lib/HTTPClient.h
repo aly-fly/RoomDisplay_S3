@@ -231,7 +231,7 @@ public:
     int headers();                     // get header count
     bool hasHeader(const char* name);  // check if header exists
 
-    String headerFirstLine();
+    String headerFirstLine();  // NEW !!!!!!!!!!!!!
 
     int getSize(void);
     const String &getLocation(void);
@@ -294,7 +294,7 @@ protected:
     RequestArgument* _currentHeaders = nullptr;
     size_t           _headerKeysCount = 0;
 
-    String _headerFirstLine;
+    String _headerFirstLine;   // NEW !!!!!!!!!!!!!
 
     int _returnCode = 0;
     int _size = -1;

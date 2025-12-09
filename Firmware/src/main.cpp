@@ -102,7 +102,7 @@ bool isTouchPressed(void) {
   if (touch > touchMax)
   {
     touchMax = touch;
-    touchThreshold = (touchIdle + touchMax) / 2;
+    touchThreshold = (touchIdle + touchMax) / 2; // half way between idle and max ever detected
     Serial.printf("Touch max = %d\n", touchMax);
   }
   return result;
@@ -224,7 +224,7 @@ void setup() {
 
   touchIdle = touchRead(TOUCH_PIN_NEXT);
   Serial.printf("Touch sensor idle = %d\n", touchIdle);
-  touchMax = touchIdle + 100;
+  touchMax = touchIdle + 400;
   touchThreshold = (touchIdle + touchMax) / 2;
 
   log_d("Total heap: %d", ESP.getHeapSize());
@@ -427,6 +427,8 @@ void loop() {
 
   // URNIK OŠ DOMŽALE
   if (ScreenNumber == 8) {  // -------------------------------------------------------------------------------------------------------------------------
+      ScreenNumber++;
+
     if (inHomeLAN || readAllData) {
       if ((CurrentMonth < 7) || (CurrentMonth > 8) || readAllData) {
         GetEAsistent();
@@ -436,6 +438,7 @@ void loop() {
         myDelay (7000);
       }
     } else ScreenNumber++;
+
   }
 
   if (ScreenNumber == 9) {  // -------------------------------------------------------------------------------------------------------------------------

@@ -10,10 +10,10 @@
 
 // ************ General config *********************
 #define DEBUG_OUTPUT
-//#define DEBUG_OUTPUT_DATA  // include received data
+#define DEBUG_OUTPUT_DATA  // include received data
 //#define DEBUG_IMG_TIMING   // image loading metrics and timing
 #define DEBUG_URNIK
-//#define DEBUG_URNIK_DETAIL
+#define DEBUG_URNIK_DETAIL
 //#define DISPLAY_TCP_MSGS
 
 #define DEVICE_NAME "Display_v2"
