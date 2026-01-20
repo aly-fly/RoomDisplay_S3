@@ -29,11 +29,12 @@
 #include "utils.h"
 
 enum displayMode_t {
-  Day, Morning_Evening, Night
+  Day, Morning_Evening, Night, NotAvailable
 };
 
 int ScreenNumber = 0;
 displayMode_t displayMode = Day;
+displayMode_t displayModeOld = NotAvailable;
 uint16_t LDRvalue;
 String TempOutdoor1, TempOutdoor2;
 bool ok;
@@ -194,6 +195,7 @@ void setup() {
    if (!connOk) {
       Serial.println("=== REBOOT ===");
       DisplayText("=== REBOOT ===\n", CLORANGE);
+      WifiDisconnect();
       delay (30000);
       ESP.restart();  // retry everything from the beginning
    }
@@ -272,6 +274,16 @@ void loop() {
   Serial.println("[IDLE] Largest available block: " + String(info.largest_free_block) + " bytes");
   Serial.println("[IDLE] Minimum free ever: " + String(info.minimum_free_bytes) + " bytes");
 
+  // reboot every 24 hours (clean memory leak (probably in GIF functions))
+  if ((displayModeOld == Night) && (displayMode == Morning_Evening)) {
+    DisplaySetBrightness(EVENING_TIME_BRIGHTNESS);
+    Serial.println("=== DAILY REBOOT ===");
+    DisplayText("=== DAILY REBOOT ===\n", CLORANGE);
+    WifiDisconnect();
+    delay (10000);
+    ESP.restart();  // reboot
+  }
+  displayModeOld = displayMode;
  
   if (displayMode == Night) {
     DisplaySetBrightness(0);
@@ -513,6 +525,7 @@ void loop() {
         if (!connOk){
             Serial.println("=== REBOOT ===");
             DisplayText("=== REBOOT ===\n", CLORANGE);
+            WifiDisconnect();
             delay (10000);
             ESP.restart();  // retry everything from the beginning
         }

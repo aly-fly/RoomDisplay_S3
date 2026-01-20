@@ -8,6 +8,7 @@
 //enum WifiState_t {disconnected, connected};
 void WifiInit(void);
 void WifiReconnectIfNeeded(void);
+void WifiDisconnect(void);
 
 //extern WifiState_t WifiState;
 extern bool inHomeLAN;

@@ -232,6 +232,7 @@ public:
     bool hasHeader(const char* name);  // check if header exists
 
     String headerFirstLine();  // NEW !!!!!!!!!!!!!
+    // add to: C:\Users\aljaz\.platformio\packages\framework-arduinoespressif32\libraries\HTTPClient\src\HTTPClient.h
 
     int getSize(void);
     const String &getLocation(void);

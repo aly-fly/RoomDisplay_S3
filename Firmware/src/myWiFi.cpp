@@ -148,3 +148,7 @@ void WifiReconnectIfNeeded(void) {
 }
 
 
+void WifiDisconnect(void)  {
+  WiFi.mode(WIFI_OFF);
+  WiFi.disconnect(true, true); // complete reset
+}
