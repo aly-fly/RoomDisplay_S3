@@ -115,6 +115,9 @@ bool ReadFeniksWebsite(void) {
                           }
 
                           int idxFooter = sBuf.indexOf("Tedenska ponudba");
+                          if (idxFooter < 0) {
+                            idxFooter = sBuf.indexOf("TEDENSKA PONUDBA");
+                          }
                           if (idxFooter >= 0) {
                             Serial.print("Footer found at ");
                             Serial.println(idxFooter);
