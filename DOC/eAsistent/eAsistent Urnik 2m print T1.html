@@ -1,0 +1,737 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html translate="no">
+
+<head>
+    <title>eAsistent Urnik</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="title" content="eAsistent" />
+    <meta name="description" content="eAsistent - rešitev za srednje, osnovne in višje šole. eDnevnik - elektronsko vodenje šolskega dnevnika. eRedovalnica - elektronsko vodenje redovalnice. Obveščevalec - obveščanje staršev o izostankih, ocenah, napovedanih ocenjevanjih znanja, predelani učni snovi. moj eAsistent za starše - storitev, ki je staršem v pomoč pri šolanju otroka." />
+    <meta name="keywords" content="eAsistent, eDnevnik, eRedovalnica, eMatični Urad, eUrnik, Sporočila, Oglasna deska, dnevnik, redovalnica, urniki, nadomeščanja, srednja šola, osnovna šola, višja šola, Obveščevalec, obveščanje staršev, moj eAsistent za starše" />
+    <link rel="shortcut icon" href="https://urniki.easistent.com/images/layout/whitelabel/easistent/favicon.ico" />
+    <link rel="apple-touch-icon" href="https://urniki.easistent.com/images/layout/whitelabel/easistent/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="https://urniki.easistent.com/css/print.css" />
+    <link rel="stylesheet" type="text/css"href="https://urniki.easistent.com/hashed_assets/css/primitives.c82d607357.css" />
+    <link rel="stylesheet" type="text/css" href="https://urniki.easistent.com/hashed_assets/css/tokens.bd1039c83c.css" />
+    <link rel="stylesheet" class="whitelabel-css" type="text/css" href="https://urniki.easistent.com/hashed_assets/css/wl-layout.4aa3974ca4.css">
+    <link rel="stylesheet" type="text/css" href="https://urniki.easistent.com/hashed_assets/css/wl-layout-popups.ef611c48e8.css">
+        <style type="text/css">
+        body #okvir_glavni #okvir_glavni_vsebina {
+            padding-left: 0;
+            margin-top: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media print {
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            #okvir_glavni,
+            #okvir_glavni_vsebina,
+            #pod_header,
+            #main,
+            .vsebina,
+            .content-container-wl,
+            .ednevnik-table-wrapper {
+                display: block !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            table.ednevnik-seznam_ur_teden {
+                width: 100% !important;
+                border-collapse: collapse;
+                page-break-inside: auto !important;
+            }
+
+            thead.custom-thead {
+                display: table-header-group !important;
+                position: static !important;
+            }
+
+            tr, td, th {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .ednevnik-seznam_ur_teden {
+                border-collapse: collapse !important;
+                width: 100% !important;
+            }
+
+            .ednevnik-seznam_ur_teden > thead > tr > th,
+            .ednevnik-seznam_ur_teden > tbody > tr > td {
+                border: var(--border-border-size-border) solid var(--color-border-color-border) !important;
+            }
+
+            .ednevnik-seznam_ur_teden > tbody > tr > td {
+                padding: 0 !important;
+            }
+
+            .ednevnik-seznam_ur_teden > tbody > tr > td.ednevnik-seznam_ur_teden-ura {
+                padding: var(--spacing-space-150) var(--spacing-space-200) !important;
+            }
+            .ednevnik-seznam_ur_teden-ura .naziv-ure,
+            .ednevnik-seznam_ur_teden-ura .potek-ure {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ednevnik-seznam_ur_teden-urnik table,
+            .ednevnik-seznam_ur_teden-urnik td,
+            .ednevnik-seznam_ur_teden-urnik th,
+            .ednevnik-seznam_ur_teden-urnik .wl-tag-xs {
+                border: none !important;
+            }
+
+            .ednevnik-seznam_ur_teden-urnik,
+            .ednevnik-seznam_ur_teden-blok-wrap {
+                width: 100% !important;
+                box-sizing: border-box;
+                position: relative;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                margin-top: 0 !important;
+                padding: var(--spacing-space-100) var(--spacing-space-150) !important;
+                border: none !important;
+            }
+
+            .ednevnik-seznam_ur_teden-blok-wrap + .ednevnik-seznam_ur_teden-blok-wrap {
+                margin-top: 0;
+            }
+
+            .ednevnik-seznam_ur_teden-urnik-naziv {
+                width: 100% !important;
+            }
+
+            .teden-blok-wrapper.hidden {
+                display: block !important;
+            }
+
+            .ednevnik-seznam_ur_teden-blok-wrap.print-border-top {
+                border-top: var(--border-border-size-border) solid var(--color-border-color-border) !important;
+                box-shadow: none !important;
+            }
+
+            .hide-print {
+                display: none !important;
+            }
+
+            .custom-th.ednevnik-seznam_ur_teden-th-danes,
+            .ednevnik-seznam_ur_teden-td-danes {
+                background: transparent !important;
+                border-top: var(--border-border-size-border) solid var(--color-border-color-border) !important;
+                box-shadow: none !important;
+                outline: none !important;
+                color: inherit !important;
+                background-image: none !important;
+            }
+
+            .custom-th.ednevnik-seznam_ur_teden-th-danes::before,
+            .custom-th.ednevnik-seznam_ur_teden-th-danes::after {
+                content: none !important;
+                display: none !important;
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .ednevnik-seznam_ur_teden > thead > tr > th.ednevnik-seznam_ur_teden-th-danes {
+                border-top: var(--border-border-size-border) solid var(--color-border-color-border) !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                outline: none !important;
+                background-image: none !important;
+            }
+
+            .custom-th.ednevnik-seznam_ur_teden-th-danes .days,
+            .custom-th.ednevnik-seznam_ur_teden-th-danes .date {
+                color: inherit !important;
+            }
+
+            .content-container-wl.ednevnik-table-wrapper {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            .ednevnik-seznam_ur_teden-td .ednevnik-seznam_ur_teden-blok-wrap {
+                border: none !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+            .ednevnik-seznam_ur_teden-td .ednevnik-seznam_ur_teden-blok-wrap:not(:first-of-type) {
+                border-top: var(--border-border-size-border) solid var(--color-border-color-border) !important;
+            }
+
+            .ednevnik-seznam_ur_teden-urnik,
+            .ednevnik-seznam_ur_teden-urnik * {
+                color: var(--color-text-color-text) !important;
+            }
+        }
+
+        .hide-print {
+            display: inline-flex;
+        }
+    </style>
+    <script type="text/javascript" src="https://urniki.easistent.com/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://urniki.easistent.com/js/functions-1.js?date=1788350305"></script>
+</head>
+
+<body data-theme="Fade">
+    <div id="okvir_glavni">
+        <div id="pod_header">
+            <div id="okvir_glavni_vsebina">
+                <div id="main">
+                    <div class="vsebina">
+                        <div>
+                            <div class="bold">2. M </div><span class="ednevnik-subtitle">Teden 1, obdobje od 31. 8. do 6. 9.</span>
+                        </div>
+                        <div class="content-container-wl ednevnik-table-wrapper">
+                            <table class="ednevnik-seznam_ur_teden">
+                                <thead class="custom-thead">
+                                    <tr>
+                                        <th class="custom-th" width="10%"></th>
+                                                                                            <th class=" custom-th">
+                                                        <div class="days">Ponedeljek</div>
+                                                        <div class="date">31. 8.</div>
+                                                    </th>
+                                                                                            <th class=" custom-th">
+                                                        <div class="days">Torek</div>
+                                                        <div class="date">1. 9.</div>
+                                                    </th>
+                                                                                            <th class=" custom-th">
+                                                        <div class="days">Sreda</div>
+                                                        <div class="date">2. 9.</div>
+                                                    </th>
+                                                                                            <th class=" custom-th">
+                                                        <div class="days">Četrtek</div>
+                                                        <div class="date">3. 9.</div>
+                                                    </th>
+                                                                                            <th class=" custom-th">
+                                                        <div class="days">Petek</div>
+                                                        <div class="date">4. 9.</div>
+                                                    </th>
+                                                                            </tr>
+                                </thead>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">0. ura</div>
+                                            <div class="potek-ure">6:40 - 7:25</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">1. ura</div>
+                                            <div class="potek-ure">7:30 - 8:15</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437459-2026-09-01" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    " style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    RU                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            I. Tarman Šmit, U312                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437459-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ZGO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            Ž. Slapar, U102                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">2. ura</div>
+                                            <div class="potek-ure">8:20 - 9:05</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437507-2026-09-01" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    " style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    RU                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            I. Tarman Šmit, U312                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437507-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    FIZ                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            T. Meglić, U204                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437507-2026-09-04" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    SLO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            K. Vidmar, U210                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">3. ura</div>
+                                            <div class="potek-ure">9:10 - 9:55</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437515-2026-09-01" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    " style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    RU                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            I. Tarman Šmit, U312                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437515-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ANG                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            S. Žeželj, U102                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437515-2026-09-04" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    SLO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            K. Vidmar, U210                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">4. ura</div>
+                                            <div class="potek-ure">10:00 - 10:45</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437523-2026-09-02" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    ednevnik-seznam_ur_teden-td-danes" style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    BIO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            I. Tarman Šmit, U312                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437523-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ANG                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            S. Žeželj, U102                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437523-2026-09-04" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    SOC                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            A. Prebil, U329                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">5. ura</div>
+                                            <div class="potek-ure">10:50 - 11:35</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437531-2026-09-02" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    ednevnik-seznam_ur_teden-td-danes" style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ANG                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            S. Žeželj, U102                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437531-2026-09-04" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    MAT                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            M. Mursa, U203                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">6. ura</div>
+                                            <div class="potek-ure">11:40 - 12:25</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437539-2026-09-02" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    ednevnik-seznam_ur_teden-td-danes" style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    GEO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            M. Šnepf, U108                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-437539-2026-09-03" class="teden-blok-wrapper">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437539-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal ednevnik-seznam_ur_teden-urnik more-groups-helper  " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ŠVZ                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            L. Vehovec, TV1                                                                                                                                                    </div>
+                                                                        <div onclick="$('#ednevnik-seznam_ur_teden-blok-437539-2026-09-03').toggle();stop_propagation(event);$('#ednevnik-seznam_ur_teden-blok-wrap-437539-2026-09-03').toggleClass('border-removal')" class="wl-tag-xs wl-tag-more-events hide-print" title="Več skupin">2</div>                                                                    </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437539-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   print-border-top border-removal" style="color:#444;border-top: var(--border-border-size-border, 1px) solid var(--color-border-color-border, #000);">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    ŠVZ                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            E. Dobrun, TV3                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                                        </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">7. ura</div>
+                                            <div class="potek-ure">12:30 - 13:15</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                            <div id="ednevnik-seznam_ur_teden-blok-wrap-437547-2026-09-02" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik    ednevnik-seznam_ur_teden-td-danes" style="color:#444;">
+                                                                                                                                <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    SLO                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            K. Vidmar, U302                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437547-2026-09-03" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    MAT                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            M. Mursa, U203                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                                                <div id="ednevnik-seznam_ur_teden-blok-wrap-437547-2026-09-04" class="ednevnik-seznam_ur_teden-blok-wrap border-removal-hide ednevnik-seznam_ur_teden-urnik   " style="color:#444;">
+                                                                                                                                    <table class="ednevnik-seznam_ur_teden-urnik-naziv">
+                                                                        <tr class="ednevnik-tr">
+                                                                            <td class="ednevnik-title">
+                                                                                                                                                                    NEM                                                                                                                                                            </td>
+                                                                            <td class="right"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="ikona-vec-ur-wrapper">
+                                                                        <div class="ednevnik-subtitle">
+                                                                                                                                                            K. Ulaga, U302                                                                                                                                                    </div>
+                                                                                                                                            </div>
+                                                                    
+                                                                                                                                    </div>
+                                                                                                        </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">8. ura</div>
+                                            <div class="potek-ure">13:20 - 14:05</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">9. ura</div>
+                                            <div class="potek-ure">14:10 - 14:55</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">10. ura</div>
+                                            <div class="potek-ure">15:00 - 15:45</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">11. ura</div>
+                                            <div class="potek-ure">15:50 - 16:35</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">12. ura</div>
+                                            <div class="potek-ure">16:40 - 17:25</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">13. ura</div>
+                                            <div class="potek-ure">17:30 - 18:15</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <td width="10%" class="ednevnik-seznam_ur_teden-td ednevnik-seznam_ur_teden-ura ">
+                                            <div class="naziv-ure">14. ura</div>
+                                            <div class="potek-ure">18:20 - 19:05</div>
+                                        </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                                    <td width="18%" class="ednevnik-seznam_ur_teden-td ">
+                                                                                            </td>
+                                                                            </tr>
+                                                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

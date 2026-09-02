@@ -11,24 +11,20 @@
 #include "display.h"
 
 /*
-os domzale; 2025 - 2026; 7.c razred:
-https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/17/0
-id:
-https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0/17/9621355
+8.c:
+https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/814563/0/0/0/4/9621355
 
-sr. zdravstvena lj; 1.m razred:
-https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/17/0
-id:
-https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0/17/11026731
+2.m:
+https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/802619/0/0/0/1/11026699
 */
 
-const String eAsistent_T_URL1 = "https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/704875/0/0/0";
+const String eAsistent_T_URL1 = "https://urniki.easistent.com/urniki/izpis/12296fadef0fe622b9f04637b58002abc872259c/814563/0/0/0";
 const String eAsistent_T_URL2 = "9621355";
 
-const String eAsistent_M_URL1 = "https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/689763/0/0/0";
-const String eAsistent_M_URL2 = "11026731";
+const String eAsistent_M_URL1 = "https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/802619/0/0/0";
+const String eAsistent_M_URL2 = "11026699";
 
-const int FirstMondayInSeptember = 1;
+const int FirstMondayInSeptember = 7;
 
 unsigned long LastTimeUrnik1Refreshed = 0;
 unsigned long LastTimeUrnik2Refreshed = 0;

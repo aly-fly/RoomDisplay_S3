@@ -10,13 +10,13 @@
 
 // ************ General config *********************
 #define DEBUG_OUTPUT
-#define DEBUG_OUTPUT_DATA  // include received data
+//#define DEBUG_OUTPUT_DATA  // include received data
 //#define DEBUG_IMG_TIMING   // image loading metrics and timing
-#define DEBUG_URNIK
-#define DEBUG_URNIK_DETAIL
+//#define DEBUG_URNIK
+//#define DEBUG_URNIK_DETAIL
 //#define DISPLAY_TCP_MSGS
 
-#define DEVICE_NAME "Display_v2"
+#define DEVICE_NAME "Display_S3"
 #define WIFI_CONNECT_TIMEOUT_SEC 240  // How long to wait for WiFi
 
 #define TIME_SERVER1  "si.pool.ntp.org"
