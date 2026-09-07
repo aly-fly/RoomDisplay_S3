@@ -24,7 +24,8 @@ const String eAsistent_T_URL2 = "9621355";
 const String eAsistent_M_URL1 = "https://urniki.easistent.com/urniki/izpis/250363fbd15a5a588225b12e7bfb6f8b1a5d432f/802619/0/0/0";
 const String eAsistent_M_URL2 = "11026699";
 
-const int FirstMondayInSeptember = 7;
+const int FirstMondayInSchoolWeek_Day = 28;
+const int FirstMondayInSchoolWeek_Month = 8;
 
 unsigned long LastTimeUrnik1Refreshed = 0;
 unsigned long LastTimeUrnik2Refreshed = 0;
@@ -437,8 +438,8 @@ void GetEAsistent(void) {
   // https://www.epochconverter.com/
   memset(&sStartTime, 0, sizeof(sStartTime));
   sStartTime.tm_year = StartYear - 1900;
-  sStartTime.tm_mon = 9 - 1;
-  sStartTime.tm_mday = FirstMondayInSeptember;
+  sStartTime.tm_mon = FirstMondayInSchoolWeek_Month - 1; // 9 - 1;  // 0..11
+  sStartTime.tm_mday = FirstMondayInSchoolWeek_Day;
   sStartTime.tm_hour = 0;
   sStartTime.tm_min = 0;
   StartTime = mktime(&sStartTime);
