@@ -14,14 +14,27 @@ print("===== copying TFT config files ===== ")
 # copy using Python libraries
 # "copy" changes file timestamp -> lib is always recompiled.
 # "copy2" keeps file timestamp -> lib is compiled once
-#shutil.copy2('./include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_JLINK_debug/TFT_eSPI/User_Setup.h')
-# shutil.copy2('./Firmware/include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_RELEASE/TFT_eSPI/User_Setup.h')
-shutil.copy2('./Firmware/include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_RELEASE_OTA/TFT_eSPI/User_Setup.h')
-# shutil.copy2('./Firmware/include/__CONFIG.h', 'C:/PIO_LIBDEPS/display_S3_DEBUG/TFT_eSPI/User_Setup.h')
 
-# copy using Windows command line
-# native "copy" command keeps file timestamp -> lib is compiled once
-# env.Execute("copy .\\src\\_USER_DEFINES.h .\\.pio\\libdeps\\esp32dev\\TFT_eSPI")
-# env.Execute("copy .\\src\\GLOBAL_DEFINES.h .\\.pio\\libdeps\\esp32dev\\TFT_eSPI\\User_Setup.h")
+import os
+import shutil
+
+# List of target file paths
+targets = [
+    'C:/PIO_LIBDEPS/display_S3_RELEASE/TFT_eSPI/User_Setup.h',
+    'C:/PIO_LIBDEPS/display_S3_RELEASE_OTA/TFT_eSPI/User_Setup.h',
+    'C:/PIO_LIBDEPS/display_S3_DEBUG/TFT_eSPI/User_Setup.h'
+]
+
+source = './Firmware/include/__CONFIG.h'
+
+for dst in targets:
+    target_dir = os.path.dirname(dst)
+    
+    # Check if the target folder exists
+    if os.path.isdir(target_dir):
+        shutil.copy2(source, dst)
+        print(f"Copied successfully to: {dst}")
+    else:
+        print(f"Skipped: Target folder does not exist -> {target_dir}")
 
 print("Done.")

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <stdint.h>
+#include <time.h>
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include "__CONFIG.h"
@@ -403,17 +404,80 @@ void FinalizeData (int urnikNr, String sName) {
 //##################################################################################################################
 //##################################################################################################################
 //##################################################################################################################
+
+// ---------- date helpers (pure integer math, no timezone/DST issues) ----------
+
+// Days since 1970-01-01 for a given civil date (m = 1..12)
+static int32_t daysFromCivil(int y, unsigned m, unsigned d) {
+  y -= (m <= 2);
+  const int32_t  era = (y >= 0 ? y : y - 399) / 400;
+  const unsigned yoe = (unsigned)(y - era * 400);
+  const unsigned doy = (153 * (m > 2 ? m - 3 : m + 9) + 2) / 5 + d - 1;
+  const unsigned doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+  return era * 146097 + (int32_t)doe - 719468;
+}
+
+// Weekday from day count: 0 = Monday ... 6 = Sunday (1970-01-01 was a Thursday)
+static int weekdayFromDays(int32_t days) {
+  return (int)(((days + 3) % 7 + 7) % 7);
+}
+
+// Day-of-month (1..7) of the first Monday in September of given year
+static int firstMondayInSeptember(int year) {
+  int wd = weekdayFromDays(daysFromCivil(year, 9, 1));  // weekday of 1. Sept
+  return 1 + (7 - wd) % 7;
+}
+
+// ---------- school year info ----------
+
+struct SchoolYearInfo {
+  int startYear;     // calendar year in which this school year started
+  int startDay;      // day in September of the first Monday (1..7)
+  int dayNumber;     // day of school year, 1 = first Monday
+  int week;          // school week, 1 = first week
+  int weekday;       // 0 = Monday ... 6 = Sunday
+};
+
+static const char *dayNames[] = {"Monday", "Tuesday", "Wednesday", "Thursday",
+                                  "Friday", "Saturday", "Sunday"};
+
+// Returns false if the system time is not valid yet (e.g. NTP not synced)
+bool getSchoolYearInfo(SchoolYearInfo &out) {
+  time_t now;
+  time(&now);
+  struct tm t;
+  localtime_r(&now, &t);
+  if (t.tm_year + 1900 < 2024) return false;   // clock not set
+
+  const int year = t.tm_year + 1900;
+  const int32_t today = daysFromCivil(year, t.tm_mon + 1, t.tm_mday);
+
+  // Start of the school year that began in this calendar year...
+  int startYear = year;
+  int startDay  = firstMondayInSeptember(startYear);
+  int32_t start = daysFromCivil(startYear, 9, startDay);
+
+  // ...if we haven't reached it yet, we're still in the school year
+  // that started last autumn (this covers Jan..Aug and early Sept).
+  if (today < start) {
+    startYear--;
+    startDay = firstMondayInSeptember(startYear);
+    start    = daysFromCivil(startYear, 9, startDay);
+  }
+
+  // Serial.printf("First Monday in September: %04d-%02d-%02d\r\n", startYear, 9, startDay);
+
+  const int32_t diff = today - start;          // days since first Monday
+  out.startYear = startYear;
+  out.startDay  = startDay;
+  out.dayNumber = diff + 1;
+  out.week      = diff / 7 + 1;
+  out.weekday   = diff % 7;                    // start is a Monday, so this works
+  return true;
+}
+
 //##################################################################################################################
 
-/*
-void eAsistentInit(void) {
-  int urnikNr, dan, ura;  
-  for (urnikNr = 0; urnikNr < 2; urnikNr++) 
-    for (dan = 0; dan < 6; dan++) 
-      for (ura = 0; ura < 10; ura++) 
-        Urnik[urnikNr][dan][ura].reserve(25);
-}
-*/
 
 void GetEAsistent(void) {
   Serial.println("GetEAsistent()");
@@ -424,38 +488,23 @@ void GetEAsistent(void) {
   }
 
   // calculate week number
-  int StartYear;
-  struct tm sStartTime;
-  time_t StartTime, CurrTime;
-  time_t TdiffSec;
   int currentSchoolWeek;
+  SchoolYearInfo syi;
 
-  StartYear = CurrentYear;
-  if (CurrentMonth < 8) { // after 1. Jan.
-    StartYear--;
+  if (!getSchoolYearInfo(syi)) {
+    Serial.println("Time not valid yet");
+    return;
   }
-  // 2.9.2024 = monday at 0:00
-  // https://www.epochconverter.com/
-  memset(&sStartTime, 0, sizeof(sStartTime));
-  sStartTime.tm_year = StartYear - 1900;
-  sStartTime.tm_mon = FirstMondayInSchoolWeek_Month - 1; // 9 - 1;  // 0..11
-  sStartTime.tm_mday = FirstMondayInSchoolWeek_Day;
-  sStartTime.tm_hour = 0;
-  sStartTime.tm_min = 0;
-  StartTime = mktime(&sStartTime);
-  time(&CurrTime);
-  TdiffSec = time_t(difftime(CurrTime, StartTime));
-  Serial.printf("Current time: %d; Start time: %d\r\n", CurrTime, StartTime);
-  Serial.print("Seconds elapsed from school year start: ");
-  Serial.println(TdiffSec);
-  currentSchoolWeek = TdiffSec / (7 * 24 * 60 * 60);
-  currentSchoolWeek++; // starts with 1
-  Serial.print("Current week from school year start: ");
-  Serial.println(currentSchoolWeek);
+  Serial.printf("School year start (first Monday in September): %04d-09-%02d\r\n", syi.startYear, syi.startDay);
+  Serial.printf("Day of school year: %d\r\n", syi.dayNumber);
+  Serial.printf("School week: %d\r\n", syi.week);
+  Serial.printf("Weekday: %s (%d)\r\n", dayNames[syi.weekday], syi.weekday + 1);
+
+  currentSchoolWeek = syi.week + 1; // starts with 1
 
   if (CurrentWeekday > 5) { // weekend
     currentSchoolWeek++; // show monday in the next week
-    Serial.print("Weekend: week++");
+    Serial.println("Weekend: week++");
   }
   if ((currentSchoolWeek < 1) || (currentSchoolWeek > 43)) {
     Serial.println("Error: wrong week number!");
@@ -463,6 +512,9 @@ void GetEAsistent(void) {
     UrnikClear(1);
     return;
   }
+
+  Serial.print("Current week from school year start: ");
+  Serial.println(currentSchoolWeek);
 
   if (! HasTimeElapsed(&LastTimeUrnik1Refreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Urnik 1: Data is valid.");
