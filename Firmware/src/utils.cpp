@@ -18,6 +18,7 @@ void TrimNonPrintable (String& Str) {
   }  
 }
 
+// Delete everything except numbers and "."
 void TrimNumDot (String& Str) {
   Str.trim(); // remove leading and trailing spaces
   TrimNonPrintable(Str);
@@ -108,7 +109,7 @@ String FindJsonParam(String& inStr, String needParam, int& Position)
     int indexStart = inStr.indexOf(needParam, Position);
     Position = -1; // status "not found" until found
     if (indexStart > 0) {
-        int indexStop = inStr.indexOf(",", indexStart);
+        int indexStop = inStr.indexOf(',', indexStart);
         Position = indexStop;
         if (indexStop <= indexStart) {
           Position = -1; // status "not found"

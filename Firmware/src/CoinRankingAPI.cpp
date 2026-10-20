@@ -3,8 +3,21 @@
 // https://developers.coinranking.com/api/documentation/coins/coin-price-history
 // https://account.coinranking.com/dashboard/api
 // Free (Current Plan) = 5000 API calls/month & 5 calls/second
+// No auth             = 2500 API calls/month & 5 calls/minute
 // real usage = each hour = 744 calls / month
 
+// free account allows 10k per month, but limits to 100 data points.
+// no-auth tier allows 2500 calls per month and returns all data.
+
+/* no auth:
+  'x-ratelimit-limit-minute: 5'
+  'x-ratelimit-remaining-minute: 4'
+  'x-ratelimit-limit-month: 2500'
+  'x-ratelimit-remaining-month: 2492'
+  'ratelimit-limit: 5'
+  'ratelimit-remaining: 4'
+  'ratelimit-reset: 35'
+ */
 
 #include <Arduino.h>
 #include <stdint.h>
@@ -18,7 +31,7 @@
 #include "GlobalVariables.h"
 #include "display.h"
 
-#define MAX_DATA_POINTS (31*24)  // real data = 720 points (each point is 1 hour)
+#define MAX_DATA_POINTS (31*24)+2  // real data = 720 points (each point is 1 hour) plus a bit of safety margin
 #define REQ_DATA_POINTS   DspW  // enough to fill the display
 
 float_t CoinData[MAX_DATA_POINTS];  // data for 1 month = 3 kB (4B / point)
@@ -64,13 +77,17 @@ bool GetDataFromCoinServer(void) {
   
       Serial.print("[HTTPS] begin...\r\n");
       DisplayText("HTTPS begin\n");
+      // Force HTTP/1.0 to disable server-side chunked transfer encoding
+      https.useHTTP10(true);
       if (https.begin(*client, COINRANKING_URL)) {  // HTTPS
-        // set hearders
-//      https.addHeader("accept", "application/json");
-        https.addHeader("x-access-token", COINRANKING_API_KEY_1);
         yield(); // watchdog reset
         Serial.print("[HTTPS] GET...\r\n");
         DisplayText("HTTPS get request: ");
+        // set hearders
+        https.addHeader("Content-Type", "application/json");
+//        https.addHeader("x-access-token", COINRANKING_API_KEY_1);
+        // alternative, also allowed by this server:  https://coinranking.com/api/documentation
+//        https.setAuthorizationType(COINRANKING_API_KEY_1B);  // "Authorization: Bearer YOUR_API_KEY" 
         // start connection and send HTTP header
         int httpCode = https.GET();
         yield(); // watchdog reset
@@ -88,8 +105,10 @@ bool GetDataFromCoinServer(void) {
           // file found at server
           if (httpCode == HTTP_CODE_OK) {
                 DisplayText("API credits left: ", CLYELLOW);
-                DisplayText(https.header("X-RateLimit-Remaining-Month").c_str(), CLYELLOW);
+                DisplayText(https.header("x-ratelimit-remaining-month").c_str(), CLYELLOW);
                 DisplayText("\n");
+                Serial.print("[HTTPS] API credits left: ");
+                Serial.println(https.header("x-ratelimit-remaining-month").c_str());
                 Serial.println("[HTTPS] Streaming data from server.");
                 DisplayText("Reading data", CLYELLOW);
                 // get tcp stream
@@ -103,7 +122,7 @@ bool GetDataFromCoinServer(void) {
                   sBufff = stream->readStringUntil('}');
                   #ifdef DEBUG_OUTPUT_DATA
                     // write it to Serial
-                    if (firstBuffer) { Serial.println(sBufff); }
+                    if (firstBuffer || (CoinDataLength < 5)) { Serial.println(sBufff); }
                     firstBuffer = false;
                   #endif
                   Serial.print("+");
@@ -116,12 +135,12 @@ bool GetDataFromCoinServer(void) {
                     if (pos >= 0) {
                       TrimNumDot(sVal);  // delete everything except numbers and "."
                       #ifdef DEBUG_OUTPUT_DATA
-                        if(CoinDataLength < 5) { 
+                        if (CoinDataLength < 15) { 
                           Serial.println(sVal); 
                         }
                       #endif
                       Val = sVal.toFloat();
-                      if ((Val > 10000) && (Val < 123000)) {
+                      if ((Val > 10000) && (Val < 150000)) {
                         CoinData[CoinDataLength] = Val;
                         CoinDataLength++;
                         if (CoinDataLength > MAX_DATA_POINTS) {
@@ -144,7 +163,7 @@ bool GetDataFromCoinServer(void) {
                     } // if data found
                   } // if data available
                   // last section was received; it finishes off with "}]}}"
-                  if (sBufff.indexOf("]") >= 0) {
+                  if (sBufff.indexOf(']') >= 0) {
                     Serial.println();
                     Serial.println("End identifier found.");
                     DisplayText("\nEnd identifier found.\n", CLGREEN);
