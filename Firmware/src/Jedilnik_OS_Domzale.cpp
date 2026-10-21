@@ -27,22 +27,25 @@ bool ReloadRequired = false;
  2. Search for "<strong>Pomembne povezave</strong>" (located at ~53 kB; need ~600 bytes following this text)
  3. Search for "<li><a href="https://www.os-domzale.si/files/2024/04/jedilnik-2024-5-1.pdf">Jedilnik</a></li>"
  4. Extract URL of the PDF file
- 5. Send to Zamzar cor conversion
- 6. Download contents of the text file (4 kB)
- 7. Get current day
- 8. Analyze contents and extract data for today
+ 5. Load metadata of the file from the server 
+ 6. Send to Zamzar cor conversion
+ 7. Download contents of the text file (4 kB)
+ 8. Get current day
+ 9. Analyze contents and extract data for today
 */
 
 
 const String OSD_URL = "https://www.os-domzale.si/jedilnik/";
 String PDF_URL, Saved_PDF_URL;
+String PDF_HASH, Saved_PDF_HASH;
 
 
 bool GetPdfLinkFromMainWebsite(void) {
   Serial.println("GetPdfLinkFromMainWebsite()");
   bool LinkFound = false;
   int safetyCounter = 0;
-  PDF_URL = "";
+  PDF_URL.clear();
+  PDF_HASH.clear();
 
   if (!WiFi.isConnected()) {
       return false;
@@ -180,6 +183,92 @@ bool GetPdfLinkFromMainWebsite(void) {
 
 
 
+//#############################################################################################################################
+//#############################################################################################################################
+//#############################################################################################################################
+
+
+bool loadFileMetadata() {
+  bool result = false;
+  Serial.println("loadFileMetadata()");
+  DisplayText("Loading remote file signature...");
+
+  if (!loadFileFromSDcardToMerory("/cert/worksers-dev.crt", Certificate, sizeof(Certificate), true))
+  {
+    return false;
+  }
+
+  WiFiClientSecure *client = new WiFiClientSecure;
+  if (client) {
+    client->setHandshakeTimeout(10); // seconds (default 120 s)
+    client->setTimeout(10);          // seconds (default  30 s)
+    client->setCACert(Certificate);
+    { // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is 
+      HTTPClient https;
+
+      // Tell HTTPClient which custom headers to capture from the response
+      const char* headerKeys[] = {"Last-Modified", "ETag"};
+      size_t headerKeysCount = sizeof(headerKeys) / sizeof(headerKeys[0]);
+      https.collectHeaders(headerKeys, headerKeysCount);
+
+      Serial.println("[HTTP] Beginning connection...");
+      if (https.begin(*client, PDF_URL)) {
+        
+        // Send a HEAD request to fetch headers only (no file content downloaded)
+        Serial.println("[HTTP] Sending HEAD request...");
+        int httpCode = https.sendRequest("HEAD");
+
+        if (httpCode > 0) {
+          Serial.printf("[HTTP] Response code: %d\n", httpCode);
+
+          if (httpCode == HTTP_CODE_OK) {
+            // Retrieve the collected headers and size
+            String lastModified = https.header("Last-Modified");
+            String etag = https.header("ETag");
+            int contentLength = https.getSize(); // Built-in content length getter
+
+            Serial.println("\n=== File Metadata ===");
+            Serial.printf("Last-Modified : %s\n", lastModified.length() > 0 ? lastModified.c_str() : "Not provided");
+            Serial.printf("ETag (Hash)   : %s\n", etag.length() > 0 ? etag.c_str() : "Not provided");
+            Serial.printf("Content-Length: %d bytes\n", contentLength);
+            Serial.println("=====================");
+            if (etag.length() > 0)         PDF_HASH = etag; else
+            if (lastModified.length() > 0) PDF_HASH = lastModified; else
+                                           PDF_HASH = contentLength;
+            TrimNonPrintable(PDF_HASH);
+            result = PDF_HASH.length() > 0;
+          } else {
+            Serial.printf("[HTTP] Server returned unexpected code: %d\n", httpCode);
+          }
+        } else {
+          Serial.printf("[HTTP] Request failed, error: %s\n", https.errorToString(httpCode).c_str());
+        }
+
+        https.end();
+      } else {
+        Serial.println("[HTTP] Unable to connect to URL");
+      }
+    }
+  }
+  if (result)
+    DisplayText("OK.\n", CLGREEN);
+  else
+    DisplayText("FAILED!\n", CLRED);
+
+  return result;
+}
+
+/* example:
+Last-Modified : Fri, 16 Oct 2026 13:13:11 GMT
+ETag (Hash)   : "{258ED005-2586-44B2-A2CE-72E02A5162B6},15"
+Content-Length: 198256 bytes
+*/
+
+//#############################################################################################################################
+//#############################################################################################################################
+//#############################################################################################################################
+
+
 bool ReadSavedFile(void){
   Serial.println("ReadSavedFile()");
   DisplayText("Opening local file...");
@@ -194,8 +283,10 @@ bool ReadSavedFile(void){
 
   DisplayText(" Reading...");
   Serial.println("Reading from file");
-  Saved_PDF_URL = file.readStringUntil(13);
-  JedilnikDatum = file.readStringUntil(13);
+  Saved_PDF_URL  = file.readStringUntil(13);
+  Saved_PDF_HASH = file.readStringUntil(13);
+  JedilnikDatum  = file.readStringUntil(13);
+  TrimNonPrintable(Saved_PDF_HASH);
   TrimNonPrintable(JedilnikDatum);
   for (int i = 0; i < 5; i++)
   {
@@ -207,6 +298,8 @@ bool ReadSavedFile(void){
   Serial.println("-------------------");
   Serial.println(Saved_PDF_URL);
   Serial.println("-------------------");
+  Serial.println(Saved_PDF_HASH);
+  Serial.println("-------------------");
   Serial.println(JedilnikDatum);
   Serial.println("-------------------");
   for (int i = 0; i < 5; i++)
@@ -217,7 +310,7 @@ bool ReadSavedFile(void){
 
   
   bool ok;
-  ok = (Saved_PDF_URL.length() > 0) && (JedilnikDatum.length() > 0) && (Jedilnik[0].length() > 0) && (Jedilnik[1].length() > 0) && (Jedilnik[2].length() > 0) && (Jedilnik[3].length() > 0) && (Jedilnik[4].length() > 0);
+  ok = (Saved_PDF_URL.length() > 0) && (Saved_PDF_HASH.length() > 0) && (JedilnikDatum.length() > 0) && (Jedilnik[0].length() > 0) && (Jedilnik[1].length() > 0) && (Jedilnik[2].length() > 0) && (Jedilnik[3].length() > 0) && (Jedilnik[4].length() > 0);
 
   if (ok){
     Serial.println("File read OK");
@@ -240,7 +333,7 @@ bool ReadSavedFile(void){
 
 void GetJedilnikOsDomzale(void){
   Serial.println("GetJedilnikOsDomzale()");
-  bool PdfOk, FileOk, NeedFreshData;
+  bool PdfOk, HashOk, FileOk, NeedFreshData;
 
   if (! HasTimeElapsed(&LastTimeJedilnikRefreshed, 2*60*60*1000)) {  // check server every 2 hours
     Serial.println("Jedilnik OS: Data is valid.");
@@ -250,23 +343,31 @@ void GetJedilnikOsDomzale(void){
 
   DisplayClear();
   PdfOk = GetPdfLinkFromMainWebsite();
+  HashOk = loadFileMetadata();
   FileOk = ReadSavedFile();
   NeedFreshData = false;
 
-  if (! PdfOk) LastTimeJedilnikRefreshed = 0; // retry
+  if ((! PdfOk) || (! HashOk)) LastTimeJedilnikRefreshed = 0; // retry
   
-  if (PdfOk && FileOk) {
-    Serial.print("Comparing URLs.. ");
-    DisplayText("Comparing URLs.. ");
-    NeedFreshData = (Saved_PDF_URL != PDF_URL);
+  if (PdfOk && FileOk && HashOk) {
+    Serial.print("Comparing saved and fresh data.. ");
+    DisplayText("Comparing saved and fresh data.. ");
 
-    if (NeedFreshData){
-      Serial.println("NO match");
-      DisplayText("NO match\n", CLORANGE);
+    if (Saved_PDF_URL != PDF_URL){
+      Serial.println("URL NOT MATCHING");
+      DisplayText("URL NOT MATCHING\n", CLORANGE);
     } else {
-      Serial.println("match");
-      DisplayText("match\n", CLGREEN);
+      Serial.println("URL match");
+      DisplayText("URL match\n", CLGREEN);
     }
+    if (Saved_PDF_HASH != PDF_HASH){
+      Serial.println("HASH NOT MATCHING");
+      DisplayText("HASH NOT MATCHING\n", CLORANGE);
+    } else {
+      Serial.println("HASH match");
+      DisplayText("HASH match\n", CLGREEN);
+    }
+    NeedFreshData = (Saved_PDF_URL != PDF_URL) || (Saved_PDF_HASH != PDF_HASH);
   }
 
   NeedFreshData = NeedFreshData || !FileOk || ReloadRequired;
@@ -586,27 +687,34 @@ void GetJedilnikOsDomzale(void){
       }
       bool ok = true;
       if(file.println(PDF_URL)){
-          Serial.println("- file written");
+          Serial.println("- file written 1");
           DisplayText(".");
       } else {
-          Serial.println("- write failed");
+          Serial.println("- write failed 1");
+          ok = false;         
+      }
+      if(file.println(PDF_HASH)){
+          Serial.println("- file written 2");
+          DisplayText(".");
+      } else {
+          Serial.println("- write failed 2");
           ok = false;         
       }
       if(file.println(JedilnikDatum)){
-          Serial.println("- file written");
+          Serial.println("- file written 3");
           DisplayText(".");
       } else {
-          Serial.println("- write failed");
+          Serial.println("- write failed 3");
           ok = false;         
       }
 
       for (int i = 0; i < 5; i++)
       {
         if(file.println(Jedilnik[i])){
-            Serial.println("- file written");
+            Serial.println("- file written 4");
             DisplayText(".");
         } else {
-            Serial.println("- write failed");
+            Serial.println("- write failed 4");
             ok = false;         
         }
       }
