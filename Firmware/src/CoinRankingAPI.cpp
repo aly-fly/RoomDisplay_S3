@@ -17,6 +17,16 @@
   'ratelimit-limit: 5'
   'ratelimit-remaining: 4'
   'ratelimit-reset: 35'
+
+  auth:
+  x-ratelimit-limit-second: 5
+  x-ratelimit-remaining-second: 4
+  x-ratelimit-limit-month: 10000
+  x-ratelimit-remaining-month: 9512
+  ratelimit-limit: 5
+  ratelimit-remaining: 4
+  ratelimit-reset: 1
+  access-control-expose-headers: x-preview-limit, x-preview-used, x-preview-remaining, x-preview-reset
  */
 
 #include <Arduino.h>
